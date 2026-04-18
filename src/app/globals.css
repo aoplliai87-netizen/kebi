@@ -1,0 +1,52 @@
+@import "pretendard/dist/web/variable/pretendardvariable.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 깨비콜밴 — 딥 블루 + 블랙 베이스, 골드 액센트 */
+:root {
+  --brand-deep-blue: #0e1f3c;
+  --brand-deep-blue-soft: #152a4d;
+  --brand-black: #050608;
+  --brand-gold: #c9a052;
+  --brand-gold-soft: rgba(201, 160, 82, 0.18);
+
+  --background: var(--brand-black);
+  --foreground: #eceef2;
+  --muted: #8b95a8;
+  --surface: #0c1018;
+  --surface-elevated: #121826;
+
+  --border: rgba(255, 255, 255, 0.09);
+  --accent: var(--brand-gold);
+  --accent-foreground: #1a1204;
+
+  --primary: var(--brand-deep-blue);
+  --primary-foreground: #f4f6f9;
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply min-h-screen bg-background text-foreground antialiased;
+    font-family:
+      "Pretendard Variable",
+      Pretendard,
+      -apple-system,
+      BlinkMacSystemFont,
+      system-ui,
+      sans-serif;
+    font-feature-settings: "ss01" on, "ss02" on;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

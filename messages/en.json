@@ -1,0 +1,30 @@
+{
+  "Metadata": {
+    "title": "Kkebi Call Van",
+    "description": "Incheon Airport premium call van booking & management"
+  },
+  "Header": {
+    "brand": "Kkebi Call Van",
+    "navService": "Services",
+    "navReviews": "Reviews",
+    "navContact": "Contact",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "langKo": "KO",
+    "langEn": "EN",
+    "langHint": "Choose language",
+    "navMain": "Main menu"
+  },
+  "FloatingBar": {
+    "call": "Call",
+    "kakao": "Kakao",
+    "book": "Book now",
+    "callAria": "Call phone number",
+    "kakaoAria": "Open KakaoTalk chat",
+    "bookAria": "Go to booking"
+  },
+  "HomePage": {
+    "heroTitle": "Premium Call Van at Incheon",
+    "heroSubtitle": "From booking to dispatch — travel with Kkebi Call Van."
+  }
+}

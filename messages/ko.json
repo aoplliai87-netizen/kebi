@@ -1,0 +1,30 @@
+{
+  "Metadata": {
+    "title": "깨비콜밴",
+    "description": "인천공항 전문 콜밴 예약 · 관리"
+  },
+  "Header": {
+    "brand": "깨비콜밴",
+    "navService": "서비스",
+    "navReviews": "이용 후기",
+    "navContact": "문의",
+    "openMenu": "메뉴 열기",
+    "closeMenu": "메뉴 닫기",
+    "langKo": "KO",
+    "langEn": "EN",
+    "langHint": "언어 선택",
+    "navMain": "주요 메뉴"
+  },
+  "FloatingBar": {
+    "call": "전화",
+    "kakao": "카톡",
+    "book": "바로예약",
+    "callAria": "전화 걸기",
+    "kakaoAria": "카카오톡 상담 열기",
+    "bookAria": "예약 페이지로 이동"
+  },
+  "HomePage": {
+    "heroTitle": "인천공항 프리미엄 콜밴",
+    "heroSubtitle": "예약부터 배차까지, 깨비콜밴과 함께하세요."
+  }
+}
