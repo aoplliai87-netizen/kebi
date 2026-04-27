@@ -1,0 +1,8 @@
+# UI/UX STRICT RULES
+- 모든 컴포넌트는 'Deep Blue (#001F3F)'와 'Gold (#D4AF37)' 테마를 유지하라.
+- 배경은 무조건 Dark/Black 계열로 고정한다.
+- 절대 내 허락 없이 tailwind.config.ts에 정의되지 않은 임의의 색상을 사용하지 마라.
+- 코드를 새로 짤 때마다 반드시 @globals.css의 컬러 토큰을 먼저 확인하고 적용하라.
+
+# WORKFLOW RULE
+- 벌크(Bulk) 작업 금지: 여러 페이지/여러 기능을 동시에 수정하지 말고, 반드시 한 페이지(또는 한 컴포넌트)씩 순차 작업한다.

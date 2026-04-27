@@ -8,7 +8,8 @@ import {
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { Header } from "@/components/layout/Header";
-import { MobileFloatingBar } from "@/components/layout/MobileFloatingBar";
+import { QuickMenu } from "@/components/layout/QuickMenu";
+import { ColorVariantToggle } from "@/components/layout/ColorVariantToggle";
 
 type Props = {
   children: React.ReactNode;
@@ -45,11 +46,12 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <NextIntlClientProvider messages={messages}>
-      <div className="flex min-h-screen flex-col pb-[calc(5.75rem+env(safe-area-inset-bottom))] md:pb-0">
+      <div className="flex min-h-screen flex-col pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0">
         <Header />
         <main className="flex-1">{children}</main>
       </div>
-      <MobileFloatingBar />
+      <ColorVariantToggle />
+      <QuickMenu />
     </NextIntlClientProvider>
   );
 }

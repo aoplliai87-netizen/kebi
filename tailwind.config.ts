@@ -50,6 +50,18 @@ const config: Config = {
           black: "var(--brand-black)",
           gold: "var(--brand-gold)",
         },
+        metal: {
+          bronze: "var(--metal-bronze)",
+          "bronze-strong": "var(--metal-bronze-strong)",
+          "bronze-soft": "var(--metal-bronze-soft)",
+          "bronze-faint": "var(--metal-bronze-faint)",
+        },
+        tone: {
+          strong: "var(--font-strong)",
+          body: "var(--font-body)",
+          soft: "var(--font-soft)",
+          sky: "var(--font-sky)",
+        },
       },
       maxWidth: {
         content: "72rem",

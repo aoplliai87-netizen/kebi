@@ -9,12 +9,20 @@
   --brand-deep-blue: #0e1f3c;
   --brand-deep-blue-soft: #152a4d;
   --brand-black: #050608;
-  --brand-gold: #c9a052;
-  --brand-gold-soft: rgba(201, 160, 82, 0.18);
+  --brand-gold: #d4af37;
+  --brand-gold-soft: rgba(212, 175, 55, 0.18);
+  --metal-bronze: #b07a57;
+  --metal-bronze-soft: rgba(176, 122, 87, 0.3);
+  --metal-bronze-strong: #d1a380;
+  --metal-bronze-faint: rgba(176, 122, 87, 0.2);
+  --font-strong: #f2f8ff;
+  --font-body: #ccd9ea;
+  --font-soft: #9eb0c8;
+  --font-sky: #8fc8ff;
 
   --background: var(--brand-black);
-  --foreground: #eceef2;
-  --muted: #8b95a8;
+  --foreground: var(--font-strong);
+  --muted: var(--font-soft);
   --surface: #0c1018;
   --surface-elevated: #121826;
 
@@ -24,6 +32,26 @@
 
   --primary: var(--brand-deep-blue);
   --primary-foreground: #f4f6f9;
+}
+
+[data-color-variant="a"] {
+  --brand-gold: #d4af37;
+  --brand-gold-soft: rgba(212, 175, 55, 0.18);
+  --metal-bronze: #b07a57;
+  --metal-bronze-soft: rgba(176, 122, 87, 0.3);
+  --metal-bronze-strong: #d1a380;
+  --metal-bronze-faint: rgba(176, 122, 87, 0.2);
+  --font-sky: #8fc8ff;
+}
+
+[data-color-variant="b"] {
+  --brand-gold: #c89b2d;
+  --brand-gold-soft: rgba(200, 155, 45, 0.2);
+  --metal-bronze: #9f6646;
+  --metal-bronze-soft: rgba(159, 102, 70, 0.32);
+  --metal-bronze-strong: #c78e6a;
+  --metal-bronze-faint: rgba(159, 102, 70, 0.22);
+  --font-sky: #79b8f4;
 }
 
 @layer base {
@@ -48,5 +76,14 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }

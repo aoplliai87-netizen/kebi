@@ -5,9 +5,12 @@
   },
   "Header": {
     "brand": "Kkebi Call Van",
-    "navService": "Services",
-    "navReviews": "Reviews",
-    "navContact": "Contact",
+    "navHome": "Home",
+    "navIntro": "Intro",
+    "navVehicle": "Vehicle",
+    "navPricing": "Pricing",
+    "navBooking": "Booking",
+    "navReview": "Review",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "langKo": "KO",
@@ -15,16 +18,83 @@
     "langHint": "Choose language",
     "navMain": "Main menu"
   },
-  "FloatingBar": {
-    "call": "Call",
-    "kakao": "Kakao",
-    "book": "Book now",
-    "callAria": "Call phone number",
-    "kakaoAria": "Open KakaoTalk chat",
-    "bookAria": "Go to booking"
+  "QuickMenu": {
+    "title": "Quick Contact Menu",
+    "label": {
+      "naver": "Naver",
+      "kakao": "Kakao",
+      "call": "Call",
+      "naverTalk": "NaverTalk",
+      "kakaoBiz": "KakaoBiz",
+      "sms": "SMS",
+      "instaDm": "InstaDM"
+    },
+    "aria": {
+      "naver": "Open Naver page",
+      "kakao": "Open Kakao chat",
+      "call": "Call phone number",
+      "naverTalk": "Open Naver TalkTalk",
+      "kakaoBiz": "Open Kakao Business",
+      "sms": "Send text message",
+      "instaDm": "Open Instagram DM"
+    }
   },
   "HomePage": {
+    "heroEyebrow": "Incheon Airport Premium",
     "heroTitle": "Premium Call Van at Incheon",
-    "heroSubtitle": "From booking to dispatch — travel with Kkebi Call Van."
+    "heroSubtitle": "From booking to dispatch — travel with Kkebi Call Van.",
+    "intro": {
+      "eyebrow": "Intro",
+      "title": "Airport-focused premium van service built on trust",
+      "desc": "Kkebi Call Van delivers a consistent experience from inquiry to ride, designed for punctual and comfortable airport transfers."
+    },
+    "vehicle": {
+      "eyebrow": "Vehicle",
+      "title": "Comfortable interior with practical luggage capacity",
+      "desc": "Optimized for suitcases, golf bags and family travel items. Gray placeholders are shown until final photos are uploaded.",
+      "imageAlt": "Vehicle image placeholder"
+    },
+    "pricing": {
+      "eyebrow": "Pricing",
+      "title": "Transparent pricing by route and schedule",
+      "airport": {
+        "label": "Airport pickup/drop-off",
+        "price": "Quote on request",
+        "note": "Varies by time and route."
+      },
+      "city": {
+        "label": "City/nearby transfers",
+        "price": "Quote on request",
+        "note": "Based on stops and travel flow."
+      },
+      "charter": {
+        "label": "Half/Full-day charter",
+        "price": "Quote on request",
+        "note": "Custom quote by itinerary."
+      }
+    },
+    "booking": {
+      "eyebrow": "Booking",
+      "title": "Fast booking after quick consultation",
+      "desc": "Send your route, passenger count and luggage details via phone, Kakao or SMS. We confirm quickly and lock your booking.",
+      "ctaCall": "Book by phone",
+      "ctaReview": "See reviews"
+    },
+    "review": {
+      "eyebrow": "Review",
+      "title": "Customer feedback",
+      "one": {
+        "content": "Perfect pickup timing for my early morning flight.",
+        "author": "Customer K**"
+      },
+      "two": {
+        "content": "I had a lot of luggage and still felt supported from start to end.",
+        "author": "Customer P**"
+      },
+      "three": {
+        "content": "Fast response and clear communication. I will book again.",
+        "author": "Customer L**"
+      }
+    }
   }
 }
