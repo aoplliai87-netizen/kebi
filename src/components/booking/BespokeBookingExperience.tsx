@@ -272,7 +272,7 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
             <div className="mt-8 rounded-2xl border border-metal-bronze/35 bg-white/[0.03] p-4">
               <p className="text-sm text-tone-soft">빠른 상담</p>
               <div className="mt-3 grid grid-cols-2 gap-2">
-                <button
+                <Button
                   type="button"
                   onClick={() =>
                     confirmAndOpen(
@@ -280,82 +280,81 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                       "전화 연결을 하시겠습니까?\n확인을 누르면 통화 화면으로 이동합니다."
                     )
                   }
+                  className="h-11 w-full rounded-xl text-sm font-semibold"
                 >
-                  <Button className="h-11 w-full rounded-xl text-sm font-semibold">
-                    <img src="/icons/phone.svg" alt="" className="h-4 w-4" />
-                    전화 상담
-                  </Button>
-                </button>
-                <button
+                  <img src="/icons/phone.svg" alt="" className="h-4 w-4" />
+                  전화 상담
+                </Button>
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={() =>
                     confirmAndOpen(
                       SITE_KAKAO_CHAT_URL,
                       "카카오톡 오픈채팅방으로 연결됩니다.\n이동하시겠습니까?"
                     )
                   }
+                  className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky"
                 >
-                  <Button variant="outline" className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky">
-                    <img src="/icons/kakao.svg" alt="" className="h-4 w-4" />
-                    카톡 상담
-                  </Button>
-                </button>
-                <button
+                  <img src="/icons/kakao.svg" alt="" className="h-4 w-4" />
+                  카톡 상담
+                </Button>
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={() =>
                     confirmAndOpen(
                       SITE_WHATSAPP_URL,
                       "WhatsApp 채팅으로 연결됩니다.\n이동하시겠습니까?"
                     )
                   }
+                  className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky"
                 >
-                  <Button variant="outline" className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky">
-                    <img src="/icons/whatsapp.svg" alt="" className="h-4 w-4" />
-                    WhatsApp (왓츠앱)
-                  </Button>
-                </button>
-                <button
+                  <img src="/icons/whatsapp.svg" alt="" className="h-4 w-4" />
+                  WhatsApp (왓츠앱)
+                </Button>
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={() =>
                     confirmAndOpen(
                       SITE_LINE_URL,
                       "LINE 채팅으로 연결됩니다.\n이동하시겠습니까?"
                     )
                   }
+                  className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky"
                 >
-                  <Button variant="outline" className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky">
-                    <img src="/icons/line.svg" alt="" className="h-4 w-4" />
-                    LINE (라인)
-                  </Button>
-                </button>
-                <button
+                  <img src="/icons/line.svg" alt="" className="h-4 w-4" />
+                  LINE (라인)
+                </Button>
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={() =>
                     confirmAndOpen(
                       SITE_INSTAGRAM_DM_URL,
                       "Instagram DM으로 이동합니다.\n연결하시겠습니까?"
                     )
                   }
+                  className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky"
                 >
-                  <Button variant="outline" className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky">
-                    <img src="/icons/instagram.svg" alt="" className="h-4 w-4" />
-                    Instagram DM
-                  </Button>
-                </button>
-                <button
+                  <img src="/icons/instagram.svg" alt="" className="h-4 w-4" />
+                  Instagram DM
+                </Button>
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={() =>
                     confirmAndOpen(
                       SITE_FACEBOOK_MESSENGER_URL,
                       "Facebook Messenger로 연결됩니다.\n이동하시겠습니까?"
                     )
                   }
+                  className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky"
                 >
-                  <Button variant="outline" className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky">
-                    <img src="/icons/messenger.svg" alt="" className="h-4 w-4" />
-                    Facebook Messenger
-                  </Button>
-                </button>
+                  <img src="/icons/messenger.svg" alt="" className="h-4 w-4" />
+                  Facebook Messenger
+                </Button>
               </div>
             </div>
           </motion.aside>
