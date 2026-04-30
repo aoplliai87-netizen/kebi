@@ -70,6 +70,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
   });
   const heroY = useTransform(scrollYProgress, [0, 1], [0, -130]);
   const veilY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const heroParts = props.heroTitle.split("Premium");
 
   return (
     <div
@@ -95,8 +96,20 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-metal-bronze-strong">
             {props.heroEyebrow}
           </p>
-          <h1 className='mt-6 text-balance font-sans text-6xl font-bold leading-[0.98] tracking-[-0.02em] text-tone-strong md:text-7xl lg:text-8xl'>
-            {props.heroTitle}
+          <h1 className='mt-6 text-balance font-sans text-6xl font-bold leading-[0.98] tracking-[-0.02em] text-tone-strong drop-shadow-[0_6px_28px_rgba(0,0,0,0.55)] md:text-7xl lg:text-8xl'>
+            {heroParts.length > 1 ? (
+              <>
+                {heroParts[0]}
+                <span className="bg-[linear-gradient(135deg,#f2cd76_0%,#d4af37_45%,#9f6e3f_100%)] bg-clip-text text-transparent drop-shadow-[0_0_18px_rgba(212,175,55,0.35)]">
+                  Premium
+                </span>
+                {heroParts.slice(1).join("Premium")}
+              </>
+            ) : (
+              <span className="bg-[linear-gradient(135deg,#e9f3ff_0%,#dbe9ff_45%,#f2cd76_100%)] bg-clip-text text-transparent">
+                {props.heroTitle}
+              </span>
+            )}
           </h1>
           <p className="mx-auto mt-7 max-w-3xl text-xl leading-relaxed text-tone-body md:mt-8 md:text-2xl [&_span]:inline-block">
             {props.heroSubtitle}
