@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
@@ -20,10 +21,10 @@ type ReviewItem = {
 type BespokeHomeExperienceProps = {
   heroEyebrow: string;
   heroTitle: string;
-  heroSubtitle: string;
+  heroSubtitle: ReactNode;
   introEyebrow: string;
   introTitle: string;
-  introDesc: string;
+  introDesc: ReactNode;
   vehicleEyebrow: string;
   vehicleTitle: string;
   vehicleDesc: string;
@@ -94,10 +95,10 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-metal-bronze-strong">
             {props.heroEyebrow}
           </p>
-          <h1 className='mt-6 text-balance font-["Times_New_Roman","Georgia",serif] text-6xl font-bold leading-[0.98] tracking-[-0.02em] text-tone-strong md:text-7xl lg:text-8xl'>
+          <h1 className='mt-6 text-balance font-sans text-6xl font-bold leading-[0.98] tracking-[-0.02em] text-tone-strong md:text-7xl lg:text-8xl'>
             {props.heroTitle}
           </h1>
-          <p className='mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-tone-body md:text-xl'>
+          <p className="mx-auto mt-7 max-w-3xl text-xl leading-relaxed text-tone-body md:mt-8 md:text-2xl [&_span]:inline-block">
             {props.heroSubtitle}
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
@@ -154,12 +155,12 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
             <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">
               {props.introEyebrow}
             </p>
-            <h2 className='mt-3 font-["Times_New_Roman","Georgia",serif] text-4xl font-bold leading-tight tracking-[-0.02em] text-tone-sky md:text-5xl'>
+            <h2 className='mt-3 font-sans text-4xl font-bold leading-tight tracking-[-0.02em] text-tone-sky md:text-5xl'>
               {props.introTitle}
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-tone-body md:text-lg">
+            <div className="mt-6 text-base leading-relaxed text-tone-body md:text-lg">
               {props.introDesc}
-            </p>
+            </div>
           </motion.div>
 
           <motion.div
@@ -201,9 +202,9 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">
             {props.vehicleEyebrow}
           </p>
-          <h3 className='mt-3 font-["Times_New_Roman","Georgia",serif] text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
+          <h2 className='mt-3 font-sans text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
             {props.vehicleTitle}
-          </h3>
+          </h2>
           <p className="mt-5 text-base leading-relaxed text-tone-body md:text-lg">
             {props.vehicleDesc}
           </p>
@@ -219,9 +220,9 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">
             {props.pricingEyebrow}
           </p>
-          <h3 className='mt-3 font-["Times_New_Roman","Georgia",serif] text-3xl font-bold tracking-[-0.02em] text-tone-strong md:text-4xl'>
+          <h2 className='mt-3 font-sans text-3xl font-bold tracking-[-0.02em] text-tone-strong md:text-4xl'>
             {props.pricingTitle}
-          </h3>
+          </h2>
           <div className="mt-6 space-y-4">
             {props.pricingTiers.map((tier) => (
               <div
@@ -248,9 +249,9 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">
             {props.bookingEyebrow}
           </p>
-          <h3 className='mt-3 font-["Times_New_Roman","Georgia",serif] text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
+          <h2 className='mt-3 font-sans text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
             {props.bookingTitle}
-          </h3>
+          </h2>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-tone-body md:text-lg">
             {props.bookingDesc}
           </p>
@@ -276,9 +277,9 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
         <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">
           {props.reviewEyebrow}
         </p>
-        <h3 className='mt-3 font-["Times_New_Roman","Georgia",serif] text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
+        <h2 className='mt-3 font-sans text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
           {props.reviewTitle}
-        </h3>
+        </h2>
         <div className="mt-8 grid gap-5 md:grid-cols-3">
           {props.reviews.map((review, idx) => (
             <motion.blockquote

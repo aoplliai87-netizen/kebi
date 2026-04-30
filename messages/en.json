@@ -1,22 +1,113 @@
 {
   "Metadata": {
-    "title": "Kkebi Call Van",
-    "description": "Incheon Airport premium call van booking & management"
+    "siteName": "Kkebi",
+    "title": "Kkebi · Private Van Service",
+    "description": "Premium private transfers from Incheon Airport — reliable, comfortable door-to-door service with Kkebi.",
+    "pages": {
+      "home": {
+        "title": "Private Van Transfer Seoul & Incheon Airport Taxi - Kkebi",
+        "description": "Incheon Airport Transfer and Incheon Airport Private Van in one service: book Kkebi for door-to-door rides from Incheon and Gimpo, fixed-fare van service across Seoul and Gyeonggi, and punctual pickups you can count on."
+      },
+      "intro": {
+        "title": "About Kkebi | Incheon Airport Private Van",
+        "description": "Meet Kkebi—your stable concierge partner for Incheon Airport Transfer and Incheon Airport Private Van, focused on comfort and guest satisfaction."
+      },
+      "vehicle": {
+        "title": "Fleet | Comfortable Private Van for Airport Transfers",
+        "description": "Spacious interiors and luggage capacity for families and business travelers—see Kkebi’s vehicle offering."
+      },
+      "pricing": {
+        "title": "Pricing | Incheon & Gimpo Airport Fixed Fares | Kkebi",
+        "description": "Transparent fixed fares including tolls. Look up your area for Incheon Airport private van pricing."
+      },
+      "booking": {
+        "title": "Book Online | Incheon Airport Private Van | Kkebi",
+        "description": "Consultation-first booking. Share your route, party size, and luggage—Kkebi will confirm your transfer quickly."
+      },
+      "review": {
+        "title": "Reviews | Incheon Airport Private Van | Kkebi",
+        "description": "Read reviews from travelers who used Kkebi for Incheon Airport private transfers."
+      },
+      "inquiry": {
+        "title": "Kkebi Guide & Contact Us | FAQ and Online Inquiry",
+        "description": "Service guide and FAQ, including routes beyond Greater Seoul, plus a structured 1:1 online inquiry form."
+      },
+      "support": {
+        "title": "Kkebi Support — FAQ & Online Inquiry | Private Airport Van",
+        "description": "FAQs for Greater Seoul and beyond, booking and payment, plus an online inquiry form. Call or Kakao for immediate assistance."
+      }
+    }
+  },
+  "Support": {
+    "heroEyebrow": "CUSTOMER CARE",
+    "heroTitle": "Support & FAQ",
+    "heroDesc": "Review service notes and frequently asked questions, then send a structured inquiry when you are ready. We respond with the same calm, punctual care as every Kkebi ride.",
+    "faqTitle": "Frequently asked questions",
+    "faq1Q": "Do you serve areas outside the Greater Seoul region?",
+    "faq1A": "Yes. Routes not listed on the fare table—regional or long-distance legs—are quoted case by case from your schedule and route. Check “Non–Greater Seoul inquiry” in the form below, or call or message us for a quick review.",
+    "faq2Q": "How do I make a reservation?",
+    "faq2A": "Use the online booking flow or reach us by phone or Kakao with your pickup/drop-off, time, headcount, and luggage. We confirm details and finalize your booking after a short consultation. For urgent needs, a phone call is fastest.",
+    "faq3Q": "How does payment work?",
+    "faq3A": "We walk you through available options when your itinerary is confirmed—cash, bank transfer, and other methods as agreed. Your consultant will share specifics at the confirmation step.",
+    "faq4Q": "How are round trips priced?",
+    "faq4A": "Round trips and returns are quoted as fixed-fare packages that reflect waiting time and whether a return leg is included. Please note any round trip in the remarks so we can align the quote.",
+    "faq5Q": "What if we have a lot of luggage?",
+    "faq5A": "Share suitcase, golf, and child-equipment counts in advance and we will match you with a vehicle that fits—loaded and handled with the same attention as our typical airport runs.",
+    "formTitle": "Online inquiry",
+    "formDesc": "Submit the form and we will get back to you. For immediate help, use the phone or Kakao buttons below.",
+    "fieldName": "Full name",
+    "fieldPhone": "Phone / messengers",
+    "fieldDeparture": "Pickup location",
+    "fieldDestination": "Drop-off location",
+    "fieldDate": "Date",
+    "fieldTime": "Time",
+    "fieldPassengers": "Passengers",
+    "fieldMessage": "Additional requests",
+    "fieldOutOfMetro": "This inquiry is outside Greater Seoul / not on the fare table",
+    "fieldOutOfMetroHint": "If your trip is regional or custom, check this box and describe the route as clearly as you can.",
+    "placeholderMessage": "Flight number, car seats, extra stops, etc.",
+    "submit": "Send inquiry",
+    "submitting": "Sending…",
+    "success": "Your message was received. We will contact you shortly.",
+    "errorGeneric": "We could not send your inquiry. Please try again or call us.",
+    "validationRequired": "Please fill in all required fields.",
+    "validationPhone": "Please enter a valid phone number.",
+    "quickEyebrow": "Faster help",
+    "quickTitle": "Call or Kakao",
+    "quickPhone": "Call us",
+    "quickKakao": "Kakao chat",
+    "requiredHint": "Required"
+  },
+  "InquiryPage": {
+    "eyebrow": "CONTACT",
+    "title": "Website inquiry",
+    "desc": "For routes not shown in the table or tailored schedules, please reach out via booking or phone. This page can be expanded with a form later.",
+    "ctaBooking": "Book online",
+    "ctaPhone": "Call us"
+  },
+  "PricingPage": {
+    "othersNotice": "This area is quoted separately. Please contact us by phone, Kakao, or the website inquiry page.",
+    "searchEmpty": "No results. Try another place name in Korean or English.",
+    "othersPhone": "Call",
+    "othersKakao": "Kakao",
+    "othersWeb": "Website inquiry"
   },
   "Header": {
-    "brand": "Kkebi Call Van",
+    "brand": "Kkebi",
     "navHome": "Home",
     "navIntro": "Intro",
     "navVehicle": "Vehicle",
     "navPricing": "Pricing",
     "navBooking": "Booking",
     "navReview": "Review",
+    "navSupport": "Support & FAQ",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "langKo": "KO",
     "langEn": "EN",
     "langHint": "Choose language",
-    "navMain": "Main menu"
+    "navMain": "Main menu",
+    "phoneAria": "Call phone number"
   },
   "QuickMenu": {
     "title": "Quick Contact Menu",
@@ -40,18 +131,20 @@
     }
   },
   "HomePage": {
-    "heroEyebrow": "Incheon Airport Premium",
-    "heroTitle": "Premium Call Van at Incheon",
-    "heroSubtitle": "From booking to dispatch — travel with Kkebi Call Van.",
+    "heroEyebrow": "Incheon Airport · Premium Transfer",
+    "heroTitle": "Premium Incheon Airport Private Van Service",
+    "heroSubtitle": "Experience the most reliable and comfortable private transfer from Incheon Airport to your destination with <brand>Kkebi</brand>.",
     "intro": {
+      "brandTitle": "Kkebi",
       "eyebrow": "Intro",
-      "title": "Airport-focused premium van service built on trust",
-      "desc": "Kkebi Call Van delivers a consistent experience from inquiry to ride, designed for punctual and comfortable airport transfers."
+      "title": "The most comfortable start to every journey—a stable concierge partner for guest satisfaction",
+      "desc": "<brand>Kkebi</brand> delivers dedicated concierge service from booking to your destination—built around Incheon Airport Transfer and Seoul Private Transfer needs, with Incheon Airport Private Van–level care for each guest: seamless, safe, and tailored to you."
     },
     "vehicle": {
-      "eyebrow": "Vehicle",
-      "title": "Comfortable interior with practical luggage capacity",
-      "desc": "Optimized for suitcases, golf bags and family travel items. Gray placeholders are shown until final photos are uploaded.",
+      "eyebrow": "AIRPORT VAN FLEET",
+      "title": "Vehicle lineup",
+      "cardTitle": "Comfortable interior, practical luggage space",
+      "desc": "Premium vans and buses matched to your party size and itinerary.",
       "imageAlt": "Vehicle image placeholder"
     },
     "pricing": {
@@ -81,8 +174,9 @@
       "ctaReview": "See reviews"
     },
     "review": {
-      "eyebrow": "Review",
+      "eyebrow": "REVIEWS",
       "title": "Customer feedback",
+      "heroDesc": "See what travelers say about their rides with Kkebi.",
       "one": {
         "content": "Perfect pickup timing for my early morning flight.",
         "author": "Customer K**"
@@ -95,6 +189,79 @@
         "content": "Fast response and clear communication. I will book again.",
         "author": "Customer L**"
       }
+    }
+  },
+  "IntroPage": {
+    "coreValueEyebrow": "Core Value",
+    "coreValueTitle": "Punctuality, consistency, trust",
+    "coreValueBody": "We manage every touchpoint from booking to arrival under one operating standard—refinement over flash—for steady, composed airport transfers.",
+    "contactEyebrow": "Contact",
+    "representativeName": "Hong Jun-pyo, CEO",
+    "representativeLine": "It is our privilege to serve you with care.",
+    "phoneCaption": "Incheon · Gimpo airport reservations",
+    "services": {
+      "s01": {
+        "title": "Private airport concierge",
+        "body": "Calm, precise coordination from arrival flow through boarding—aligned with your inbound journey."
+      },
+      "s02": {
+        "title": "Executive Business Mobility",
+        "body": "We map Executive Business Mobility around your day—whether you need an Incheon Airport Transfer, door-to-door Incheon Airport Private Van service, or a Seoul Private Transfer between appointments—for a seamless, safe, and flawless experience tailored to your schedule."
+      },
+      "s03": {
+        "title": "Family & child-friendly care",
+        "body": "Luggage, boarding flow, and stops planned in advance for a relaxed ride."
+      },
+      "s04": {
+        "title": "Late-night & dawn safe operation",
+        "body": "The same standards apply after hours—we stay responsive until you arrive safely."
+      }
+    }
+  },
+  "VehicleFleet": {
+    "sectionEyebrow": "PREMIUM AIRPORT FLEET",
+    "sectionTitle": "Fleet by vehicle type",
+    "sectionDesc": "Choose the right Staria, Solati, or County for your headcount and schedule.",
+    "detailBtn": "View details",
+    "bookBtn": "Book online",
+    "phoneBtn": "Call us",
+    "galleryHeading": "Gallery",
+    "galleryNote": "High-resolution vehicle photos will be added to the slots below as they become available.",
+    "gallerySlotLabel": "Photo",
+    "modalClose": "Close",
+    "staria": {
+      "badge": "Premium van",
+      "name": "Hyundai Staria",
+      "seat45": "4–5 seats",
+      "seat67": "6–7 seats",
+      "luggage": "Room for suitcases, strollers & golf bags",
+      "imageAlt": "Hyundai Staria premium van side view",
+      "f1": "Modern comfort & safety for longer airport legs",
+      "f2": "Generous legroom and headroom for every passenger",
+      "f3": "Flexible layouts for business or family travel",
+      "f4": "Luggage-friendly flow built for airport pickup & drop-off"
+    },
+    "solati": {
+      "badge": "Large van",
+      "name": "Hyundai Solati",
+      "capacity": "13–15 seats",
+      "luggage": "Group luggage & equipment friendly",
+      "imageAlt": "Hyundai Solati large passenger van",
+      "f1": "Ideal for mid-size groups and delegations",
+      "f2": "High cargo capacity for gear-heavy trips",
+      "f3": "Stable driving feel for airport & city transfers",
+      "f4": "Great for golf outings, seminars & group moves"
+    },
+    "county": {
+      "badge": "Mini / mid-size bus",
+      "name": "Hyundai County",
+      "capacity": "15–25 seats",
+      "luggage": "High-volume baggage & equipment",
+      "imageAlt": "Hyundai County minibus side view",
+      "f1": "Built for larger groups and executive movements",
+      "f2": "Group boarding aligned with safety standards",
+      "f3": "Airport access and longer routes covered",
+      "f4": "Spacious cabin for extended journeys"
     }
   }
 }

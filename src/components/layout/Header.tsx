@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
-import { Menu, X } from "lucide-react";
+import { Menu, Phone, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
+import { SITE_PHONE_DISPLAY, SITE_PHONE_TEL } from "@/lib/site";
 
 const NAV = [
   { msgKey: "navHome" as const, href: "/" },
@@ -15,6 +16,7 @@ const NAV = [
   { msgKey: "navPricing" as const, href: "/pricing" },
   { msgKey: "navBooking" as const, href: "/booking" },
   { msgKey: "navReview" as const, href: "/review" },
+  { msgKey: "navSupport" as const, href: "/inquiry" },
 ] as const;
 
 export function Header() {
@@ -32,32 +34,40 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/80 bg-brand-black/88 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-content items-center justify-between gap-3 px-4 sm:h-16 sm:px-6">
-        <Link
-          href="/"
-          className="flex min-w-0 shrink-0 items-center"
-        >
-          <Image
-            src="/images/logo.png"
-            alt={t("brand")}
-            width={180}
-            height={50}
-            priority
-            className="h-9 w-auto object-contain sm:h-10 md:h-11"
-          />
-        </Link>
+      <div className="mx-auto flex h-14 max-w-content items-center justify-between gap-2 px-4 sm:h-16 sm:gap-3 sm:px-6">
+        <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-4 md:gap-5">
+          <Link href="/" className="flex min-w-0 shrink-0 items-center">
+            <Image
+              src="/images/logo.png"
+              alt={t("brand")}
+              width={180}
+              height={50}
+              priority
+              className="h-9 w-auto object-contain sm:h-10 md:h-11"
+            />
+          </Link>
+          <a
+            href={SITE_PHONE_TEL}
+            className="flex min-w-0 shrink items-center gap-1.5 rounded-full border border-metal-bronze/35 bg-white/[0.04] px-2 py-1.5 text-[10px] font-medium tracking-wide text-metal-bronze-strong shadow-[0_0_0_1px_rgba(176,122,87,0.08)] transition-colors hover:border-metal-bronze-strong hover:text-tone-sky sm:px-2.5 md:px-3 md:text-[11px]"
+            aria-label={`${t("phoneAria")}: ${SITE_PHONE_DISPLAY}`}
+          >
+            <Phone className="h-3 w-3 shrink-0 opacity-90 md:h-3.5 md:w-3.5" aria-hidden />
+            <span className="font-numeric tabular-nums">{SITE_PHONE_DISPLAY}</span>
+          </a>
+        </div>
 
-        <nav className="hidden items-center gap-4 xl:flex" aria-label={t("navMain")}>
-          {NAV.map(({ msgKey, href }) => (
-            <Link
-              key={msgKey}
-              href={href}
-              className="text-[11px] text-tone-soft transition-colors hover:text-tone-sky"
-            >
-              {t(msgKey)}
-            </Link>
-          ))}
-        </nav>
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <nav className="hidden items-center gap-4 xl:flex" aria-label={t("navMain")}>
+            {NAV.map(({ msgKey, href }) => (
+              <Link
+                key={msgKey}
+                href={href}
+                className="text-[11px] text-tone-soft transition-colors hover:text-tone-sky"
+              >
+                {t(msgKey)}
+              </Link>
+            ))}
+          </nav>
 
         <div className="flex items-center gap-2">
           <div className="flex rounded-lg border border-border bg-surface p-0.5" role="group" aria-label={t("langHint")}>
@@ -89,6 +99,7 @@ export function Header() {
             <span className="sr-only">{open ? t("closeMenu") : t("openMenu")}</span>
           </button>
         </div>
+        </div>
       </div>
 
       <div id="mobile-drawer" className={cn("fixed inset-0 z-50 xl:hidden", open ? "pointer-events-auto" : "pointer-events-none")} aria-hidden={!open}>
@@ -101,7 +112,17 @@ export function Header() {
 
         <div className={cn("absolute right-0 top-0 flex h-full w-[min(100%,20rem)] flex-col border-l border-border bg-brand-black shadow-xl transition-transform duration-300 ease-out", open ? "translate-x-0" : "translate-x-full")}> 
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
-            <span className="text-sm font-semibold">{t("brand")}</span>
+            <div className="flex min-w-0 flex-col gap-1">
+              <span className="text-sm font-semibold">{t("brand")}</span>
+              <a
+                href={SITE_PHONE_TEL}
+                className="flex items-center gap-1.5 text-xs font-medium text-metal-bronze-strong hover:text-tone-sky"
+                onClick={() => setOpen(false)}
+              >
+                <Phone className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                <span className="font-numeric tabular-nums">{SITE_PHONE_DISPLAY}</span>
+              </a>
+            </div>
             <button type="button" className="rounded-lg p-2 text-tone-soft hover:bg-surface hover:text-tone-sky" onClick={() => setOpen(false)} aria-label={t("closeMenu")}>
               <X className="h-5 w-5" aria-hidden />
             </button>

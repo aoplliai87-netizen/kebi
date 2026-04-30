@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
+import { Montserrat } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import "./globals.css";
 
-/** 기본 메타 — locale별 세부값은 `[locale]/layout`에서 덮어씁니다 */
+import { SITE_URL } from "@/lib/seo";
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  display: "swap",
+});
+
+/** canonical·OG 상대 경로 해석 기준 — 언어별 세부 메타는 `[locale]` 페이지에서 설정합니다 */
 export const metadata: Metadata = {
-  title: "깨비콜밴",
-  description: "인천공항 전문 콜밴 예약 · 관리",
+  metadataBase: new URL(SITE_URL),
 };
 
 export default async function RootLayout({
@@ -16,7 +24,7 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} className={montserrat.variable} suppressHydrationWarning>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );

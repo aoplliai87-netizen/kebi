@@ -32,26 +32,14 @@
 
   --primary: var(--brand-deep-blue);
   --primary-foreground: #f4f6f9;
-}
 
-[data-color-variant="a"] {
-  --brand-gold: #d4af37;
-  --brand-gold-soft: rgba(212, 175, 55, 0.18);
-  --metal-bronze: #b07a57;
-  --metal-bronze-soft: rgba(176, 122, 87, 0.3);
-  --metal-bronze-strong: #d1a380;
-  --metal-bronze-faint: rgba(176, 122, 87, 0.2);
-  --font-sky: #8fc8ff;
-}
-
-[data-color-variant="b"] {
-  --brand-gold: #c89b2d;
-  --brand-gold-soft: rgba(200, 155, 45, 0.2);
-  --metal-bronze: #9f6646;
-  --metal-bronze-soft: rgba(159, 102, 70, 0.32);
-  --metal-bronze-strong: #c78e6a;
-  --metal-bronze-faint: rgba(159, 102, 70, 0.22);
-  --font-sky: #79b8f4;
+  /**
+   * UI 산세리프: ko는 Pretendard 우선, en은 Montserrat 우선(라틴) + 한글 폴백(Pretendard).
+   * --font-montserrat 는 `src/app/layout.tsx`의 next/font 주입값입니다.
+   */
+  --font-ui-sans:
+    "Pretendard Variable", Pretendard, var(--font-montserrat), -apple-system, BlinkMacSystemFont,
+    system-ui, sans-serif;
 }
 
 @layer base {
@@ -59,17 +47,25 @@
     @apply scroll-smooth;
   }
 
+  html[lang="en"] {
+    --font-ui-sans:
+      var(--font-montserrat), "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+      system-ui, sans-serif;
+  }
+
   body {
     @apply min-h-screen bg-background text-foreground antialiased;
-    font-family:
-      "Pretendard Variable",
-      Pretendard,
-      -apple-system,
-      BlinkMacSystemFont,
-      system-ui,
-      sans-serif;
+    font-family: var(--font-ui-sans);
     font-feature-settings: "ss01" on, "ss02" on;
+    font-optical-sizing: auto;
     text-rendering: optimizeLegibility;
+  }
+
+  /* 한국어: 단어 중간 줄바꿈 완화 (모바일 등에서 어절 단위 유지) */
+  html[lang="ko"] body {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    line-break: strict;
   }
 }
 

@@ -9,11 +9,21 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
+        /** globals.css 의 html/lang별 --font-ui-sans 와 동일 스택 (Tailwind 유틸과 본문 폰트 일치) */
         sans: [
+          "var(--font-ui-sans)",
           '"Pretendard Variable"',
           "Pretendard",
           "-apple-system",
           "BlinkMacSystemFont",
+          "system-ui",
+          "sans-serif",
+        ],
+        /** 요금·숫자 강조용 (Montserrat, root layout에서 CSS 변수 주입) */
+        numeric: [
+          "var(--font-montserrat)",
+          "Montserrat",
+          "ui-sans-serif",
           "system-ui",
           "sans-serif",
         ],

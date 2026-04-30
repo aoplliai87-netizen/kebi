@@ -1,9 +1,17 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { BespokeHomeExperience } from "@/components/home/BespokeHomeExperience";
+import { getLocalizedPageMetadata } from "@/lib/page-metadata";
 
 type Props = {
   params: { locale: string };
 };
+
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  return getLocalizedPageMetadata(params.locale, "home");
+}
 
 export default async function HomePage({ params }: Props) {
   const { locale } = params;
@@ -14,12 +22,22 @@ export default async function HomePage({ params }: Props) {
     <BespokeHomeExperience
       heroEyebrow={t("heroEyebrow")}
       heroTitle={t("heroTitle")}
-      heroSubtitle={t("heroSubtitle")}
+      heroSubtitle={t.rich("heroSubtitle", {
+        brand: (chunks) => (
+          <span className="font-semibold text-brand-gold [font-size:1.28em] leading-snug tracking-tight drop-shadow-[0_0_24px_rgba(212,175,55,0.2)]">
+            {chunks}
+          </span>
+        ),
+      })}
       introEyebrow={t("intro.eyebrow")}
       introTitle={t("intro.title")}
-      introDesc={t("intro.desc")}
+      introDesc={t.rich("intro.desc", {
+        brand: (chunks) => (
+          <span className="font-semibold text-brand-gold">{chunks}</span>
+        ),
+      })}
       vehicleEyebrow={t("vehicle.eyebrow")}
-      vehicleTitle={t("vehicle.title")}
+      vehicleTitle={t("vehicle.cardTitle")}
       vehicleDesc={t("vehicle.desc")}
       pricingEyebrow={t("pricing.eyebrow")}
       pricingTitle={t("pricing.title")}

@@ -6,86 +6,190 @@ export type PricingRow = {
   distanceKm: number | null;
 };
 
-export type PricingRegion = {
+/** 시·군 단위 묶음 — 상단 행 클릭 시 세부 구간 표시 */
+export type PricingRegionGroup = {
+  group: true;
   id: string;
   name: string;
   nameEn: string;
   rows: PricingRow[];
 };
 
+export type PricingTableEntry = PricingRow | PricingRegionGroup;
+
+export function isPricingRegionGroup(entry: PricingTableEntry): entry is PricingRegionGroup {
+  return "group" in entry && entry.group === true;
+}
+
+export type PricingRegion = {
+  id: string;
+  name: string;
+  nameEn: string;
+  rows: PricingTableEntry[];
+};
+
 const sortKo = (a: PricingRow, b: PricingRow) =>
   a.name.localeCompare(b.name, "ko");
+
+const row = (
+  name: string,
+  nameEn: string,
+  gimpo: number,
+  incheon: number,
+): PricingRow => ({
+  name,
+  nameEn,
+  gimpo,
+  incheon,
+  distanceKm: null,
+});
+
+const regionGroup = (
+  id: string,
+  name: string,
+  nameEn: string,
+  rows: PricingRow[],
+): PricingRegionGroup => ({
+  group: true,
+  id,
+  name,
+  nameEn,
+  rows,
+});
+
+/**
+ * 서울 구간 — 표시 순서 고정.
+ * (기본은 가나다이나, 동일 권역 내 금액이 다른 항목은 바로 아래에 둠. 예: 강남구 → 개포동 → 일원·세곡·자곡)
+ */
+const seoulRows: PricingRow[] = [
+  { name: "김포공항", nameEn: "Gimpo Airport", gimpo: 0, incheon: 70000, distanceKm: null },
+  { name: "강남구", nameEn: "Gangnam-gu", gimpo: 55000, incheon: 90000, distanceKm: null },
+  { name: "개포동", nameEn: "Gaepo-dong", gimpo: 60000, incheon: 90000, distanceKm: null },
+  { name: "일원, 세곡, 자곡", nameEn: "Irwon, Segok, Jagok", gimpo: 65000, incheon: 95000, distanceKm: null },
+  { name: "강동구", nameEn: "Gangdong-gu", gimpo: 60000, incheon: 90000, distanceKm: null },
+  { name: "상일, 명일동", nameEn: "Sangil, Myeongil-dong", gimpo: 60000, incheon: 95000, distanceKm: null },
+  { name: "강북구", nameEn: "Gangbuk-gu", gimpo: 60000, incheon: 90000, distanceKm: null },
+  { name: "강서구", nameEn: "Gangseo-gu", gimpo: 40000, incheon: 75000, distanceKm: null },
+  { name: "관악구", nameEn: "Gwanak-gu", gimpo: 50000, incheon: 80000, distanceKm: null },
+  { name: "광진구", nameEn: "Gwangjin-gu", gimpo: 60000, incheon: 90000, distanceKm: null },
+  { name: "구로구", nameEn: "Guro-gu", gimpo: 45000, incheon: 75000, distanceKm: null },
+  { name: "금천구", nameEn: "Geumcheon-gu", gimpo: 45000, incheon: 75000, distanceKm: null },
+  { name: "노원구", nameEn: "Nowon-gu", gimpo: 65000, incheon: 100000, distanceKm: null },
+  { name: "도봉구", nameEn: "Dobong-gu", gimpo: 65000, incheon: 100000, distanceKm: null },
+  { name: "동대문구", nameEn: "Dongdaemun-gu", gimpo: 55000, incheon: 90000, distanceKm: null },
+  { name: "동작구", nameEn: "Dongjak-gu", gimpo: 50000, incheon: 80000, distanceKm: null },
+  { name: "마포구", nameEn: "Mapo-gu", gimpo: 45000, incheon: 75000, distanceKm: null },
+  { name: "서대문구", nameEn: "Seodaemun-gu", gimpo: 50000, incheon: 80000, distanceKm: null },
+  { name: "서초구", nameEn: "Seocho-gu", gimpo: 55000, incheon: 90000, distanceKm: null },
+  { name: "성동구", nameEn: "Seongdong-gu", gimpo: 55000, incheon: 85000, distanceKm: null },
+  { name: "성북구", nameEn: "Seongbuk-gu", gimpo: 55000, incheon: 85000, distanceKm: null },
+  { name: "송파구", nameEn: "Songpa-gu", gimpo: 60000, incheon: 90000, distanceKm: null },
+  { name: "양천구", nameEn: "Yangcheon-gu", gimpo: 40000, incheon: 75000, distanceKm: null },
+  { name: "영등포구", nameEn: "Yeongdeungpo-gu", gimpo: 45000, incheon: 75000, distanceKm: null },
+  { name: "용산구", nameEn: "Yongsan-gu", gimpo: 55000, incheon: 85000, distanceKm: null },
+  { name: "은평구", nameEn: "Eunpyeong-gu", gimpo: 50000, incheon: 80000, distanceKm: null },
+  { name: "종로구", nameEn: "Jongno-gu", gimpo: 55000, incheon: 85000, distanceKm: null },
+  { name: "중구", nameEn: "Jung-gu", gimpo: 55000, incheon: 85000, distanceKm: null },
+  { name: "중랑구", nameEn: "Jungnang-gu", gimpo: 65000, incheon: 90000, distanceKm: null },
+];
+
+/**
+ * 경기/수도권 — 표시 순서 고정. 시·군 단위 그룹은 `regionGroup`, 나머지는 단일 행.
+ */
+const gyeonggiRows: PricingTableEntry[] = [
+  row("가평역", "Gapyeong Station area", 130000, 160000),
+  row("고양시 (일산, 덕양 포함)", "Goyang-si (Ilsan, Deogyang)", 45000, 75000),
+  row("고양 벽제", "Goyang Byeokje", 60000, 85000),
+  row("과천시", "Gwacheon-si", 70000, 90000),
+  row("광명[역]", "Gwangmyeong (station)", 55000, 80000),
+  row("광주시", "Gwangju-si", 95000, 120000),
+  row("곤지암", "Gonjiam", 110000, 130000),
+  row("구리시", "Guri-si", 70000, 100000),
+  row("군포시", "Gunpo-si", 65000, 85000),
+  row("김포시 (신도시)", "Gimpo-si (new town)", 55000, 75000),
+  regionGroup("namyangju", "남양주시", "Namyangju-si", [
+    row("덕소", "Deokso", 80000, 110000),
+    row("별내, 다산", "Byeollae, Dasan", 70000, 100000),
+    row("수동, 조안", "Sudong, Joan", 100000, 130000),
+    row("진접, 화도", "Jinjeop, Hwado", 90000, 120000),
+  ]),
+  row("동두천시", "Dongducheon-si", 90000, 130000),
+  row("부천시", "Bucheon-si", 40000, 70000),
+  row("성남시 (분당 포함)", "Seongnam-si (incl. Bundang)", 85000, 100000),
+  row("수원시", "Suwon-si", 80000, 90000),
+  row("수원 광교", "Suwon Gwanggyo", 85000, 90000),
+  row("수원 영통", "Suwon Yeongtong", 85000, 100000),
+  row("시흥시 (목감 포함)", "Siheung-si (incl. Mokgam)", 60000, 70000),
+  row("시흥 정왕동", "Siheung Jeongwang-dong", 60000, 70000),
+  row("안산시", "Ansan-si", 65000, 75000),
+  row("안산 건건동", "Ansan Geongeon-dong", 70000, 80000),
+  row("안산 대부도", "Ansan Daebudo", 80000, 100000),
+  row("안산 팔곡동", "Ansan Palgok-dong", 70000, 80000),
+  row("안성시", "Anseong-si", 120000, 140000),
+  row("안성 공도", "Anseong Gongdo", 110000, 130000),
+  row("안양시", "Anyang-si", 65000, 85000),
+  row("양주시", "Yangju-si", 80000, 110000),
+  row("양평군", "Yangpyeong-gun", 120000, 150000),
+  row("여주시", "Yeoju-si", 120000, 150000),
+  row("연천군", "Yeoncheon-gun", 110000, 160000),
+  row("오산시", "Osan-si", 90000, 110000),
+  regionGroup("yongin", "용인시", "Yongin-si", [
+    row("용인 기흥, 죽전, 동백, 수지", "Yongin Giheung, Jukjeon, Dongbaek, Suji", 85000, 100000),
+    row("용인 남사", "Yongin Namsa", 110000, 130000),
+    row("용인 양지, 모현", "Yongin Yangji, Mohyeon", 100000, 120000),
+    row("용인 이동", "Yongin Idong", 100000, 130000),
+    row("용인 처인구", "Yongin Cheoin-gu", 90000, 120000),
+  ]),
+  row("위례", "Wirye", 85000, 100000),
+  row("의왕, 평촌", "Uiwang, Pyeongchon", 65000, 85000),
+  row("의정부시", "Uijeongbu-si", 70000, 100000),
+  row("이천시", "Icheon-si", 110000, 130000),
+  regionGroup("incheon_metro", "인천광역시", "Incheon", [
+    row("강화", "Ganghwa", 70000, 100000),
+    row("검단, 계양", "Geomdan, Gyeyang", 45000, 70000),
+    row("인천 서구, 부평", "Incheon Seo-gu, Bupyeong", 50000, 70000),
+    row("연수동, 송도, 간석, 남동", "Yeonsu, Songdo, Ganseok, Namdong", 60000, 60000),
+    row("청라", "Cheongna", 50000, 60000),
+  ]),
+  row("일산", "Ilsan", 45000, 75000),
+  row("일산 탄현", "Ilsan Tanhyeon", 50000, 80000),
+  row("일산 화정, 행신", "Ilsan Hwajeong, Haengsin", 40000, 75000),
+  row("장호원", "Janghowon", 120000, 160000),
+  row("청평", "Cheongpyeong", 110000, 150000),
+  regionGroup("paju", "파주시", "Paju-si", [
+    row("파주 LCD", "Paju LCD", 70000, 95000),
+    row("파주 광탄", "Paju Gwangtan", 80000, 100000),
+    row("파주 금촌", "Paju Geumchon", 65000, 90000),
+    row("파주 문산", "Paju Munsan", 75000, 110000),
+    row("파주 봉일천", "Paju Bongilcheon", 70000, 100000),
+    row("파주 운정", "Paju Unjeong", 60000, 85000),
+  ]),
+  row("평택시", "Pyeongtaek-si", 120000, 130000),
+  row("포천시", "Pocheon-si", 100000, 130000),
+  row("하남시", "Hanam-si", 75000, 100000),
+  regionGroup("hwaseong", "화성시", "Hwaseong-si", [
+    row("화성 동탄 1, 발안, 향남", "Hwaseong Dongtan 1, Balan, Hyangnam", 90000, 100000),
+    row("화성 동탄 2", "Hwaseong Dongtan 2", 95000, 110000),
+    row("화성 병점", "Hwaseong Byeongjeom", 85000, 100000),
+    row("화성 봉담", "Hwaseong Bongdam", 80000, 95000),
+    row("화성 새솔동, 송산", "Hwaseong Saesol, Songsan", 75000, 85000),
+    row("화성 제부도", "Hwaseong Jebudo", 90000, 110000),
+    row("화성시청", "Hwaseong City Hall", 85000, 90000),
+  ]),
+];
 
 export const pricingRegions: PricingRegion[] = [
   {
     id: "seoul",
     name: "서울",
     nameEn: "Seoul",
-    rows: [
-      { name: "강남구", nameEn: "Gangnam-gu", gimpo: 90000, incheon: 90000, distanceKm: null },
-      { name: "강동구", nameEn: "Gangdong-gu", gimpo: 100000, incheon: 100000, distanceKm: null },
-      { name: "강북구", nameEn: "Gangbuk-gu", gimpo: 95000, incheon: 95000, distanceKm: null },
-      { name: "강서구", nameEn: "Gangseo-gu", gimpo: 85000, incheon: 85000, distanceKm: null },
-      { name: "관악구", nameEn: "Gwanak-gu", gimpo: 90000, incheon: 90000, distanceKm: null },
-      { name: "광진구", nameEn: "Gwangjin-gu", gimpo: 95000, incheon: 95000, distanceKm: null },
-      { name: "구로구", nameEn: "Guro-gu", gimpo: 85000, incheon: 85000, distanceKm: null },
-      { name: "금천구", nameEn: "Geumcheon-gu", gimpo: 85000, incheon: 85000, distanceKm: null },
-      { name: "노원구", nameEn: "Nowon-gu", gimpo: 100000, incheon: 100000, distanceKm: null },
-      { name: "도봉구", nameEn: "Dobong-gu", gimpo: 100000, incheon: 100000, distanceKm: null },
-      { name: "동대문구", nameEn: "Dongdaemun-gu", gimpo: 95000, incheon: 95000, distanceKm: null },
-      { name: "동작구", nameEn: "Dongjak-gu", gimpo: 90000, incheon: 90000, distanceKm: null },
-      { name: "마포구", nameEn: "Mapo-gu", gimpo: 85000, incheon: 85000, distanceKm: null },
-      { name: "서대문구", nameEn: "Seodaemun-gu", gimpo: 90000, incheon: 90000, distanceKm: null },
-      { name: "서초구", nameEn: "Seocho-gu", gimpo: 90000, incheon: 90000, distanceKm: null },
-      { name: "성동구", nameEn: "Seongdong-gu", gimpo: 95000, incheon: 95000, distanceKm: null },
-      { name: "성북구", nameEn: "Seongbuk-gu", gimpo: 95000, incheon: 95000, distanceKm: null },
-      { name: "송파구", nameEn: "Songpa-gu", gimpo: 95000, incheon: 95000, distanceKm: null },
-      { name: "양천구", nameEn: "Yangcheon-gu", gimpo: 85000, incheon: 85000, distanceKm: null },
-      { name: "영등포구", nameEn: "Yeongdeungpo-gu", gimpo: 85000, incheon: 85000, distanceKm: null },
-      { name: "용산구", nameEn: "Yongsan-gu", gimpo: 90000, incheon: 90000, distanceKm: null },
-      { name: "은평구", nameEn: "Eunpyeong-gu", gimpo: 95000, incheon: 95000, distanceKm: null },
-      { name: "종로구", nameEn: "Jongno-gu", gimpo: 90000, incheon: 90000, distanceKm: null },
-      { name: "중구", nameEn: "Jung-gu", gimpo: 90000, incheon: 90000, distanceKm: null },
-      { name: "중랑구", nameEn: "Jungnang-gu", gimpo: 95000, incheon: 95000, distanceKm: null },
-    ].sort(sortKo),
+    rows: seoulRows,
   },
   {
     id: "gyeonggi",
     name: "경기도",
     nameEn: "Gyeonggi-do",
-    rows: [
-      { name: "가평", nameEn: "Gapyeong", gimpo: 130000, incheon: 160000, distanceKm: null },
-      { name: "고양", nameEn: "Goyang", gimpo: 80000, incheon: 90000, distanceKm: null },
-      { name: "과천", nameEn: "Gwacheon", gimpo: 90000, incheon: 100000, distanceKm: null },
-      { name: "광명", nameEn: "Gwangmyeong", gimpo: 85000, incheon: 95000, distanceKm: null },
-      { name: "광주", nameEn: "Gwangju", gimpo: 110000, incheon: 120000, distanceKm: null },
-      { name: "구리", nameEn: "Guri", gimpo: 100000, incheon: 110000, distanceKm: null },
-      { name: "군포", nameEn: "Gunpo", gimpo: 90000, incheon: 100000, distanceKm: null },
-      { name: "김포", nameEn: "Gimpo", gimpo: 70000, incheon: 80000, distanceKm: null },
-      { name: "남양주", nameEn: "Namyangju", gimpo: 110000, incheon: 120000, distanceKm: null },
-      { name: "동두천", nameEn: "Dongducheon", gimpo: 120000, incheon: 130000, distanceKm: null },
-      { name: "부천", nameEn: "Bucheon", gimpo: 80000, incheon: 90000, distanceKm: null },
-      { name: "성남", nameEn: "Seongnam", gimpo: 100000, incheon: 110000, distanceKm: null },
-      { name: "수원", nameEn: "Suwon", gimpo: 95000, incheon: 105000, distanceKm: null },
-      { name: "시흥", nameEn: "Siheung", gimpo: 85000, incheon: 95000, distanceKm: null },
-      { name: "안산", nameEn: "Ansan", gimpo: 90000, incheon: 100000, distanceKm: null },
-      { name: "안성", nameEn: "Anseong", gimpo: 120000, incheon: 130000, distanceKm: null },
-      { name: "안양", nameEn: "Anyang", gimpo: 90000, incheon: 100000, distanceKm: null },
-      { name: "양주", nameEn: "Yangju", gimpo: 120000, incheon: 130000, distanceKm: null },
-      { name: "양평", nameEn: "Yangpyeong", gimpo: 110000, incheon: 120000, distanceKm: null },
-      { name: "여주", nameEn: "Yeoju", gimpo: 120000, incheon: 130000, distanceKm: null },
-      { name: "연천", nameEn: "Yeoncheon", gimpo: 130000, incheon: 140000, distanceKm: null },
-      { name: "오산", nameEn: "Osan", gimpo: 90000, incheon: 110000, distanceKm: null },
-      { name: "용인", nameEn: "Yongin", gimpo: 110000, incheon: 120000, distanceKm: null },
-      { name: "의왕", nameEn: "Uiwang", gimpo: 90000, incheon: 100000, distanceKm: null },
-      { name: "의정부", nameEn: "Uijeongbu", gimpo: 120000, incheon: 130000, distanceKm: null },
-      { name: "이천", nameEn: "Icheon", gimpo: 110000, incheon: 120000, distanceKm: null },
-      { name: "파주", nameEn: "Paju", gimpo: 100000, incheon: 110000, distanceKm: null },
-      { name: "평택", nameEn: "Pyeongtaek", gimpo: 110000, incheon: 120000, distanceKm: null },
-      { name: "포천", nameEn: "Pocheon", gimpo: 120000, incheon: 130000, distanceKm: null },
-      { name: "하남", nameEn: "Hanam", gimpo: 100000, incheon: 110000, distanceKm: null },
-      { name: "화성", nameEn: "Hwaseong", gimpo: 100000, incheon: 110000, distanceKm: null },
-    ].sort(sortKo),
+    rows: gyeonggiRows,
   },
   {
     id: "gangwon",
@@ -211,5 +315,9 @@ export const pricingRegions: PricingRegion[] = [
   },
 ].map((region) => ({
   ...region,
-  rows: [...region.rows].sort(sortKo),
+  /** 서울·경기/수도권은 수동 순서 유지, 그 외 지역만 가나다순 */
+  rows:
+    region.id === "seoul" || region.id === "gyeonggi"
+      ? [...region.rows]
+      : ([...(region.rows as PricingRow[])].sort(sortKo) as PricingTableEntry[]),
 }));

@@ -1,52 +1,49 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
-type BespokeIntroExperienceProps = {
-  sectionLabel: string;
-  headline: string;
-  description: string;
+export type IntroServiceItem = {
+  title: string;
+  body: string;
+  image: string;
+  align: "left" | "right";
 };
 
-const services = [
-  {
-    title: "인천공항 프라이빗 의전",
-    body: "입국 동선에 맞춰 대기, 안내, 탑승까지 차분하고 정교하게 연결합니다.",
-    image:
-      "https://images.unsplash.com/photo-1536599424071-0b215a388ba7?auto=format&fit=crop&w=1800&q=80",
-    align: "left" as const,
-  },
-  {
-    title: "VIP 비즈니스 이동",
-    body: "회의 일정 중심으로 분 단위 동선을 구성해 이동의 리듬을 안정적으로 유지합니다.",
-    image:
-      "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1800&q=80",
-    align: "right" as const,
-  },
-  {
-    title: "가족/유아 동반 맞춤 케어",
-    body: "짐 적재, 탑승 동선, 정차 포인트를 사전에 반영해 편안한 여정을 제공합니다.",
-    image:
-      "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1800&q=80",
-    align: "left" as const,
-  },
-  {
-    title: "심야/새벽 안전 배차",
-    body: "심야 시간대에도 동일한 기준으로 응대하며, 도착까지 안정적인 상태를 유지합니다.",
-    image:
-      "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=1800&q=80",
-    align: "right" as const,
-  },
-];
+type BespokeIntroExperienceProps = {
+  brandTitle: string;
+  sectionLabel: string;
+  headline: string;
+  description: ReactNode;
+  coreValueEyebrow: string;
+  coreValueTitle: string;
+  coreValueBody: string;
+  contactEyebrow: string;
+  representativeName: string;
+  representativeLine: string;
+  phoneCaption: string;
+  phoneDisplay: string;
+  services: IntroServiceItem[];
+};
 
 const LUX_EASE = [0.22, 1, 0.36, 1] as const;
 const LUX_TRANSITION = { duration: 0.8, ease: LUX_EASE } as const;
 
 export function BespokeIntroExperience({
+  brandTitle,
   sectionLabel,
   headline,
   description,
+  coreValueEyebrow,
+  coreValueTitle,
+  coreValueBody,
+  contactEyebrow,
+  representativeName,
+  representativeLine,
+  phoneCaption,
+  phoneDisplay,
+  services,
 }: BespokeIntroExperienceProps) {
   const rootRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -90,20 +87,22 @@ export function BespokeIntroExperience({
           transition={LUX_TRANSITION}
         >
           <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-metal-bronze/40 bg-white/[0.03] text-metal-bronze-strong shadow-[0_0_0_1px_rgba(176,122,87,0.18)] md:h-24 md:w-24">
-            <span className='text-[10px] tracking-[0.2em] md:text-xs'>IMAGE_4 LOGO</span>
+            <span className="text-[10px] tracking-[0.2em] md:text-xs">IMAGE_4 LOGO</span>
           </div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-metal-bronze-strong">
             {sectionLabel}
           </p>
-          <h1 className='mt-6 text-balance font-["Times_New_Roman","Georgia",serif] text-6xl font-bold leading-[0.98] tracking-[-0.02em] text-tone-strong md:text-7xl lg:text-8xl'>
-            깨비 콜밴
+          <h1 className="mt-6 text-balance font-sans tracking-[-0.02em]">
+            <span className="block text-5xl font-bold leading-[0.98] text-brand-gold md:text-6xl lg:text-7xl">
+              {brandTitle}
+            </span>
+            <span className="mt-4 block text-2xl font-bold leading-tight text-tone-sky md:mt-5 md:text-3xl">
+              {headline}
+            </span>
           </h1>
-          <p className='mt-4 font-["Times_New_Roman","Georgia",serif] text-2xl font-bold tracking-[-0.02em] text-tone-sky md:text-3xl'>
-            {headline}
-          </p>
-          <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-tone-body md:text-lg">
+          <div className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-tone-body md:text-lg">
             {description}
-          </p>
+          </div>
         </motion.header>
 
         <section className="relative mt-28 md:mt-36">
@@ -148,9 +147,11 @@ export function BespokeIntroExperience({
               viewport={{ once: true, amount: 0.35 }}
               transition={LUX_TRANSITION}
             >
-              <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">Core Value</p>
-              <h2 className='mt-3 font-["Times_New_Roman","Georgia",serif] text-4xl font-bold leading-tight tracking-[-0.02em] text-tone-strong md:text-5xl'>
-                정시성, 일관성, 신뢰의 균형
+              <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">
+                {coreValueEyebrow}
+              </p>
+              <h2 className="mt-3 font-sans text-4xl font-bold leading-tight tracking-[-0.02em] text-tone-strong md:text-5xl">
+                {coreValueTitle}
               </h2>
             </motion.div>
             <motion.div
@@ -160,10 +161,7 @@ export function BespokeIntroExperience({
               viewport={{ once: true, amount: 0.35 }}
               transition={LUX_TRANSITION}
             >
-              <p className="text-base leading-relaxed text-tone-body md:text-lg">
-                예약 응대부터 도착 안내까지 모든 접점을 단일 운영 기준으로 관리합니다.
-                화려함보다 정교함에 집중해 공항 이동을 한층 안정적인 경험으로 완성합니다.
-              </p>
+              <p className="text-base leading-relaxed text-tone-body md:text-lg">{coreValueBody}</p>
             </motion.div>
           </div>
         </section>
@@ -195,12 +193,10 @@ export function BespokeIntroExperience({
                 <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">
                   Specialized Service {String(index + 1).padStart(2, "0")}
                 </p>
-                <h3 className='mt-3 font-["Times_New_Roman","Georgia",serif] text-3xl font-bold leading-tight tracking-[-0.02em] text-tone-sky md:text-4xl'>
+                <h3 className="mt-3 font-sans text-3xl font-bold leading-tight tracking-[-0.02em] text-tone-sky md:text-4xl">
                   {service.title}
                 </h3>
-                <p className="mt-5 text-base leading-relaxed text-tone-body md:text-lg">
-                  {service.body}
-                </p>
+                <p className="mt-5 text-base leading-relaxed text-tone-body md:text-lg">{service.body}</p>
               </div>
             </motion.article>
           ))}
@@ -213,19 +209,19 @@ export function BespokeIntroExperience({
           viewport={{ once: true, amount: 0.35 }}
           transition={LUX_TRANSITION}
         >
-          <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">Contact</p>
+          <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">{contactEyebrow}</p>
           <div className="mt-8 grid gap-8 md:grid-cols-[1.1fr_0.9fr] md:items-end">
             <div>
-              <p className='font-["Times_New_Roman","Georgia",serif] text-2xl italic tracking-[-0.02em] text-metal-bronze-strong md:text-3xl'>
-                대표 홍준표
+              <p className="font-sans text-2xl italic tracking-[-0.02em] text-metal-bronze-strong md:text-3xl">
+                {representativeName}
               </p>
-              <p className="mt-3 text-base text-tone-soft">고객님을 정성껏 모시겠습니다.</p>
+              <p className="mt-3 text-base text-tone-soft">{representativeLine}</p>
             </div>
             <div className="md:text-right">
-              <p className='font-["Times_New_Roman","Georgia",serif] text-4xl font-bold tracking-[-0.02em] text-tone-strong md:text-5xl'>
-                010-4135-7621
+              <p className="font-numeric text-4xl font-bold tracking-[-0.02em] text-tone-strong tabular-nums md:text-5xl">
+                {phoneDisplay}
               </p>
-              <p className="mt-3 text-sm text-tone-soft">인천공항 · 김포공항 예약 문의</p>
+              <p className="mt-3 text-sm text-tone-soft">{phoneCaption}</p>
             </div>
           </div>
         </motion.section>

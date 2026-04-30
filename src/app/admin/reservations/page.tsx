@@ -24,7 +24,7 @@ export default async function ReservationsAdminPage({ searchParams }: Props) {
 
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-10">
-      <h1 className='font-["Times_New_Roman","Georgia",serif] text-4xl font-bold tracking-[-0.02em] text-tone-strong md:text-5xl'>
+      <h1 className='font-sans text-4xl font-bold tracking-[-0.02em] text-tone-strong md:text-5xl'>
         예약 관리자 페이지
       </h1>
       <p className="mt-3 text-tone-body">

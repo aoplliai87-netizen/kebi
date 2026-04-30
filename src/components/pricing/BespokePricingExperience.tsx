@@ -1,10 +1,19 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState, type WheelEvent } from "react";
-import { pricingRegions } from "@/constants/pricingData";
-import { SITE_KAKAO_CHAT_URL, SITE_PHONE_TEL } from "@/lib/site";
-import { Button } from "@/components/ui/Button";
+import { Link } from "@/i18n/navigation";
+import {
+  isPricingRegionGroup,
+  pricingRegions,
+  type PricingRegion,
+  type PricingRow,
+  type PricingTableEntry,
+} from "@/constants/pricingData";
+import { SITE_KAKAO_CHAT_URL, SITE_PHONE_TEL, SITE_WEB_INQUIRY_PATH } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 const LUX_EASE = [0.22, 1, 0.36, 1] as const;
 const LUX_TRANSITION = { duration: 0.8, ease: LUX_EASE } as const;
@@ -24,27 +33,80 @@ const ROW_VARIANTS = {
 const KRW = new Intl.NumberFormat("ko-KR");
 const normalize = (value: string) => value.toLowerCase().replace(/\s|-/g, "");
 
+function matchesRowQuery(row: PricingRow, q: string): boolean {
+  return normalize(row.name).includes(q) || normalize(row.nameEn).includes(q);
+}
+
+function filterPricingEntries(entries: PricingTableEntry[], q: string): PricingTableEntry[] {
+  if (!q) return entries;
+  const out: PricingTableEntry[] = [];
+  for (const entry of entries) {
+    if (isPricingRegionGroup(entry)) {
+      const parentHit = normalize(entry.name).includes(q) || normalize(entry.nameEn).includes(q);
+      const childHits = entry.rows.filter((r) => matchesRowQuery(r, q));
+      if (parentHit) {
+        out.push(entry);
+      } else if (childHits.length > 0) {
+        out.push({ ...entry, rows: childHits });
+      }
+    } else if (matchesRowQuery(entry, q)) {
+      out.push(entry);
+    }
+  }
+  return out;
+}
+
 export function BespokePricingExperience() {
-  const [activeRegion, setActiveRegion] = useState(pricingRegions[0]?.id ?? "seoul");
+  const t = useTranslations("PricingPage");
+  const displayRegions = useMemo<PricingRegion[]>(() => {
+    const seoul = pricingRegions.find((region) => region.id === "seoul");
+    const metro = pricingRegions.find((region) => region.id === "gyeonggi");
+    return [
+      seoul ? { ...seoul, name: "서울", nameEn: "Seoul" } : null,
+      metro ? { ...metro, name: "경기/수도권", nameEn: "Gyeonggi / Metro Area" } : null,
+      { id: "others", name: "기타/그 외 지역", nameEn: "Other areas (Contact us)", rows: [] },
+    ].filter(Boolean) as PricingRegion[];
+  }, []);
+
+  const [activeRegion, setActiveRegion] = useState(displayRegions[0]?.id ?? "seoul");
   const [query, setQuery] = useState("");
+  const [openMetroGroups, setOpenMetroGroups] = useState<Record<string, boolean>>({});
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [canScroll, setCanScroll] = useState(false);
 
   const currentRegion = useMemo(
-    () => pricingRegions.find((region) => region.id === activeRegion) ?? pricingRegions[0],
-    [activeRegion]
+    () =>
+      displayRegions.find((region) => region.id === activeRegion) ??
+      displayRegions[0] ??
+      { id: "others", name: "기타/그 외 지역", nameEn: "Other areas (Contact us)", rows: [] },
+    [displayRegions, activeRegion]
   );
 
-  const filteredRows = useMemo(() => {
-    const normalized = normalize(query.trim());
-    if (!normalized) return currentRegion.rows;
-    return currentRegion.rows.filter(
-      (row) =>
-        normalize(row.name).includes(normalized) ||
-        normalize(row.nameEn).includes(normalized)
+  const queryNorm = useMemo(() => normalize(query.trim()), [query]);
+  const searchActive = queryNorm.length > 0;
+
+  const filteredEntries = useMemo(() => {
+    const rows = currentRegion.rows;
+    if (currentRegion.id === "gyeonggi") {
+      return filterPricingEntries(rows, queryNorm);
+    }
+    if (!queryNorm) return rows;
+    return rows.filter(
+      (entry) =>
+        !isPricingRegionGroup(entry) && matchesRowQuery(entry, queryNorm),
     );
-  }, [currentRegion, query]);
+  }, [currentRegion, queryNorm]);
+
+  const groupExpanded = (id: string) => searchActive || openMetroGroups[id] === true;
+
+  const toggleMetroGroup = (id: string) => {
+    if (searchActive) return;
+    setOpenMetroGroups((prev) => ({
+      ...prev,
+      [id]: !(prev[id] ?? false),
+    }));
+  };
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -81,38 +143,38 @@ export function BespokePricingExperience() {
 
   return (
     <div className="bg-[radial-gradient(circle_at_15%_15%,rgba(97,138,196,0.12),transparent_38%),linear-gradient(180deg,#04070d_0%,#071224_55%,#05080f_100%)]">
-      <section className="border-b border-border/45 py-20 md:py-24">
-        <div className="mx-auto max-w-content px-4 md:px-6">
+      <section className="scroll-mt-24 border-b border-border/45 pt-4 pb-12 md:pb-16 md:pt-6">
+        <div className="mx-auto max-w-content space-y-5 px-4 md:px-6">
           <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={LUX_TRANSITION}
-            className="rounded-3xl border border-metal-bronze/35 bg-surface/65 p-7 shadow-[0_18px_52px_rgba(0,0,0,0.35)] md:p-10"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: LUX_EASE }}
+            className="rounded-2xl border border-metal-bronze/35 bg-surface/65 p-4 shadow-[0_18px_52px_rgba(0,0,0,0.35)] md:p-6"
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.26em] text-metal-bronze-strong">
-              PRICING GUIDE
-            </p>
-            <h1 className='mt-4 font-["Times_New_Roman","Georgia",serif] text-5xl font-bold tracking-[-0.02em] text-tone-strong md:text-6xl'>
-              정찰제 운임 안내
-            </h1>
-            <p className="mt-5 rounded-2xl border border-metal-bronze/30 bg-black/20 px-4 py-3 text-base text-tone-body md:text-lg">
-              본 요금표는 고속도로 통행료가 포함된 정찰제 금액입니다.
-            </p>
-            <div className="mt-4 rounded-2xl border border-brand-gold/45 bg-brand-gold-soft px-4 py-3 text-sm font-semibold text-[#f6e8bd] md:text-base">
-              스타리아/카니발 6인 이상 탑승 시 추가 요금이 발생할 수 있습니다.
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-metal-bronze-strong md:text-xs">
+                  PRICING GUIDE
+                </p>
+                <h1 className="mt-2 font-sans text-3xl font-bold tracking-[-0.02em] text-tone-strong md:text-4xl lg:text-5xl">
+                  요금 안내 (정찰제)
+                </h1>
+              </div>
+              <div className="flex min-w-0 flex-1 flex-col gap-3">
+                <p className="rounded-xl border border-metal-bronze/30 bg-black/20 px-3 py-2.5 text-sm text-tone-body md:text-base">
+                  본 요금표는 고속도로 통행료가 포함된 금액입니다.
+                </p>
+                <div className="rounded-xl border border-brand-gold/45 bg-brand-gold-soft px-3 py-2.5 text-xs font-semibold text-[#f6e8bd] md:text-sm">
+                  스타리아 6인 이상 탑승 시 추가 요금이 발생할 수 있습니다.
+                </div>
+              </div>
             </div>
           </motion.div>
-        </div>
-      </section>
 
-      <section className="border-b border-border/45 py-16 md:py-20">
-        <div className="mx-auto max-w-content px-4 md:px-6">
           <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={LUX_TRANSITION}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: LUX_EASE, delay: 0.05 }}
             className="rounded-3xl border border-white/10 bg-[#0a1324]/80 p-5 md:p-7"
           >
             <div className="border-b border-white/10 pb-5">
@@ -129,9 +191,9 @@ export function BespokePricingExperience() {
                   }}
                 >
                   <div className="inline-flex min-w-max items-stretch rounded-xl border border-white/15 bg-white/5 p-1.5 backdrop-blur-md">
-                    {pricingRegions.map((region, index) => {
+                    {displayRegions.map((region, index) => {
                       const active = region.id === activeRegion;
-                      const withDivider = index !== pricingRegions.length - 1;
+                      const withDivider = index !== displayRegions.length - 1;
                       return (
                         <div
                           key={`mobile-${region.id}`}
@@ -171,15 +233,17 @@ export function BespokePricingExperience() {
                 </div>
               </div>
 
-              <div className="hidden grid-cols-5 rounded-xl border border-white/15 bg-white/5 p-1.5 backdrop-blur-md xl:grid">
-                {pricingRegions.map((region, index) => {
+              <div
+                className="hidden rounded-xl border border-white/15 bg-white/5 p-1.5 backdrop-blur-md xl:grid"
+                style={{ gridTemplateColumns: `repeat(${displayRegions.length}, minmax(0, 1fr))` }}
+              >
+                {displayRegions.map((region, index) => {
                   const active = region.id === activeRegion;
-                  const withDivider = index !== pricingRegions.length - 1;
-                  const withRowDivider = index < 5;
+                  const withDivider = index !== displayRegions.length - 1;
                   return (
                     <div
                       key={`desktop-${region.id}`}
-                      className={`relative flex items-center ${withDivider ? "border-r border-white/10" : ""} ${withRowDivider ? "border-b border-white/10" : ""}`}
+                      className={`relative flex items-center ${withDivider ? "border-r border-white/10" : ""}`}
                     >
                       <button
                         type="button"
@@ -220,11 +284,10 @@ export function BespokePricingExperience() {
             </div>
 
             <div className="mt-6 overflow-hidden rounded-2xl border border-white/10">
-              <div className="grid grid-cols-[1.9fr_1fr_1fr_0.8fr] bg-brand-deep/65 px-4 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-metal-bronze-strong md:px-5 md:text-base">
+              <div className="grid grid-cols-[1.9fr_1fr_1fr] bg-brand-deep/65 px-4 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-metal-bronze-strong md:px-5 md:text-base">
                 <p>지역명(영어명)</p>
-                <p>요금(김포)</p>
-                <p>요금(인천)</p>
-                <p>거리(km)</p>
+                <p className="font-numeric tabular-nums">요금(김포공항)</p>
+                <p className="font-numeric tabular-nums">요금(인천공항)</p>
               </div>
               <motion.div
                 className="divide-y divide-white/10 bg-[#081121]/80"
@@ -233,91 +296,111 @@ export function BespokePricingExperience() {
                 initial="hidden"
                 animate="show"
               >
-                {filteredRows.length === 0 ? (
-                  <p className="px-5 py-8 text-base text-tone-soft md:text-lg">
-                    검색 결과가 없습니다. 다른 지역명(한글/영문)으로 검색해 주세요.
-                  </p>
-                ) : (
-                  filteredRows.map((row) => (
-                    <motion.article
-                      key={`${currentRegion.id}-${row.name}`}
-                      variants={ROW_VARIANTS}
-                      className="grid grid-cols-[1.9fr_1fr_1fr_0.8fr] items-center px-4 py-4 text-base md:px-5 md:text-lg"
-                    >
-                      <p className="font-semibold text-tone-strong">
-                        {row.name} <span className="font-normal text-tone-soft">({row.nameEn})</span>
+                {filteredEntries.length === 0 ? (
+                  currentRegion.id === "others" ? (
+                    <div className="flex flex-col gap-5 px-4 py-6 sm:px-5 md:flex-row md:items-center md:justify-between md:gap-8">
+                      <p className="min-w-0 flex-1 text-base leading-relaxed text-tone-soft md:text-lg">
+                        {t("othersNotice")}
                       </p>
-                      <p className="text-metal-bronze-strong">{KRW.format(row.gimpo)}원</p>
-                      <p className="text-metal-bronze-strong">{KRW.format(row.incheon)}원</p>
-                      <p className="text-tone-body">{row.distanceKm ? row.distanceKm : "-"}</p>
-                    </motion.article>
-                  ))
+                      <div className="flex shrink-0 flex-wrap gap-2 md:justify-end">
+                        <a
+                          href={SITE_PHONE_TEL}
+                          className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-5 text-sm font-semibold text-emerald-50 transition-colors hover:bg-emerald-500"
+                        >
+                          {t("othersPhone")}
+                        </a>
+                        <a
+                          href={SITE_KAKAO_CHAT_URL}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex h-11 items-center justify-center rounded-xl border border-[#FEE500]/80 bg-[#FEE500] px-5 text-sm font-semibold text-[#191919] transition-opacity hover:opacity-95"
+                        >
+                          {t("othersKakao")}
+                        </a>
+                        <Link
+                          href={SITE_WEB_INQUIRY_PATH}
+                          className="inline-flex h-11 items-center justify-center rounded-xl border border-white/20 bg-white/[0.08] px-5 text-sm font-semibold text-tone-strong transition-colors hover:bg-white/12"
+                        >
+                          {t("othersWeb")}
+                        </Link>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="px-5 py-8 text-base text-tone-soft md:text-lg">{t("searchEmpty")}</p>
+                  )
+                ) : (
+                  filteredEntries.map((entry) =>
+                    isPricingRegionGroup(entry) ? (
+                      <div
+                        key={`${currentRegion.id}-g-${entry.id}`}
+                        className="border-b border-white/10 last:border-b-0"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => toggleMetroGroup(entry.id)}
+                          className="grid w-full grid-cols-[1.9fr_1fr_1fr] items-center gap-2 px-4 py-4 text-left text-base transition-colors hover:bg-white/[0.04] md:px-5 md:text-lg"
+                          aria-expanded={groupExpanded(entry.id)}
+                        >
+                          <span className="flex min-w-0 items-center gap-2 font-semibold text-tone-strong">
+                            <ChevronDown
+                              className={cn(
+                                "h-4 w-4 shrink-0 text-metal-bronze-strong transition-transform",
+                                !groupExpanded(entry.id) && "-rotate-90",
+                              )}
+                              aria-hidden
+                            />
+                            <span className="min-w-0">
+                              {entry.name}{" "}
+                              <span className="font-normal text-tone-soft">({entry.nameEn})</span>
+                            </span>
+                          </span>
+                          <span className="font-numeric tabular-nums text-tone-soft">—</span>
+                          <span className="font-numeric tabular-nums text-tone-soft">—</span>
+                        </button>
+                        {groupExpanded(entry.id) && (
+                          <div className="bg-black/15">
+                            {entry.rows.map((row) => (
+                              <motion.article
+                                key={`${currentRegion.id}-${entry.id}-${row.name}`}
+                                variants={ROW_VARIANTS}
+                                className="grid grid-cols-[1.9fr_1fr_1fr] items-center border-t border-white/5 px-4 py-3.5 pl-8 text-base md:px-5 md:pl-10 md:text-lg"
+                              >
+                                <p className="font-medium text-tone-strong">
+                                  {row.name}{" "}
+                                  <span className="font-normal text-tone-soft">({row.nameEn})</span>
+                                </p>
+                                <p className="font-numeric tabular-nums text-metal-bronze-strong">
+                                  {KRW.format(row.gimpo)}원
+                                </p>
+                                <p className="font-numeric tabular-nums text-metal-bronze-strong">
+                                  {KRW.format(row.incheon)}원
+                                </p>
+                              </motion.article>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <motion.article
+                        key={`${currentRegion.id}-${entry.name}`}
+                        variants={ROW_VARIANTS}
+                        className="grid grid-cols-[1.9fr_1fr_1fr] items-center px-4 py-4 text-base md:px-5 md:text-lg"
+                      >
+                        <p className="font-semibold text-tone-strong">
+                          {entry.name}{" "}
+                          <span className="font-normal text-tone-soft">({entry.nameEn})</span>
+                        </p>
+                        <p className="font-numeric tabular-nums text-metal-bronze-strong">
+                          {KRW.format(entry.gimpo)}원
+                        </p>
+                        <p className="font-numeric tabular-nums text-metal-bronze-strong">
+                          {KRW.format(entry.incheon)}원
+                        </p>
+                      </motion.article>
+                    ),
+                  )
                 )}
               </motion.div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="py-16 md:py-20">
-        <div className="mx-auto max-w-content px-4 md:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={LUX_TRANSITION}
-            className="rounded-3xl border border-white/15 bg-white/[0.04] p-6 backdrop-blur-xl md:p-8"
-          >
-            <h2 className='font-["Times_New_Roman","Georgia",serif] text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
-              자주 묻는 질문
-            </h2>
-            <div className="mt-6 grid gap-4 md:grid-cols-3">
-              <article className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm font-semibold text-tone-strong">야간/새벽에도 요금이 동일한가요?</p>
-                <p className="mt-2 text-sm leading-relaxed text-tone-body">
-                  기본 표준 운임을 적용하며, 심야 대기나 특별 요청이 있을 경우 사전 안내 후 반영됩니다.
-                </p>
-              </article>
-              <article className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm font-semibold text-tone-strong">왕복 예약은 어떻게 계산되나요?</p>
-                <p className="mt-2 text-sm leading-relaxed text-tone-body">
-                  대기 시간과 귀환 일정 포함 여부에 따라 맞춤 정찰제로 별도 안내드립니다.
-                </p>
-              </article>
-              <article className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm font-semibold text-tone-strong">짐이 많아도 이용 가능한가요?</p>
-                <p className="mt-2 text-sm leading-relaxed text-tone-body">
-                  캐리어/골프백/유아용품 동반 수량을 전달해주시면 차량 타입에 맞춰 안전하게 배차합니다.
-                </p>
-              </article>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={LUX_TRANSITION}
-            className="mt-8 rounded-3xl border border-metal-bronze/35 bg-gradient-to-r from-brand-deep/55 to-surface p-6 md:p-8"
-          >
-            <p className="text-sm text-tone-body">빠른 상담이 필요하신가요?</p>
-            <h3 className='mt-2 font-["Times_New_Roman","Georgia",serif] text-3xl font-bold tracking-[-0.02em] text-tone-strong md:text-4xl'>
-              전화/카톡 상담으로 즉시 요금 확인
-            </h3>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <a href={SITE_PHONE_TEL}>
-                <Button className="h-12 rounded-xl px-6 text-sm font-semibold">
-                  전화 상담하기
-                </Button>
-              </a>
-              <a href={SITE_KAKAO_CHAT_URL} target="_blank" rel="noreferrer">
-                <Button
-                  variant="outline"
-                  className="h-12 rounded-xl border-metal-bronze/40 px-6 text-sm font-semibold text-tone-sky"
-                >
-                  카톡 상담하기
-                </Button>
-              </a>
             </div>
           </motion.div>
         </div>
