@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useId, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
-import { SITE_PHONE_TEL } from "@/lib/site";
+import { BRAND_LOGO_SRC, SITE_PHONE_TEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { VEHICLE_FLEET_MAIN, type FleetVehicleKey } from "@/constants/vehicleFleetImages";
 
@@ -47,26 +47,35 @@ function FleetRow({ vkey, onOpenDetail }: FleetRowProps) {
   return (
     <article className="overflow-hidden rounded-[28px] border border-white/10 bg-[linear-gradient(135deg,rgba(12,16,24,0.92),rgba(8,12,20,0.98))] shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
       <div className="flex flex-col lg:flex-row lg:items-stretch">
-        <div className="relative aspect-[16/10] w-full shrink-0 lg:aspect-auto lg:min-h-[280px] lg:w-[min(44%,480px)]">
+        <div
+          className={cn(
+            "relative w-full shrink-0 lg:aspect-auto lg:w-[min(44%,480px)]",
+            vkey === "staria"
+              ? "aspect-[16/11] lg:min-h-[300px]"
+              : "aspect-[16/10] lg:min-h-[280px]",
+          )}
+        >
           <Image
             src={img}
             alt={t(`${vkey}.imageAlt`)}
             fill
-            className="object-cover"
+            className={cn(
+              vkey === "staria"
+                ? "object-contain bg-[#070b12]"
+                : "object-cover object-center",
+            )}
             sizes="(max-width: 1024px) 100vw, 480px"
             priority={vkey === "staria"}
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/55 via-transparent to-transparent lg:from-black/40" />
-          <div className="absolute bottom-5 left-5 flex items-center gap-2 rounded-lg border border-white/15 bg-black/45 px-4 py-2 backdrop-blur-sm">
-            <span
-              className={`font-semibold uppercase tracking-[0.28em] ${accent}`}
-              style={{
-                textShadow:
-                  "0 0 18px rgba(143,200,255,0.85), 0 0 42px rgba(143,200,255,0.35)",
-              }}
-            >
-              Kkebi
-            </span>
+          <div className="absolute bottom-5 left-5 rounded-lg border border-white/15 bg-black/50 p-2 backdrop-blur-sm">
+            <Image
+              src={BRAND_LOGO_SRC}
+              alt=""
+              width={120}
+              height={44}
+              className="h-7 w-auto max-w-[7.5rem] object-contain object-left sm:h-8 sm:max-w-[8.5rem]"
+            />
           </div>
         </div>
 

@@ -8,12 +8,9 @@
  * 원격 URL을 그대로 써도 됩니다. 빌드 전에 파일이 실제로 존재하는지 확인하세요.
  */
 export const VEHICLE_FLEET_MAIN = {
-  staria:
-    "https://images.unsplash.com/photo-1619405399517-d7fce0f13302?auto=format&fit=crop&w=1400&q=82",
-  solati:
-    "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1400&q=82",
-  county:
-    "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1400&q=82",
+  staria: "/images/vehicles/staria-hero.png",
+  solati: "/images/vehicles/solati-hero.png",
+  county: "/images/vehicles/county-hero.png",
 } as const;
 
 export type FleetVehicleKey = keyof typeof VEHICLE_FLEET_MAIN;
