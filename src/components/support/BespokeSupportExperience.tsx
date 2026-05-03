@@ -4,12 +4,75 @@ import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
-import { SITE_KAKAO_CHAT_URL, SITE_PHONE_TEL } from "@/lib/site";
+import {
+  SITE_FACEBOOK_MESSENGER_URL,
+  SITE_INSTAGRAM_DM_URL,
+  SITE_KAKAO_CHAT_URL,
+  SITE_LINE_URL,
+  SITE_PHONE_TEL,
+  SITE_WHATSAPP_URL,
+} from "@/lib/site";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
 const LUX_EASE = [0.22, 1, 0.36, 1] as const;
 const FAQ_IDS = [1, 2, 3, 4, 5] as const;
+
+type QuickChannel = "" | "phone" | "kakao" | "whatsapp" | "line" | "instagram" | "facebook";
+
+const CHANNEL_ORDER: Exclude<QuickChannel, "">[] = [
+  "phone",
+  "kakao",
+  "whatsapp",
+  "line",
+  "instagram",
+  "facebook",
+];
+
+const CHANNEL_MSG_KEY: Record<
+  Exclude<QuickChannel, "">,
+  | "contactPhone"
+  | "contactKakao"
+  | "contactWhatsapp"
+  | "contactLine"
+  | "contactInstagram"
+  | "contactFacebook"
+> = {
+  phone: "contactPhone",
+  kakao: "contactKakao",
+  whatsapp: "contactWhatsapp",
+  line: "contactLine",
+  instagram: "contactInstagram",
+  facebook: "contactFacebook",
+};
+
+function channelUrl(id: Exclude<QuickChannel, "">): string {
+  switch (id) {
+    case "phone":
+      return SITE_PHONE_TEL;
+    case "kakao":
+      return SITE_KAKAO_CHAT_URL;
+    case "whatsapp":
+      return SITE_WHATSAPP_URL;
+    case "line":
+      return SITE_LINE_URL;
+    case "instagram":
+      return SITE_INSTAGRAM_DM_URL;
+    case "facebook":
+      return SITE_FACEBOOK_MESSENGER_URL;
+    default:
+      return SITE_PHONE_TEL;
+  }
+}
+
+function openChannel(id: Exclude<QuickChannel, "">) {
+  const url = channelUrl(id);
+  if (url.startsWith("tel:")) {
+    window.location.href = url;
+    return;
+  }
+  window.open(url, "_blank", "noopener,noreferrer");
+}
 
 export function BespokeSupportExperience() {
   const t = useTranslations("Support");
@@ -81,6 +144,9 @@ export function BespokeSupportExperience() {
         return;
       }
       setSubmitState("success");
+      if (typeof window !== "undefined") {
+        window.open(SITE_KAKAO_CHAT_URL, "_blank", "noopener,noreferrer");
+      }
       setName("");
       setPhone("");
       setDeparture("");
@@ -103,20 +169,20 @@ export function BespokeSupportExperience() {
 
   return (
     <div className="bg-[radial-gradient(circle_at_15%_15%,rgba(97,138,196,0.12),transparent_38%),linear-gradient(180deg,#04070d_0%,#071224_55%,#05080f_100%)]">
-      <section className="scroll-mt-24 border-b border-border/45 pt-6 pb-12 md:pb-16 md:pt-10">
+      <section className="scroll-mt-24 border-b border-border/45 bg-[radial-gradient(circle_at_50%_0%,rgba(212,175,55,0.08),transparent_55%),linear-gradient(180deg,#04070d_0%,#071224_45%,#05080f_100%)] pt-8 pb-12 md:pb-16 md:pt-12">
         <div className="mx-auto max-w-content px-4 md:px-6">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: LUX_EASE }}
           >
-            <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-metal-bronze-strong md:text-xs">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-brand-gold/90 md:text-xs">
               {t("heroEyebrow")}
             </p>
-            <h1 className="mt-3 font-sans text-3xl font-bold tracking-[-0.02em] text-tone-strong md:text-4xl lg:text-5xl">
+            <h1 className="mt-3 max-w-4xl font-sans text-3xl font-bold leading-[1.12] tracking-[-0.02em] text-brand-gold md:text-4xl lg:text-5xl">
               {t("heroTitle")}
             </h1>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-tone-body md:text-lg">
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-tone-body md:mt-5 md:text-lg">
               {t("heroDesc")}
             </p>
           </motion.div>
@@ -127,7 +193,7 @@ export function BespokeSupportExperience() {
             transition={{ duration: 0.5, ease: LUX_EASE, delay: 0.05 }}
             className="mt-10 rounded-3xl border border-white/10 bg-[#0a1324]/85 p-6 backdrop-blur-md md:p-8"
           >
-            <h2 className="font-sans text-2xl font-bold tracking-[-0.02em] text-tone-sky md:text-3xl">
+            <h2 className="font-sans text-2xl font-bold tracking-[-0.02em] text-brand-gold md:text-3xl">
               {t("faqTitle")}
             </h2>
             <div className="mt-6 space-y-2">
@@ -172,7 +238,7 @@ export function BespokeSupportExperience() {
 
       <section className="border-b border-border/45 py-12 md:py-16">
         <div className="mx-auto max-w-content px-4 md:px-6">
-          <h2 className="font-sans text-2xl font-bold tracking-[-0.02em] text-tone-strong md:text-3xl">
+          <h2 className="font-sans text-2xl font-bold tracking-[-0.02em] text-brand-gold md:text-3xl">
             {t("formTitle")}
           </h2>
           <p className="mt-3 max-w-2xl text-tone-body md:text-lg">{t("formDesc")}</p>
@@ -334,40 +400,52 @@ export function BespokeSupportExperience() {
               <p className="text-sm font-medium text-red-300/95">{t("errorGeneric")}</p>
             )}
 
-            <Button
-              type="submit"
-              size="lg"
-              className="h-14 w-full rounded-xl text-base font-semibold md:w-auto md:min-w-[200px]"
-              disabled={submitState === "loading"}
-            >
-              {submitState === "loading" ? t("submitting") : t("submit")}
-            </Button>
+            <div className="flex flex-col-reverse gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-center text-sm leading-relaxed text-tone-soft sm:text-left">{t("submitHint")}</p>
+              <Button
+                type="submit"
+                size="lg"
+                className="h-14 w-full shrink-0 rounded-xl px-10 text-base font-semibold sm:ml-auto sm:w-auto sm:min-w-[260px]"
+                disabled={submitState === "loading"}
+              >
+                {submitState === "loading" ? t("submitting") : t("submit")}
+              </Button>
+            </div>
           </form>
 
           <div className="mt-12 rounded-3xl border border-metal-bronze/35 bg-gradient-to-r from-brand-deep/55 to-surface p-6 md:p-10">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-metal-bronze-strong">
-              {t("quickEyebrow")}
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-gold/90">
+              {t("contactSectionEyebrow")}
             </p>
-            <h3 className="mt-3 font-sans text-2xl font-bold tracking-[-0.02em] text-tone-strong md:text-4xl">
-              {t("quickTitle")}
+            <h3 className="mt-2 font-sans text-xl font-bold tracking-[-0.02em] text-brand-gold md:text-2xl">
+              {t("contactSectionTitle")}
             </h3>
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
-              <a href={SITE_PHONE_TEL} className="block flex-1 sm:min-w-[240px]">
-                <span className="inline-flex h-14 w-full items-center justify-center rounded-2xl bg-emerald-600 px-8 text-lg font-semibold text-emerald-50 shadow-lg transition-colors hover:bg-emerald-500">
-                  {t("quickPhone")}
-                </span>
-              </a>
-              <a
-                href={SITE_KAKAO_CHAT_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="block flex-1 sm:min-w-[240px]"
-              >
-                <span className="inline-flex h-14 w-full items-center justify-center rounded-2xl border-2 border-[#FEE500]/90 bg-[#FEE500] px-8 text-lg font-semibold text-[#191919] shadow-lg transition-opacity hover:opacity-95">
-                  {t("quickKakao")}
-                </span>
-              </a>
-            </div>
+            <p className="mt-2 max-w-2xl text-sm text-tone-body md:text-base">{t("contactSectionDesc")}</p>
+            <label htmlFor="quick-channel" className="sr-only">
+              {t("contactSectionTitle")}
+            </label>
+            <select
+              id="quick-channel"
+              defaultValue=""
+              onChange={(e) => {
+                const v = e.target.value;
+                if (!v) return;
+                const id = v as Exclude<QuickChannel, "">;
+                const label = t(CHANNEL_MSG_KEY[id]);
+                const ok = window.confirm(t("channelConfirm", { channel: label }));
+                e.target.value = "";
+                if (!ok) return;
+                openChannel(id);
+              }}
+              className="mt-6 h-14 w-full rounded-xl border border-metal-bronze/35 bg-black/35 px-4 text-base font-medium text-tone-strong focus:border-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold/30 md:max-w-xl"
+            >
+              <option value="">{t("contactMethodPlaceholder")}</option>
+              {CHANNEL_ORDER.map((id) => (
+                <option key={id} value={id} className="bg-[#0a1324]">
+                  {t(CHANNEL_MSG_KEY[id])}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </section>

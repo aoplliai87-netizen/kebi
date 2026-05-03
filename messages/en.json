@@ -54,7 +54,7 @@
     "faq5Q": "What if we have a lot of luggage?",
     "faq5A": "Share suitcase, golf, and child-equipment counts in advance and we will match you with a vehicle that fits—loaded and handled with the same attention as our typical airport runs.",
     "formTitle": "Online inquiry",
-    "formDesc": "Submit the form and we will get back to you. For immediate help, use the phone or Kakao buttons below.",
+    "formDesc": "Submit the form and we will get back to you. For immediate help, pick a channel below or call us directly.",
     "fieldName": "Full name",
     "fieldPhone": "Phone / messengers",
     "fieldDeparture": "Pickup location",
@@ -72,10 +72,18 @@
     "errorGeneric": "We could not send your inquiry. Please try again or call us.",
     "validationRequired": "Please fill in all required fields.",
     "validationPhone": "Please enter a valid phone number.",
-    "quickEyebrow": "Faster help",
-    "quickTitle": "Call or Kakao",
-    "quickPhone": "Call us",
-    "quickKakao": "Kakao chat",
+    "contactSectionEyebrow": "QUICK LINKS",
+    "contactSectionTitle": "Choose a channel",
+    "contactSectionDesc": "Choose a channel, confirm, then we will connect you.",
+    "contactMethodPlaceholder": "Select a channel",
+    "channelConfirm": "Open {channel}?\nPress OK to continue.",
+    "contactPhone": "Phone call",
+    "contactKakao": "KakaoTalk",
+    "contactWhatsapp": "WhatsApp",
+    "contactLine": "LINE",
+    "contactInstagram": "Instagram DM",
+    "contactFacebook": "Facebook Messenger",
+    "submitHint": "After your inquiry is received, KakaoTalk will open in a new tab.",
     "requiredHint": "Required"
   },
   "InquiryPage": {
@@ -86,6 +94,8 @@
     "ctaPhone": "Call us"
   },
   "PricingPage": {
+    "heroEyebrow": "PRICING GUIDE",
+    "heroTitle": "Fare guide (flat rates)",
     "othersNotice": "This area is quoted separately. Please contact us by phone, Kakao, or the website inquiry page.",
     "searchEmpty": "No results. Try another place name in Korean or English.",
     "othersPhone": "Call",
@@ -179,15 +189,18 @@
       "heroDesc": "See what travelers say about their rides with Kkebi.",
       "one": {
         "content": "Perfect pickup timing for my early morning flight.",
-        "author": "Customer K**"
+        "author": "Customer K**",
+        "postedAt": "2025-12-18"
       },
       "two": {
         "content": "I had a lot of luggage and still felt supported from start to end.",
-        "author": "Customer P**"
+        "author": "Customer P**",
+        "postedAt": "2025-11-07"
       },
       "three": {
         "content": "Fast response and clear communication. I will book again.",
-        "author": "Customer L**"
+        "author": "Customer L**",
+        "postedAt": "2025-09-24"
       }
     }
   },
@@ -263,5 +276,66 @@
       "f3": "Airport access and longer routes covered",
       "f4": "Spacious cabin for extended journeys"
     }
+  },
+  "BookingExperience": {
+    "steps": {
+      "s1": "1) Contact details",
+      "s2": "2) Schedule & service type",
+      "s3": "3) Pickup & drop-off",
+      "s4": "4) Vehicle, passengers & bags"
+    },
+    "onlineTitle": "Online booking",
+    "dateHint": "Pick date and time from the selectors or type directly.",
+    "routeDeparture": "Pickup",
+    "routeDestination": "Drop-off",
+    "swapRoute": "Swap pickup and drop-off",
+    "primaryPlaceholder": "Select area type",
+    "subPlaceholder": "Select sub-area",
+    "detailPlaceholder": "Detailed address, building, gate, etc.",
+    "flightOptional": "Flight number (optional)",
+    "waypointCta": "Add stopover",
+    "waypointModalTitle": "Stopovers",
+    "waypointAdd": "Add a stopover",
+    "waypointAppend": "Add to list",
+    "modalClose": "Close",
+    "waypointRemove": "Remove",
+    "waypointEmpty": "No stopovers yet. Add one below.",
+    "waypointListLabel": "Stopovers",
+    "vehiclePlaceholder": "Select vehicle",
+    "luggage": "Luggage",
+    "golfBags": "Golf bags",
+    "summaryRoute": "Pickup / Drop-off",
+    "summaryWaypoints": "Stopovers",
+    "summaryGolf": "Golf bags",
+    "validationRoute": "Please complete pickup & drop-off (area, sub-area, details) and select a vehicle.",
+    "validationMessenger": "Please select a messenger.",
+    "primary_incheon_airport": "Incheon Airport",
+    "primary_gimpo_airport": "Gimpo Airport",
+    "primary_seoul": "Seoul",
+    "primary_gyeonggi": "Gyeonggi / Greater Seoul",
+    "primary_other": "Other regions",
+    "messengerLabel": "Messenger",
+    "messengerSelectPlaceholder": "Choose messenger",
+    "childLabelMain": "Child",
+    "childLabelSub": "(under 7)"
+  },
+  "ReviewBoard": {
+    "sampleBadge": "Sample {n}",
+    "userSectionTitle": "Review board",
+    "writeReviewBtn": "Write a post",
+    "writeReviewHint": "Tap the button below to open the review form.",
+    "formTitle": "Write a review",
+    "authorLabel": "Nickname (optional)",
+    "authorPlaceholder": "Anonymous",
+    "contentLabel": "Your feedback",
+    "contentPlaceholder": "Share your experience (min. 10 characters)",
+    "imagesLabel": "Photos (optional, up to 4)",
+    "submit": "Submit",
+    "submitting": "Submitting…",
+    "success": "Thank you — your review was posted.",
+    "error": "Could not submit. Please try again shortly.",
+    "validationContent": "Please enter at least 10 characters.",
+    "emptyUser": "No guest reviews yet — be the first.",
+    "loadError": "Could not load reviews."
   }
 }

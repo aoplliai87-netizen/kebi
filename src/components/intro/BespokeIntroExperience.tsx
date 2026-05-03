@@ -2,7 +2,9 @@
 
 import type { ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 import { useRef } from "react";
+import { BRAND_LOGO_SRC } from "@/lib/site";
 
 export type IntroServiceItem = {
   title: string;
@@ -86,10 +88,21 @@ export function BespokeIntroExperience({
           viewport={{ once: true, amount: 0.35 }}
           transition={LUX_TRANSITION}
         >
-          <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-metal-bronze/40 bg-white/[0.03] text-metal-bronze-strong shadow-[0_0_0_1px_rgba(176,122,87,0.18)] md:h-24 md:w-24">
-            <span className="text-[10px] tracking-[0.2em] md:text-xs">IMAGE_4 LOGO</span>
+          <div className="mx-auto mb-8 flex justify-center">
+            <div className="rounded-full p-[2px] shadow-[0_16px_44px_rgba(0,0,0,0.55)] [background:linear-gradient(145deg,#e8c547_0%,#b8892a_42%,#7a4d2e_100%)]">
+              <div className="flex max-w-[220px] items-center justify-center rounded-full bg-[radial-gradient(circle_at_50%_38%,#121c2e_0%,#060b13_72%)] px-6 py-5 ring-1 ring-black/40 md:max-w-[260px] md:px-8 md:py-6">
+                <Image
+                  src={BRAND_LOGO_SRC}
+                  alt=""
+                  width={320}
+                  height={120}
+                  className="h-auto w-full max-h-[5.5rem] object-contain object-center md:max-h-[6.5rem]"
+                  priority
+                />
+              </div>
+            </div>
           </div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-metal-bronze-strong">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-metal-bronze-strong md:text-sm md:tracking-[0.26em]">
             {sectionLabel}
           </p>
           <h1 className="mt-6 text-balance font-sans tracking-[-0.02em]">

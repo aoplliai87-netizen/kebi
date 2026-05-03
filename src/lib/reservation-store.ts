@@ -20,6 +20,11 @@ export type ReservationRecord = {
   vehicle: string;
   passengers: number;
   luggage: number;
+  /** 성인·소아 구분 저장 (선택) */
+  adultPassengers?: number;
+  childPassengers?: number;
+  golfBags?: number;
+  waypointsSummary?: string;
   preferredMessenger: string;
 };
 

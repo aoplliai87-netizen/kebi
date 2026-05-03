@@ -93,7 +93,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           viewport={{ once: true, amount: 0.45 }}
           transition={LUX_TRANSITION}
         >
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-metal-bronze-strong">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-metal-bronze-strong md:text-[13px] md:tracking-[0.26em]">
             {props.heroEyebrow}
           </p>
           <h1 className='mt-6 text-balance font-sans text-6xl font-bold leading-[0.98] tracking-[-0.02em] text-tone-strong drop-shadow-[0_6px_28px_rgba(0,0,0,0.55)] md:text-7xl lg:text-8xl'>
@@ -116,14 +116,14 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Link href="/booking">
-              <Button className="h-11 rounded-xl px-7 text-sm font-semibold">
+              <Button className="h-11 rounded-xl px-7 text-sm font-semibold md:h-12 md:px-8 md:text-base">
                 실시간 예약하기
               </Button>
             </Link>
             <a href={SITE_PHONE_TEL}>
               <Button
                 variant="outline"
-                className="h-11 rounded-xl border-metal-bronze/45 px-7 text-sm font-semibold text-tone-sky"
+                className="h-11 rounded-xl border-metal-bronze/45 px-7 text-sm font-semibold text-tone-sky md:h-12 md:px-8 md:text-base"
               >
                 전화 상담하기
               </Button>

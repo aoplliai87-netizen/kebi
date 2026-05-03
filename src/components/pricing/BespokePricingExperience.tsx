@@ -153,11 +153,11 @@ export function BespokePricingExperience() {
           >
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
               <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-metal-bronze-strong md:text-xs">
-                  PRICING GUIDE
+                <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-brand-gold/90 md:text-xs">
+                  {t("heroEyebrow")}
                 </p>
-                <h1 className="mt-2 font-sans text-3xl font-bold tracking-[-0.02em] text-tone-strong md:text-4xl lg:text-5xl">
-                  요금 안내 (정찰제)
+                <h1 className="mt-2 font-sans text-3xl font-bold tracking-[-0.02em] text-brand-gold md:text-4xl lg:text-5xl">
+                  {t("heroTitle")}
                 </h1>
               </div>
               <div className="flex min-w-0 flex-1 flex-col gap-3">

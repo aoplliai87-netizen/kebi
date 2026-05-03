@@ -8,21 +8,16 @@ import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
 import { SITE_PHONE_TEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { VEHICLE_FLEET_MAIN, type FleetVehicleKey } from "@/constants/vehicleFleetImages";
+
+export type { FleetVehicleKey };
 
 const accent = "text-tone-sky";
 const accentSoft = "text-tone-sky/90";
 
-const FLEET_IMAGES = {
-  staria:
-    "https://images.unsplash.com/photo-1619405399517-d7fce0f13302?auto=format&fit=crop&w=1400&q=82",
-  solati:
-    "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1400&q=82",
-  county:
-    "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1400&q=82",
-} as const;
+const FLEET_IMAGES = VEHICLE_FLEET_MAIN;
 
-const ROW_KEYS = ["staria", "solati", "county"] as const;
-export type FleetVehicleKey = (typeof ROW_KEYS)[number];
+const ROW_KEYS: readonly FleetVehicleKey[] = ["staria", "solati", "county"];
 
 const GALLERY_SLOT_COUNT = 6;
 

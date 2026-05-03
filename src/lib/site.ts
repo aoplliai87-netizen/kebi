@@ -23,3 +23,6 @@ export const SITE_LINE_URL =
 export const SITE_WEB_INQUIRY_PATH = "/inquiry" as const;
 export const SITE_FACEBOOK_MESSENGER_URL =
   process.env.NEXT_PUBLIC_FACEBOOK_MESSENGER_URL ?? "fb-messenger://";
+
+/** 헤더·소개 히어로 등 공통 로고 — `public/images/logo.jpg` 등으로 두고 이 경로만 맞추면 됩니다(JPEG 가능). */
+export const BRAND_LOGO_SRC = "/images/logo.jpg";

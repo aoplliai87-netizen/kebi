@@ -67,9 +67,16 @@ async function sendReservationMail(record: ReservationRecord) {
       `비행 편명: ${record.flightNo || "-"}`,
       `희망 차량: ${record.vehicle}`,
       `인원수: ${record.passengers}`,
+      record.adultPassengers != null || record.childPassengers != null
+        ? `성인/소아: ${record.adultPassengers ?? "-"} / ${record.childPassengers ?? "-"}`
+        : null,
       `수하물: ${record.luggage}`,
+      record.golfBags != null ? `골프백: ${record.golfBags}` : null,
+      record.waypointsSummary ? `경유지: ${record.waypointsSummary}` : null,
       `희망 메신저: ${record.preferredMessenger}`,
-    ].join("\n"),
+    ]
+      .filter((line): line is string => Boolean(line))
+      .join("\n"),
   });
 
   return { delivered: true as const };
@@ -102,6 +109,19 @@ export async function POST(request: Request) {
       vehicle: payload.vehicle!.trim(),
       passengers: Number(payload.passengers),
       luggage: Number(payload.luggage),
+      adultPassengers:
+        payload.adultPassengers != null && Number.isFinite(Number(payload.adultPassengers))
+          ? Number(payload.adultPassengers)
+          : undefined,
+      childPassengers:
+        payload.childPassengers != null && Number.isFinite(Number(payload.childPassengers))
+          ? Number(payload.childPassengers)
+          : undefined,
+      golfBags:
+        payload.golfBags != null && Number.isFinite(Number(payload.golfBags))
+          ? Number(payload.golfBags)
+          : undefined,
+      waypointsSummary: payload.waypointsSummary?.trim() || undefined,
       preferredMessenger: payload.preferredMessenger!.trim(),
     };
 

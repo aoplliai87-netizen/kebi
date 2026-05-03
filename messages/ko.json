@@ -54,7 +54,7 @@
     "faq5Q": "짐이 많아도 이용 가능한가요?",
     "faq5A": "캐리어·골프백·유아용품 등 동반 수량을 알려주시면 차량 타입에 맞춰 안전하게 배차합니다.",
     "formTitle": "온라인 문의",
-    "formDesc": "내용을 남겨 주시면 확인 후 연락드립니다. 급하신 경우 하단 전화·카카오톡을 이용해 주세요.",
+    "formDesc": "내용을 남겨 주시면 확인 후 연락드립니다. 급하신 경우 아래에서 채널을 선택하거나 전화로 연락해 주세요.",
     "fieldName": "성함",
     "fieldPhone": "연락처",
     "fieldDeparture": "출발지",
@@ -72,10 +72,18 @@
     "errorGeneric": "전송에 실패했습니다. 잠시 후 다시 시도하시거나 전화로 문의해 주세요.",
     "validationRequired": "필수 항목을 입력해 주세요.",
     "validationPhone": "연락처를 올바르게 입력해 주세요.",
-    "quickEyebrow": "더 빠른 상담",
-    "quickTitle": "전화·카카오톡으로 바로 연결",
-    "quickPhone": "전화 상담하기",
-    "quickKakao": "카카오톡 상담하기",
+    "contactSectionEyebrow": "빠른 연결",
+    "contactSectionTitle": "문의 방식 선택",
+    "contactSectionDesc": "채널을 선택하면 확인 후 해당 경로로 연결됩니다.",
+    "contactMethodPlaceholder": "연결할 채널을 선택하세요",
+    "channelConfirm": "「{channel}」(으)로 연결할까요?\n확인을 누르면 이동합니다.",
+    "contactPhone": "전화연결",
+    "contactKakao": "카카오톡",
+    "contactWhatsapp": "WhatsApp (왓츠앱)",
+    "contactLine": "LINE (라인)",
+    "contactInstagram": "Instagram DM",
+    "contactFacebook": "Facebook Messenger",
+    "submitHint": "문의 접수 후 카카오톡 상담 창이 함께 열립니다.",
     "requiredHint": "필수"
   },
   "InquiryPage": {
@@ -86,6 +94,8 @@
     "ctaPhone": "전화 상담하기"
   },
   "PricingPage": {
+    "heroEyebrow": "PRICING GUIDE",
+    "heroTitle": "요금 안내 (정찰제)",
     "othersNotice": "해당 지역은 별도 문의로 안내드립니다. 전화/카톡/홈페이지 문의로 해 주세요.",
     "searchEmpty": "검색 결과가 없습니다. 다른 지역명(한글/영문)으로 검색해 주세요.",
     "othersPhone": "전화",
@@ -179,15 +189,18 @@
       "heroDesc": "실제 이용 고객님의 후기를 확인해 보세요.",
       "one": {
         "content": "새벽 비행이었는데 시간 맞춰 와주셔서 이동이 정말 편했습니다.",
-        "author": "김** 고객"
+        "author": "김** 고객",
+        "postedAt": "2025-12-18"
       },
       "two": {
         "content": "짐이 많았는데도 정리까지 도와주셔서 시작부터 안심됐어요.",
-        "author": "박** 고객"
+        "author": "박** 고객",
+        "postedAt": "2025-11-07"
       },
       "three": {
         "content": "응답이 빠르고 안내가 명확해서 다음에도 재예약할 예정입니다.",
-        "author": "이** 고객"
+        "author": "이** 고객",
+        "postedAt": "2025-09-24"
       }
     }
   },
@@ -263,5 +276,66 @@
       "f3": "공항 접근·장거리 노선 모두 대응",
       "f4": "넓은 실내로 장시간 이동도 여유 있게"
     }
+  },
+  "BookingExperience": {
+    "steps": {
+      "s1": "1) 기본 정보 입력",
+      "s2": "2) 일정 및 서비스 유형 선택",
+      "s3": "3) 출발/도착 정보 입력",
+      "s4": "4) 차량/인원/수하물 확정"
+    },
+    "onlineTitle": "온라인 예약",
+    "dateHint": "날짜/시간은 선택기에서 고르거나 직접 입력할 수 있습니다.",
+    "routeDeparture": "출발",
+    "routeDestination": "도착",
+    "swapRoute": "출발지와 도착지 바꾸기",
+    "primaryPlaceholder": "지역 구분 선택",
+    "subPlaceholder": "세부 지역 선택",
+    "detailPlaceholder": "상세 주소 · 건물명 · 게이트 등",
+    "flightOptional": "비행 편명 (선택)",
+    "waypointCta": "경유지 추가",
+    "waypointModalTitle": "경유지 입력",
+    "waypointAdd": "새 경유지 입력",
+    "waypointAppend": "목록에 추가",
+    "modalClose": "닫기",
+    "waypointRemove": "삭제",
+    "waypointEmpty": "등록된 경유지가 없습니다. 아래에서 구간을 추가해 주세요.",
+    "waypointListLabel": "등록된 경유지",
+    "vehiclePlaceholder": "차량 종류 선택",
+    "luggage": "수하물",
+    "golfBags": "골프백",
+    "summaryRoute": "출발 / 도착",
+    "summaryWaypoints": "경유지",
+    "summaryGolf": "골프백",
+    "validationRoute": "출발지와 도착지의 지역·세부 위치·상세 주소를 모두 입력해 주세요. 차량 종류도 선택해 주세요.",
+    "validationMessenger": "메신저를 선택해 주세요.",
+    "primary_incheon_airport": "인천공항",
+    "primary_gimpo_airport": "김포공항",
+    "primary_seoul": "서울",
+    "primary_gyeonggi": "경기/수도권",
+    "primary_other": "기타/그 외 지역",
+    "messengerLabel": "메신저 선택",
+    "messengerSelectPlaceholder": "메신저 선택하기",
+    "childLabelMain": "소아",
+    "childLabelSub": "(7세 미만)"
+  },
+  "ReviewBoard": {
+    "sampleBadge": "샘플 {n}",
+    "userSectionTitle": "리뷰 게시판",
+    "writeReviewBtn": "글 쓰기",
+    "writeReviewHint": "아래 버튼을 눌러 후기를 작성할 수 있습니다.",
+    "formTitle": "리뷰 남기기",
+    "authorLabel": "닉네임 (선택)",
+    "authorPlaceholder": "익명",
+    "contentLabel": "후기 내용",
+    "contentPlaceholder": "이용 경험을 남겨 주세요. (최소 10자)",
+    "imagesLabel": "사진 첨부 (선택, 최대 4장)",
+    "submit": "등록하기",
+    "submitting": "등록 중…",
+    "success": "후기가 등록되었습니다. 감사합니다.",
+    "error": "등록에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+    "validationContent": "후기 내용을 10자 이상 입력해 주세요.",
+    "emptyUser": "아직 등록된 고객 후기가 없습니다. 첫 후기를 남겨 주세요.",
+    "loadError": "후기를 불러오지 못했습니다."
   }
 }

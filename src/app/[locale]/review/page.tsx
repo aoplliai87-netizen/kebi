@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ReviewSection } from "@/components/landing/ReviewSection";
+import { BespokeReviewExperience } from "@/components/review/BespokeReviewExperience";
 import { OnlineBookingCta } from "@/components/layout/OnlineBookingCta";
 import { SubpageHero } from "@/components/layout/SubpageHero";
 import { getLocalizedPageMetadata } from "@/lib/page-metadata";
@@ -26,7 +26,7 @@ export default async function ReviewPage({ params }: Props) {
         title={t("title")}
         description={t("heroDesc")}
       />
-      <ReviewSection />
+      <BespokeReviewExperience />
       <OnlineBookingCta />
     </>
   );

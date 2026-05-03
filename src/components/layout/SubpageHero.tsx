@@ -4,22 +4,22 @@ type SubpageHeroProps = {
   description: string;
 };
 
-/** 소형 라벨(eyebrow) → h1(title) → 본문(description) 순서 */
+/**
+ * 서브페이지 공통 히어로 — 브랜드 골드 타이포로 차량/요금/리뷰 등 페이지 간 통일감 유지
+ */
 export function SubpageHero({ eyebrow, title, description }: SubpageHeroProps) {
   return (
-    <section className="border-b border-border/45 py-24 md:py-28">
+    <section className="border-b border-border/45 bg-[radial-gradient(circle_at_50%_0%,rgba(212,175,55,0.08),transparent_55%),linear-gradient(180deg,#04070d_0%,#071224_45%,#05080f_100%)] py-16 md:py-20 lg:py-24">
       <div className="mx-auto max-w-content px-4 md:px-6">
-        <div className="rounded-3xl border border-border/60 bg-gradient-to-r from-surface to-brand-deep/60 px-6 py-10 md:px-10 md:py-14">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-tone-sky/95">
-            {eyebrow}
-          </p>
-          <h1 className="mt-4 text-balance font-sans text-5xl font-extrabold leading-[1.02] tracking-tight text-tone-strong md:text-7xl">
-            {title}
-          </h1>
-          <p className="mt-5 max-w-3xl text-base leading-relaxed text-tone-body md:text-lg">
-            {description}
-          </p>
-        </div>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-brand-gold/90 md:text-xs">
+          {eyebrow}
+        </p>
+        <h1 className="mt-3 max-w-4xl text-balance font-sans text-3xl font-bold leading-[1.12] tracking-[-0.02em] text-brand-gold md:text-4xl lg:text-5xl">
+          {title}
+        </h1>
+        <p className="mt-4 max-w-3xl text-base leading-relaxed text-tone-body md:mt-5 md:text-lg">
+          {description}
+        </p>
       </div>
     </section>
   );
