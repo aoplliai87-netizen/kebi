@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 export async function IntroSection() {
-  const t = await getTranslations("HomePage.intro");
+  const t = await getTranslations("IntroPage.hero");
 
   return (
     <section
@@ -18,7 +18,11 @@ export async function IntroSection() {
               {t("title")}
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-tone-body md:text-base">
-              {t("desc")}
+              {t.rich("desc", {
+                brand: (chunks) => (
+                  <span className="font-semibold text-brand-gold">{chunks}</span>
+                ),
+              })}
             </p>
 
             <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -48,7 +52,11 @@ export async function IntroSection() {
               Premium Notes
             </p>
             <p className="mt-3 text-sm leading-relaxed text-tone-body md:text-base">
-              {t("desc")}
+              {t.rich("desc", {
+                brand: (chunks) => (
+                  <span className="font-semibold text-brand-gold">{chunks}</span>
+                ),
+              })}
             </p>
             <div className="mt-6 h-px bg-border/70" />
             <p className="mt-6 text-sm leading-relaxed text-tone-soft">

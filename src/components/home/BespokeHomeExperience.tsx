@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
+import { HOME_INTRO_VISUALS } from "@/constants/homeIntroVisuals";
 import { SITE_PHONE_TEL } from "@/lib/site";
 import { useRef } from "react";
 
@@ -41,26 +42,12 @@ type BespokeHomeExperienceProps = {
   reviews: ReviewItem[];
 };
 
-const visualSet = [
-  {
-    title: "Premier Airport Escort",
-    image:
-      "https://images.unsplash.com/photo-1519642918688-7e43b19245d8?auto=format&fit=crop&w=1800&q=80",
-  },
-  {
-    title: "Executive Business Transfer",
-    image:
-      "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1800&q=80",
-  },
-  {
-    title: "Calm Family Journey",
-    image:
-      "https://images.unsplash.com/photo-1536599424071-0b215a388ba7?auto=format&fit=crop&w=1800&q=80",
-  },
-];
-
 const LUX_EASE = [0.22, 1, 0.36, 1] as const;
 const LUX_TRANSITION = { duration: 0.8, ease: LUX_EASE } as const;
+
+/** 섹션 상단 라벨(소개, AIRPORT VAN FLEET 등) — 모바일은 살짝만, md 이상에서 균형 있게 확대 */
+const homeSectionEyebrow =
+  "text-[13px] font-semibold uppercase tracking-[0.2em] text-metal-bronze-strong md:text-sm md:tracking-[0.24em] lg:tracking-[0.26em]";
 
 export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -165,9 +152,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
             viewport={{ once: true, amount: 0.45 }}
             transition={LUX_TRANSITION}
           >
-            <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">
-              {props.introEyebrow}
-            </p>
+            <p className={homeSectionEyebrow}>{props.introEyebrow}</p>
             <h2 className='mt-3 font-sans text-4xl font-bold leading-tight tracking-[-0.02em] text-tone-sky md:text-5xl'>
               {props.introTitle}
             </h2>
@@ -183,11 +168,11 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
             viewport={{ once: true, amount: 0.45 }}
             transition={LUX_TRANSITION}
           >
-            {visualSet.map((item, idx) => (
+            {HOME_INTRO_VISUALS.map((item, idx) => (
               <motion.article
-                key={item.title}
+                key={item.src}
                 className={`overflow-hidden rounded-[26px] border border-white/10 shadow-[0_18px_50px_rgba(0,0,0,0.38)] ${
-                  idx === 1 ? "md:ml-12" : idx === 2 ? "md:mr-12" : ""
+                  idx === 1 ? "md:ml-12" : ""
                 }`}
                 initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -195,9 +180,9 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
                 transition={{ ...LUX_TRANSITION, delay: idx * 0.08 }}
               >
                 <img
-                  src={item.image}
-                  alt={item.title}
-                  className="h-52 w-full object-cover md:h-56"
+                  src={item.src}
+                  alt={item.alt}
+                  className="h-56 w-full object-cover md:h-64"
                 />
               </motion.article>
             ))}
@@ -212,9 +197,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           viewport={{ once: true, amount: 0.45 }}
           transition={LUX_TRANSITION}
         >
-          <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">
-            {props.vehicleEyebrow}
-          </p>
+          <p className={homeSectionEyebrow}>{props.vehicleEyebrow}</p>
           <h2 className='mt-3 font-sans text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
             {props.vehicleTitle}
           </h2>
@@ -230,9 +213,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           transition={LUX_TRANSITION}
           className="rounded-[30px] border border-metal-bronze/30 bg-gradient-to-br from-white/[0.03] to-brand-deep/25 p-8"
         >
-          <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">
-            {props.pricingEyebrow}
-          </p>
+          <p className={homeSectionEyebrow}>{props.pricingEyebrow}</p>
           <h2 className='mt-3 font-sans text-3xl font-bold tracking-[-0.02em] text-tone-strong md:text-4xl'>
             {props.pricingTitle}
           </h2>
@@ -259,9 +240,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           viewport={{ once: true, amount: 0.45 }}
           transition={LUX_TRANSITION}
         >
-          <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">
-            {props.bookingEyebrow}
-          </p>
+          <p className={homeSectionEyebrow}>{props.bookingEyebrow}</p>
           <h2 className='mt-3 font-sans text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
             {props.bookingTitle}
           </h2>
@@ -287,9 +266,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
       </section>
 
       <section className="mx-auto max-w-content px-4 pb-24 md:px-6 md:pb-32">
-        <p className="text-xs uppercase tracking-[0.24em] text-metal-bronze-strong">
-          {props.reviewEyebrow}
-        </p>
+        <p className={homeSectionEyebrow}>{props.reviewEyebrow}</p>
         <h2 className='mt-3 font-sans text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
           {props.reviewTitle}
         </h2>

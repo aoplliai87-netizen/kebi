@@ -17,6 +17,7 @@ export default async function HomePage({ params }: Props) {
   const { locale } = params;
   setRequestLocale(locale);
   const t = await getTranslations("HomePage");
+  const tIntroHero = await getTranslations("IntroPage.hero");
 
   return (
     <BespokeHomeExperience
@@ -29,9 +30,9 @@ export default async function HomePage({ params }: Props) {
           </span>
         ),
       })}
-      introEyebrow={t("intro.eyebrow")}
-      introTitle={t("intro.title")}
-      introDesc={t.rich("intro.desc", {
+      introEyebrow={tIntroHero("eyebrow")}
+      introTitle={tIntroHero("title")}
+      introDesc={tIntroHero.rich("desc", {
         brand: (chunks) => (
           <span className="font-semibold text-brand-gold">{chunks}</span>
         ),

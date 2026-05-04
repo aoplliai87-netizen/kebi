@@ -144,12 +144,6 @@
     "heroEyebrow": "Incheon Airport · Premium Transfer",
     "heroTitle": "Premium Incheon Airport Private Van Service",
     "heroSubtitle": "Experience the most reliable and comfortable private transfer from Incheon Airport to your destination with <brand>Kkebi</brand>.",
-    "intro": {
-      "brandTitle": "Kkebi",
-      "eyebrow": "Intro",
-      "title": "The most comfortable start to every journey—a stable concierge partner for guest satisfaction",
-      "desc": "<brand>Kkebi</brand> delivers dedicated concierge service from booking to your destination—built around Incheon Airport Transfer and Seoul Private Transfer needs, with Incheon Airport Private Van–level care for each guest: seamless, safe, and tailored to you."
-    },
     "vehicle": {
       "eyebrow": "AIRPORT VAN FLEET",
       "title": "Vehicle lineup",
@@ -205,6 +199,12 @@
     }
   },
   "IntroPage": {
+    "hero": {
+      "brandTitle": "Kkebi",
+      "eyebrow": "Intro",
+      "title": "The most comfortable start to every journey—a stable concierge partner for guest satisfaction",
+      "desc": "<brand>Kkebi</brand> delivers dedicated concierge service from booking to your destination—built around Incheon Airport Transfer and Seoul Private Transfer needs, with Incheon Airport Private Van–level care for each guest: seamless, safe, and tailored to you."
+    },
     "coreValueEyebrow": "Core Value",
     "coreValueTitle": "Punctuality, consistency, trust",
     "coreValueBody": "We manage every touchpoint from booking to arrival under one operating standard—refinement over flash—for steady, composed airport transfers.",

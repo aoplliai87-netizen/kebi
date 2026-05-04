@@ -144,12 +144,6 @@
     "heroEyebrow": "Incheon Airport Premium",
     "heroTitle": "인천공항 Premium 콜밴",
     "heroSubtitle": "설레는 여행의 시작, 편안한 여행의 끝 <brand>깨비콜밴</brand> 이 함께합니다",
-    "intro": {
-      "brandTitle": "깨비콜밴",
-      "eyebrow": "소개",
-      "title": "가장 편안한 여정의 시작, 고객 만족을 향한 안정적인 의전 파트너",
-      "desc": "<brand>깨비콜밴</brand>은 예약 응대부터 목적지 도착까지, 단 한 분의 고객을 위한 결함 없는 전담 의전 서비스를 제공합니다."
-    },
     "vehicle": {
       "eyebrow": "AIRPORT VAN FLEET",
       "title": "차량 안내",
@@ -205,6 +199,12 @@
     }
   },
   "IntroPage": {
+    "hero": {
+      "brandTitle": "깨비콜밴",
+      "eyebrow": "소개",
+      "title": "가장 편안한 여정의 시작, 고객 만족을 향한 안정적인 의전 파트너",
+      "desc": "<brand>깨비콜밴</brand>은 예약 응대부터 목적지 도착까지, 단 한 분의 고객을 위한 결함 없는 전담 의전 서비스를 제공합니다."
+    },
     "coreValueEyebrow": "Core Value",
     "coreValueTitle": "정시성, 일관성, 신뢰",
     "coreValueBody": "예약 응대부터 도착 안내까지 모든 접점을 단일 운영 기준으로 관리합니다. 화려함보다 정교함에 집중해 공항 이동을 한층 안정적인 경험으로 완성합니다.",

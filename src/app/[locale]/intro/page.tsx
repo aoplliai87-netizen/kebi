@@ -22,7 +22,7 @@ export async function generateMetadata({
 
 export default async function IntroPage({ params }: Props) {
   setRequestLocale(params.locale);
-  const tHero = await getTranslations("HomePage.intro");
+  const tHero = await getTranslations("IntroPage.hero");
   const t = await getTranslations("IntroPage");
 
   const services = SERVICE_IDS.map((id, i) => ({
