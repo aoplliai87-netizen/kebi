@@ -462,7 +462,7 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
 
             <div className="mt-8 rounded-2xl border border-metal-bronze/35 bg-white/[0.03] p-4">
               <p className="text-sm text-tone-soft">빠른 상담</p>
-              <div className="mt-3 grid grid-cols-2 gap-2">
+              <div className="mt-3 grid grid-cols-2 gap-2.5">
                 <Button
                   type="button"
                   onClick={() =>
@@ -471,9 +471,9 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                       "전화 연결을 하시겠습니까?\n확인을 누르면 통화 화면으로 이동합니다.",
                     )
                   }
-                  className="h-11 w-full rounded-xl text-sm font-semibold"
+                  className="h-12 w-full rounded-xl border border-brand-gold/45 bg-brand-gold/90 text-sm font-semibold text-black shadow-[0_6px_18px_rgba(212,175,55,0.22)]"
                 >
-                  <img src="/icons/phone.svg" alt="" className="h-4 w-4" />
+                  <img src="/icons/phone.svg" alt="" className="h-5 w-5" />
                   전화 상담
                 </Button>
                 <Button
@@ -485,10 +485,10 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                       "카카오톡 오픈채팅방으로 연결됩니다.\n이동하시겠습니까?",
                     )
                   }
-                  className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky"
+                  className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
-                  <img src="/icons/kakao.svg" alt="" className="h-4 w-4" />
-                  카카오톡 상담
+                  <img src="/icons/kakao.svg" alt="" className="h-5 w-5" />
+                  카카오톡
                 </Button>
                 <Button
                   type="button"
@@ -499,10 +499,10 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                       "WhatsApp 채팅으로 연결됩니다.\n이동하시겠습니까?",
                     )
                   }
-                  className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky"
+                  className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
-                  <img src="/icons/whatsapp.svg" alt="" className="h-4 w-4" />
-                  WhatsApp (왓츠앱)
+                  <img src="/icons/whatsapp.svg" alt="" className="h-5 w-5" />
+                  WhatsApp
                 </Button>
                 <Button
                   type="button"
@@ -510,10 +510,10 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                   onClick={() =>
                     confirmAndOpen(SITE_LINE_URL, "LINE 채팅으로 연결됩니다.\n이동하시겠습니까?")
                   }
-                  className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky"
+                  className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
-                  <img src="/icons/line.svg" alt="" className="h-4 w-4" />
-                  LINE (라인)
+                  <img src="/icons/line.svg" alt="" className="h-5 w-5" />
+                  LINE
                 </Button>
                 <Button
                   type="button"
@@ -524,9 +524,9 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                       "Instagram DM으로 이동합니다.\n연결하시겠습니까?",
                     )
                   }
-                  className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky"
+                  className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
-                  <img src="/icons/instagram.svg" alt="" className="h-4 w-4" />
+                  <img src="/icons/instagram.svg" alt="" className="h-5 w-5" />
                   Instagram DM
                 </Button>
                 <Button
@@ -535,13 +535,13 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                   onClick={() =>
                     confirmAndOpen(
                       SITE_FACEBOOK_MESSENGER_URL,
-                      "Facebook Messenger로 연결됩니다.\n이동하시겠습니까?",
+                      "페이스북으로 연결됩니다.\n이동하시겠습니까?",
                     )
                   }
-                  className="h-11 w-full rounded-xl border-metal-bronze/40 text-sm font-semibold text-tone-sky"
+                  className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
-                  <img src="/icons/messenger.svg" alt="" className="h-4 w-4" />
-                  Facebook Messenger
+                  <img src="/icons/messenger.svg" alt="" className="h-5 w-5" />
+                  페이스북
                 </Button>
               </div>
             </div>
@@ -631,7 +631,7 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                     <div
                       role="dialog"
                       aria-label="달력 날짜 선택기"
-                      className="absolute z-[110] mt-2 w-full min-w-[19rem] rounded-2xl border border-metal-bronze/30 bg-[#0b1424] p-3 shadow-[0_18px_40px_rgba(0,0,0,0.45)]"
+                      className="absolute z-[110] mt-2 w-full min-w-[19rem] rounded-2xl border border-metal-bronze/35 bg-[linear-gradient(180deg,#121d33_0%,#0a1324_100%)] p-3 shadow-[0_24px_54px_rgba(0,0,0,0.52)]"
                     >
                       <div className="mb-3 flex items-center justify-between">
                         <button
@@ -714,7 +714,7 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                     <div
                       role="listbox"
                       aria-label="시간 선택 목록"
-                      className="absolute z-[110] mt-2 w-full min-w-[17rem] rounded-2xl border border-metal-bronze/30 bg-[#0b1424] shadow-[0_18px_40px_rgba(0,0,0,0.45)] sm:min-w-[19rem]"
+                      className="absolute z-[110] mt-2 w-full min-w-[17rem] rounded-2xl border border-metal-bronze/35 bg-[linear-gradient(180deg,#121d33_0%,#0a1324_100%)] shadow-[0_24px_54px_rgba(0,0,0,0.52)] sm:min-w-[19rem]"
                     >
                       <div className="grid max-h-[min(22rem,70vh)] grid-cols-1 divide-y divide-white/10 sm:grid-cols-2 sm:divide-x sm:divide-y-0">
                         <div className="flex min-h-0 flex-col">
@@ -950,12 +950,12 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                     {t("messengerSelectPlaceholder")}
                   </option>
                   {[
-                    "전화 상담",
-                    "카카오톡 상담",
-                    "WhatsApp (왓츠앱)",
-                    "LINE (라인)",
+                    "전화",
+                    "카카오톡",
+                    "WhatsApp",
+                    "LINE",
                     "Instagram DM",
-                    "Facebook Messenger",
+                    "페이스북",
                   ].map((channel) => (
                     <option key={channel} value={channel} className="bg-[#0a1324]">
                       {channel}

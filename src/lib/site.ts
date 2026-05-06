@@ -13,11 +13,11 @@ export const SITE_SMS_URL =
   process.env.NEXT_PUBLIC_SMS_URL ?? "sms:+821041357621";
 export const SITE_INSTAGRAM_DM_URL =
   process.env.NEXT_PUBLIC_INSTAGRAM_DM_URL ??
-  "instagram://direct-inbox";
+  "https://www.instagram.com/hongjunpyo7974";
 export const SITE_WHATSAPP_URL =
-  process.env.NEXT_PUBLIC_WHATSAPP_URL ?? "whatsapp://send?phone=821041357621";
+  process.env.NEXT_PUBLIC_WHATSAPP_URL ?? "https://wa.me/821041357621";
 export const SITE_LINE_URL =
-  process.env.NEXT_PUBLIC_LINE_URL ?? "line://ti/p/@sample";
+  process.env.NEXT_PUBLIC_LINE_URL ?? "https://line.me/ti/p/naeuri61";
 
 /** 홈페이지 문의 페이지 (`/[locale]/inquiry`) — 라우트 변경 시 함께 수정 */
 export const SITE_WEB_INQUIRY_PATH = "/inquiry" as const;

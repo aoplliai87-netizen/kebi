@@ -5,8 +5,17 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
 import { HOME_INTRO_VISUALS } from "@/constants/homeIntroVisuals";
-import { SITE_PHONE_TEL } from "@/lib/site";
-import { useRef } from "react";
+import { VEHICLE_FLEET_MAIN } from "@/constants/vehicleFleetImages";
+import {
+  SITE_FACEBOOK_MESSENGER_URL,
+  SITE_INSTAGRAM_DM_URL,
+  SITE_KAKAO_CHAT_URL,
+  SITE_LINE_URL,
+  SITE_PHONE_TEL,
+  SITE_WHATSAPP_URL,
+} from "@/lib/site";
+import { cn } from "@/lib/utils";
+import { useEffect, useRef, useState } from "react";
 
 type PricingTier = {
   label: string;
@@ -49,6 +58,26 @@ const LUX_TRANSITION = { duration: 0.8, ease: LUX_EASE } as const;
 const homeSectionEyebrow =
   "text-[13px] font-semibold uppercase tracking-[0.2em] text-metal-bronze-strong md:text-sm md:tracking-[0.24em] lg:tracking-[0.26em]";
 
+const QUICK_CHANNELS: ReadonlyArray<{
+  label: string;
+  icon: string;
+  href: string;
+  tone?: "phone";
+}> = [
+  { label: "전화", icon: "/icons/phone.svg", href: SITE_PHONE_TEL, tone: "phone" as const },
+  { label: "카카오톡", icon: "/icons/kakao.svg", href: SITE_KAKAO_CHAT_URL },
+  { label: "WhatsApp", icon: "/icons/whatsapp.svg", href: SITE_WHATSAPP_URL },
+  { label: "LINE", icon: "/icons/line.svg", href: SITE_LINE_URL },
+  { label: "Instagram", icon: "/icons/instagram.svg", href: SITE_INSTAGRAM_DM_URL },
+  { label: "Messenger", icon: "/icons/messenger.svg", href: SITE_FACEBOOK_MESSENGER_URL },
+] as const;
+
+const HERO_BACKGROUND_SLIDES = [
+  ...HOME_INTRO_VISUALS.map((item) => item.src),
+  VEHICLE_FLEET_MAIN.staria,
+  VEHICLE_FLEET_MAIN.solati,
+] as const;
+
 export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -58,6 +87,19 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
   const heroY = useTransform(scrollYProgress, [0, 1], [0, -130]);
   const veilY = useTransform(scrollYProgress, [0, 1], [0, -60]);
   const heroParts = props.heroTitle.split("Premium");
+  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
+  const homeVehiclePreviews = [
+    { key: "staria", src: VEHICLE_FLEET_MAIN.staria, label: "스타리아" },
+    { key: "solati", src: VEHICLE_FLEET_MAIN.solati, label: "쏠라티" },
+    { key: "county", src: VEHICLE_FLEET_MAIN.county, label: "카운티" },
+  ] as const;
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setHeroSlideIndex((prev) => (prev + 1) % HERO_BACKGROUND_SLIDES.length);
+    }, 4200);
+    return () => window.clearInterval(timer);
+  }, []);
 
   return (
     <div
@@ -71,10 +113,25 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
         className="pointer-events-none absolute inset-0 opacity-25 [background:repeating-linear-gradient(122deg,rgba(255,255,255,0.04),rgba(255,255,255,0.04)_1px,transparent_1px,transparent_8px)]"
       />
 
-      <section className="relative border-b border-border/50 pb-20 pt-24 md:pb-28 md:pt-32">
+      <section className="relative overflow-hidden border-b border-border/50 pb-20 pt-24 md:pb-28 md:pt-32">
+        <div className="pointer-events-none absolute inset-0">
+          {HERO_BACKGROUND_SLIDES.map((src, index) => (
+            <img
+              key={src}
+              src={src}
+              alt=""
+              className={cn(
+                "absolute inset-0 h-full w-full object-cover transition-opacity duration-[1300ms]",
+                heroSlideIndex === index ? "opacity-100" : "opacity-0",
+              )}
+            />
+          ))}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,6,12,0.72)_0%,rgba(4,7,13,0.78)_40%,rgba(5,9,16,0.86)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(212,175,55,0.12),transparent_45%)]" />
+        </div>
         <motion.div
           style={{ y: heroY }}
-          className="mx-auto max-w-content px-4 text-center md:px-6"
+          className="relative z-10 mx-auto max-w-content px-4 text-center md:px-6"
           initial={{ opacity: 0, y: 34 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.45 }}
@@ -119,79 +176,61 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
         </motion.div>
       </section>
 
-      <section className="relative mx-auto max-w-content px-4 py-20 md:px-6 md:py-28">
-        <motion.svg
-          aria-hidden
-          viewBox="0 0 1200 430"
-          className="pointer-events-none absolute left-0 top-6 h-[320px] w-full opacity-60"
-          initial={{ opacity: 0, pathLength: 0.2 }}
-          whileInView={{ opacity: 1, pathLength: 1 }}
-          viewport={{ once: true, amount: 0.4 }}
+      <section className="relative mx-auto max-w-content px-4 py-16 md:px-6 md:py-20">
+        <motion.div
+          className="mx-auto max-w-4xl text-center"
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.35 }}
           transition={LUX_TRANSITION}
         >
-          <defs>
-            <linearGradient id="homeBronze" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="var(--metal-bronze)" />
-              <stop offset="50%" stopColor="var(--metal-bronze)" />
-              <stop offset="100%" stopColor="var(--metal-bronze-strong)" />
-            </linearGradient>
-          </defs>
-          <path
-            d="M40 250 C 210 100, 430 120, 610 250 S 980 400, 1160 210"
-            fill="none"
-            stroke="url(#homeBronze)"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-          />
-        </motion.svg>
+          <h2 className='font-sans text-4xl font-bold leading-tight tracking-[-0.02em] text-tone-sky md:text-5xl'>
+            {props.introTitle}
+          </h2>
+          <div className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-tone-body md:text-lg">
+            {props.introDesc}
+          </div>
+        </motion.div>
+      </section>
 
-        <div className="grid gap-12 md:grid-cols-[1.05fr_0.95fr]">
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.45 }}
-            transition={LUX_TRANSITION}
-          >
-            <p className={homeSectionEyebrow}>{props.introEyebrow}</p>
-            <h2 className='mt-3 font-sans text-4xl font-bold leading-tight tracking-[-0.02em] text-tone-sky md:text-5xl'>
-              {props.introTitle}
-            </h2>
-            <div className="mt-6 text-base leading-relaxed text-tone-body md:text-lg">
-              {props.introDesc}
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="space-y-6 md:pt-16"
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.45 }}
-            transition={LUX_TRANSITION}
-          >
-            {HOME_INTRO_VISUALS.map((item, idx) => (
-              <motion.article
-                key={item.src}
-                className={`overflow-hidden rounded-[26px] border border-white/10 shadow-[0_18px_50px_rgba(0,0,0,0.38)] ${
-                  idx === 1 ? "md:ml-12" : ""
-                }`}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.45 }}
-                transition={{ ...LUX_TRANSITION, delay: idx * 0.08 }}
+      <section className="mx-auto max-w-content px-4 pb-16 md:px-6 md:pb-20">
+        <div className="rounded-[30px] border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))] p-6 text-center shadow-[0_18px_54px_rgba(0,0,0,0.32)] md:p-10">
+          <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-metal-bronze-strong">About Me</p>
+          <p className="mx-auto mt-3 max-w-3xl text-xl font-semibold leading-relaxed text-tone-strong md:text-3xl">
+            상담 채널을 선택해 빠르게 연결하고, 대표 번호로 즉시 예약 상담받으세요.
+          </p>
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+            {QUICK_CHANNELS.map((channel) => (
+              <a
+                key={channel.label}
+                href={channel.href}
+                target={channel.href.startsWith("http") ? "_blank" : undefined}
+                rel={channel.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                className={cn(
+                  "inline-flex h-12 w-12 items-center justify-center rounded-xl border bg-black/25 transition-all hover:-translate-y-0.5",
+                  channel.tone === "phone"
+                    ? "border-emerald-400/65 bg-emerald-500/20 shadow-[0_8px_24px_rgba(16,185,129,0.2)] hover:bg-emerald-500/28"
+                    : "border-white/20 hover:border-brand-gold/55 hover:bg-white/[0.08]",
+                )}
+                aria-label={channel.label}
+                title={channel.label}
               >
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  className="h-56 w-full object-cover md:h-64"
-                />
-              </motion.article>
+                <img src={channel.icon} alt="" className="h-5 w-5" />
+              </a>
             ))}
-          </motion.div>
+          </div>
+          <a
+            href={SITE_PHONE_TEL}
+            className="mt-8 inline-flex h-14 min-w-[220px] items-center justify-center rounded-xl bg-gradient-to-b from-brand-gold via-[#ddb94a] to-[#b8892a] px-8 text-lg font-bold text-black shadow-[0_10px_26px_rgba(212,175,55,0.34)] transition hover:brightness-110"
+          >
+            전화걸기
+          </a>
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-content gap-10 border-y border-border/45 px-4 py-20 md:grid-cols-2 md:px-6 md:py-24">
+      <section className="mx-auto grid max-w-content gap-10 border-y border-border/45 px-4 py-20 md:px-6 md:py-24">
         <motion.div
+          className="text-center"
           initial={{ opacity: 0, y: 36 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.45 }}
@@ -201,17 +240,28 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           <h2 className='mt-3 font-sans text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
             {props.vehicleTitle}
           </h2>
-          <p className="mt-5 text-base leading-relaxed text-tone-body md:text-lg">
+          <p className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-tone-body md:text-lg">
             {props.vehicleDesc}
           </p>
+          <div className="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-3">
+            {homeVehiclePreviews.map((item) => (
+              <article
+                key={item.key}
+                className="overflow-hidden rounded-2xl border border-white/12 bg-black/25 shadow-[0_12px_34px_rgba(0,0,0,0.32)]"
+              >
+                <img src={item.src} alt={item.label} className="h-36 w-full object-cover" />
+                <p className="px-3 py-2 text-sm font-semibold text-tone-strong">{item.label}</p>
+              </article>
+            ))}
+          </div>
         </motion.div>
 
         <motion.div
+          className="mx-auto w-full max-w-3xl rounded-[30px] border border-metal-bronze/30 bg-gradient-to-br from-white/[0.03] to-brand-deep/25 p-8 text-center"
           initial={{ opacity: 0, y: 36 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.45 }}
           transition={LUX_TRANSITION}
-          className="rounded-[30px] border border-metal-bronze/30 bg-gradient-to-br from-white/[0.03] to-brand-deep/25 p-8"
         >
           <p className={homeSectionEyebrow}>{props.pricingEyebrow}</p>
           <h2 className='mt-3 font-sans text-3xl font-bold tracking-[-0.02em] text-tone-strong md:text-4xl'>
@@ -234,7 +284,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
 
       <section className="mx-auto max-w-content px-4 py-20 md:px-6 md:py-24">
         <motion.div
-          className="rounded-[30px] border border-metal-bronze/32 bg-gradient-to-r from-brand-deep/55 to-surface p-8 md:p-10"
+          className="rounded-[30px] border border-metal-bronze/32 bg-gradient-to-r from-brand-deep/55 to-surface p-8 text-center md:p-10"
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.45 }}
@@ -244,16 +294,16 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           <h2 className='mt-3 font-sans text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
             {props.bookingTitle}
           </h2>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-tone-body md:text-lg">
+          <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-tone-body md:text-lg">
             {props.bookingDesc}
           </p>
-          <div className="mt-7 flex flex-wrap gap-3">
+          <div className="mt-7 flex flex-wrap justify-center gap-3">
             <a href={SITE_PHONE_TEL}>
               <Button className="h-11 rounded-xl px-6 text-sm font-semibold">
                 {props.bookingCall}
               </Button>
             </a>
-            <Link href="/review">
+            <Link href="/booking">
               <Button
                 variant="outline"
                 className="h-11 rounded-xl border-metal-bronze/45 px-6 text-sm font-semibold text-tone-sky"
@@ -265,7 +315,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
         </motion.div>
       </section>
 
-      <section className="mx-auto max-w-content px-4 pb-24 md:px-6 md:pb-32">
+      <section className="mx-auto max-w-content px-4 pb-24 text-center md:px-6 md:pb-32">
         <p className={homeSectionEyebrow}>{props.reviewEyebrow}</p>
         <h2 className='mt-3 font-sans text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
           {props.reviewTitle}

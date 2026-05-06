@@ -338,7 +338,12 @@ export function BespokePricingExperience() {
                         <button
                           type="button"
                           onClick={() => toggleMetroGroup(entry.id)}
-                          className="grid w-full grid-cols-[1.9fr_1fr_1fr] items-center gap-2 px-4 py-4 text-left text-base transition-colors hover:bg-white/[0.04] md:px-5 md:text-lg"
+                          className={cn(
+                            "group grid w-full grid-cols-[1.9fr_1fr_1fr] items-center gap-2 px-4 py-4 text-left text-base transition-colors md:px-5 md:text-lg",
+                            groupExpanded(entry.id)
+                              ? "bg-brand-gold-soft/35 ring-1 ring-inset ring-metal-bronze/35"
+                              : "bg-[#0d1a31]/55 hover:bg-[#12203b]/70 ring-1 ring-inset ring-tone-sky/20",
+                          )}
                           aria-expanded={groupExpanded(entry.id)}
                         >
                           <span className="flex min-w-0 items-center gap-2 font-semibold text-tone-strong">
@@ -357,6 +362,13 @@ export function BespokePricingExperience() {
                           <span className="font-numeric tabular-nums text-tone-soft">—</span>
                           <span className="font-numeric tabular-nums text-tone-soft">—</span>
                         </button>
+                        {!groupExpanded(entry.id) && (
+                          <div className="px-4 pb-2 pt-1 md:px-5">
+                            <span className="inline-flex items-center rounded-full border border-tone-sky/35 bg-tone-sky/10 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-tone-sky">
+                              세부 지역 {entry.rows.length}개 펼쳐보기
+                            </span>
+                          </div>
+                        )}
                         {groupExpanded(entry.id) && (
                           <div className="bg-black/15">
                             {entry.rows.map((row) => (

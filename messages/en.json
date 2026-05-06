@@ -174,8 +174,8 @@
       "eyebrow": "Booking",
       "title": "Fast booking after quick consultation",
       "desc": "Send your route, passenger count and luggage details via phone, Kakao or SMS. We confirm quickly and lock your booking.",
-      "ctaCall": "Book by phone",
-      "ctaReview": "See reviews"
+      "ctaCall": "Call us",
+      "ctaReview": "Book online"
     },
     "review": {
       "eyebrow": "REVIEWS",
@@ -240,6 +240,7 @@
     "phoneBtn": "Call us",
     "galleryHeading": "Gallery",
     "galleryNote": "High-resolution vehicle photos will be added to the slots below as they become available.",
+    "tourAvailable": "Tour available",
     "gallerySlotLabel": "Photo",
     "modalClose": "Close",
     "staria": {

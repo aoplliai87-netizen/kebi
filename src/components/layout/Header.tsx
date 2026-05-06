@@ -64,10 +64,12 @@ export function Header() {
           </Link>
           <a
             href={SITE_PHONE_TEL}
-            className="inline-flex min-h-[2.75rem] max-w-full shrink items-center gap-2 rounded-xl bg-gradient-to-b from-brand-gold via-[#e6c24a] to-[#b8892a] px-3 py-2 text-xs font-bold text-black shadow-[0_4px_20px_rgba(212,175,55,0.45)] transition hover:brightness-110 sm:px-5 sm:text-sm md:text-base"
+            className="inline-flex min-h-[2.75rem] max-w-full shrink items-center gap-2 rounded-full border border-brand-gold/40 bg-[linear-gradient(180deg,rgba(212,175,55,0.2),rgba(212,175,55,0.1))] px-3 py-2 text-xs font-bold text-brand-gold shadow-[0_4px_18px_rgba(212,175,55,0.2)] transition hover:border-brand-gold/65 hover:text-[#f2d78e] sm:px-5 sm:text-sm md:text-base"
             aria-label={`${t("phoneAria")}: ${SITE_PHONE_DISPLAY}`}
           >
-            <Phone className="h-4 w-4 shrink-0 opacity-95" aria-hidden />
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-brand-gold text-black">
+              <Phone className="h-3.5 w-3.5 shrink-0" aria-hidden />
+            </span>
             <span className="font-numeric tabular-nums tracking-tight">{SITE_PHONE_DISPLAY}</span>
           </a>
         </div>
@@ -130,7 +132,7 @@ export function Header() {
         </div>
       </div>
 
-      <div id="mobile-drawer" className={cn("fixed inset-0 z-50 xl:hidden", open ? "pointer-events-auto" : "pointer-events-none")} aria-hidden={!open}>
+      <div id="mobile-drawer" className={cn("fixed inset-0 z-[90] xl:hidden", open ? "pointer-events-auto" : "pointer-events-none")} aria-hidden={!open}>
         <button
           type="button"
           className={cn("absolute inset-0 bg-black/60 transition-opacity", open ? "opacity-100" : "opacity-0")}
@@ -138,16 +140,18 @@ export function Header() {
           aria-label={t("closeMenu")}
         />
 
-        <div className={cn("absolute right-0 top-0 flex h-full w-[min(100%,20rem)] flex-col border-l border-border bg-brand-black shadow-xl transition-transform duration-300 ease-out", open ? "translate-x-0" : "translate-x-full")}> 
+        <div className={cn("fixed right-0 top-0 bottom-0 flex w-[min(100%,22rem)] flex-col border-l border-white/10 bg-[#04070d] shadow-[0_18px_44px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-out overflow-y-auto", open ? "translate-x-0" : "translate-x-full")}>
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <div className="flex min-w-0 flex-col gap-1">
               <span className="text-sm font-semibold">{t("brand")}</span>
               <a
                 href={SITE_PHONE_TEL}
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-b from-brand-gold via-[#e6c24a] to-[#b8892a] px-4 py-2.5 text-sm font-bold text-black shadow-[0_4px_16px_rgba(212,175,55,0.35)]"
+                className="inline-flex items-center gap-2 rounded-full border border-brand-gold/45 bg-[linear-gradient(180deg,rgba(212,175,55,0.2),rgba(212,175,55,0.1))] px-4 py-2.5 text-sm font-bold text-brand-gold shadow-[0_4px_16px_rgba(212,175,55,0.22)]"
                 onClick={() => setOpen(false)}
               >
-                <Phone className="h-4 w-4 shrink-0" aria-hidden />
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-brand-gold text-black">
+                  <Phone className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                </span>
                 <span className="font-numeric tabular-nums">{SITE_PHONE_DISPLAY}</span>
               </a>
             </div>
@@ -155,7 +159,7 @@ export function Header() {
               <X className="h-5 w-5" aria-hidden />
             </button>
           </div>
-          <nav className="flex flex-1 flex-col gap-1 p-3" aria-label={t("navMain")}>
+          <nav className="grid gap-1 p-3 pb-6" aria-label={t("navMain")}>
             {NAV.map(({ msgKey, href }) => (
               <Link
                 key={msgKey}

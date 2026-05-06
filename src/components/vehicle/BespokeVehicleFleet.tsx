@@ -88,6 +88,9 @@ function FleetRow({ vkey, onOpenDetail }: FleetRowProps) {
               <h3 className="mt-2 font-sans text-2xl font-bold tracking-[-0.02em] text-tone-strong md:text-3xl">
                 {t(`${vkey}.name`)}
               </h3>
+              <p className="mt-2 inline-flex rounded-full border border-tone-sky/35 bg-tone-sky/10 px-3 py-1 text-xs font-semibold text-tone-sky">
+                {t("tourAvailable")}
+              </p>
             </div>
 
             <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm text-tone-body md:text-base">
@@ -394,17 +397,17 @@ export function BespokeVehicleFleet() {
         aria-labelledby="fleet-heading"
       >
         <div className="mx-auto max-w-content px-4 md:px-6">
-          <header className="mb-12 max-w-3xl md:mb-16">
+          <header className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
             <p className={`text-[11px] font-semibold uppercase tracking-[0.26em] ${accentSoft}`}>
               {t("sectionEyebrow")}
             </p>
             <h2
               id="fleet-heading"
-              className="mt-3 font-sans text-3xl font-bold tracking-[-0.02em] text-tone-strong md:text-4xl"
+              className="mt-3 font-sans text-3xl font-bold tracking-[-0.02em] text-brand-gold md:text-4xl"
             >
               {t("sectionTitle")}
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-tone-body md:text-lg">{t("sectionDesc")}</p>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-tone-body md:text-lg">{t("sectionDesc")}</p>
           </header>
 
           <div className="flex flex-col gap-10 md:gap-12">
