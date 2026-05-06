@@ -70,6 +70,10 @@
 }
 
 @layer utilities {
+  body.mobile-menu-open .mobile-quick-menu {
+    display: none !important;
+  }
+
   .text-balance {
     text-wrap: balance;
   }

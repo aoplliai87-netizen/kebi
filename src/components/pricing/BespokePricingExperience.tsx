@@ -12,7 +12,8 @@ import {
   type PricingRow,
   type PricingTableEntry,
 } from "@/constants/pricingData";
-import { SITE_KAKAO_CHAT_URL, SITE_PHONE_TEL, SITE_WEB_INQUIRY_PATH } from "@/lib/site";
+import { SITE_WEB_INQUIRY_PATH } from "@/lib/site";
+import { useSiteRuntime } from "@/components/providers/SiteRuntimeProvider";
 import { cn } from "@/lib/utils";
 
 const LUX_EASE = [0.22, 1, 0.36, 1] as const;
@@ -58,6 +59,7 @@ function filterPricingEntries(entries: PricingTableEntry[], q: string): PricingT
 
 export function BespokePricingExperience() {
   const t = useTranslations("PricingPage");
+  const { phoneTel, links } = useSiteRuntime();
   const displayRegions = useMemo<PricingRegion[]>(() => {
     const seoul = pricingRegions.find((region) => region.id === "seoul");
     const metro = pricingRegions.find((region) => region.id === "gyeonggi");
@@ -284,10 +286,10 @@ export function BespokePricingExperience() {
             </div>
 
             <div className="mt-6 overflow-hidden rounded-2xl border border-white/10">
-              <div className="grid grid-cols-[1.9fr_1fr_1fr] bg-brand-deep/65 px-4 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-metal-bronze-strong md:px-5 md:text-base">
-                <p>지역명(영어명)</p>
-                <p className="font-numeric tabular-nums">요금(김포공항)</p>
-                <p className="font-numeric tabular-nums">요금(인천공항)</p>
+              <div className="grid grid-cols-[1.6fr_1fr_1fr] bg-brand-deep/65 px-4 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-metal-bronze-strong md:grid-cols-[1.9fr_1fr_1fr] md:px-5 md:text-base">
+                <p>지역</p>
+                <p className="font-numeric tabular-nums text-[10px] leading-tight md:text-base">김포<br className="md:hidden"/>공항</p>
+                <p className="font-numeric tabular-nums text-[10px] leading-tight md:text-base">인천<br className="md:hidden"/>공항</p>
               </div>
               <motion.div
                 className="divide-y divide-white/10 bg-[#081121]/80"
@@ -304,13 +306,13 @@ export function BespokePricingExperience() {
                       </p>
                       <div className="flex shrink-0 flex-wrap gap-2 md:justify-end">
                         <a
-                          href={SITE_PHONE_TEL}
+                          href={phoneTel}
                           className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-5 text-sm font-semibold text-emerald-50 transition-colors hover:bg-emerald-500"
                         >
                           {t("othersPhone")}
                         </a>
                         <a
-                          href={SITE_KAKAO_CHAT_URL}
+                          href={links.kakao}
                           target="_blank"
                           rel="noreferrer"
                           className="inline-flex h-11 items-center justify-center rounded-xl border border-[#FEE500]/80 bg-[#FEE500] px-5 text-sm font-semibold text-[#191919] transition-opacity hover:opacity-95"
@@ -364,9 +366,13 @@ export function BespokePricingExperience() {
                         </button>
                         {!groupExpanded(entry.id) && (
                           <div className="px-4 pb-2 pt-1 md:px-5">
-                            <span className="inline-flex items-center rounded-full border border-tone-sky/35 bg-tone-sky/10 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-tone-sky">
+                            <button
+                              type="button"
+                              onClick={() => toggleMetroGroup(entry.id)}
+                              className="inline-flex items-center rounded-full border border-tone-sky/35 bg-tone-sky/10 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-tone-sky transition hover:bg-tone-sky/15"
+                            >
                               세부 지역 {entry.rows.length}개 펼쳐보기
-                            </span>
+                            </button>
                           </div>
                         )}
                         {groupExpanded(entry.id) && (
@@ -375,16 +381,16 @@ export function BespokePricingExperience() {
                               <motion.article
                                 key={`${currentRegion.id}-${entry.id}-${row.name}`}
                                 variants={ROW_VARIANTS}
-                                className="grid grid-cols-[1.9fr_1fr_1fr] items-center border-t border-white/5 px-4 py-3.5 pl-8 text-base md:px-5 md:pl-10 md:text-lg"
+                                className="grid grid-cols-[1.6fr_1fr_1fr] items-center border-t border-white/5 px-4 py-3.5 pl-8 text-base md:grid-cols-[1.9fr_1fr_1fr] md:px-5 md:pl-10 md:text-lg"
                               >
                                 <p className="font-medium text-tone-strong">
                                   {row.name}{" "}
                                   <span className="font-normal text-tone-soft">({row.nameEn})</span>
                                 </p>
-                                <p className="font-numeric tabular-nums text-metal-bronze-strong">
+                                <p className="font-numeric tabular-nums text-[12px] text-metal-bronze-strong md:text-base">
                                   {KRW.format(row.gimpo)}원
                                 </p>
-                                <p className="font-numeric tabular-nums text-metal-bronze-strong">
+                                <p className="font-numeric tabular-nums text-[12px] text-metal-bronze-strong md:text-base">
                                   {KRW.format(row.incheon)}원
                                 </p>
                               </motion.article>
@@ -396,16 +402,16 @@ export function BespokePricingExperience() {
                       <motion.article
                         key={`${currentRegion.id}-${entry.name}`}
                         variants={ROW_VARIANTS}
-                        className="grid grid-cols-[1.9fr_1fr_1fr] items-center px-4 py-4 text-base md:px-5 md:text-lg"
+                        className="grid grid-cols-[1.6fr_1fr_1fr] items-center px-4 py-4 text-base md:grid-cols-[1.9fr_1fr_1fr] md:px-5 md:text-lg"
                       >
                         <p className="font-semibold text-tone-strong">
                           {entry.name}{" "}
                           <span className="font-normal text-tone-soft">({entry.nameEn})</span>
                         </p>
-                        <p className="font-numeric tabular-nums text-metal-bronze-strong">
+                        <p className="font-numeric tabular-nums text-[12px] text-metal-bronze-strong md:text-base">
                           {KRW.format(entry.gimpo)}원
                         </p>
-                        <p className="font-numeric tabular-nums text-metal-bronze-strong">
+                        <p className="font-numeric tabular-nums text-[12px] text-metal-bronze-strong md:text-base">
                           {KRW.format(entry.incheon)}원
                         </p>
                       </motion.article>

@@ -1,9 +1,12 @@
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/Button";
 import { SITE_PHONE_TEL } from "@/lib/site";
+import { getSiteSettings } from "@/lib/site-settings-store";
 
 export async function OnlineBookingCta() {
   const t = await getTranslations("HomePage.booking");
+  const settings = await getSiteSettings();
+  const phoneTel = settings.phoneTel || SITE_PHONE_TEL;
 
   return (
     <section className="border-t border-border/45 py-16 md:py-20">
@@ -19,7 +22,7 @@ export async function OnlineBookingCta() {
             {t("desc")}
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <a href={SITE_PHONE_TEL}>
+            <a href={phoneTel}>
               <Button className="h-10 rounded-lg px-4 text-sm">
                 {t("ctaCall")}
               </Button>

@@ -8,12 +8,16 @@ import {
   Car,
   Clock3,
   Crown,
+  HeartHandshake,
   PlaneTakeoff,
+  Sparkles,
   Trophy,
   X,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSiteRuntime } from "@/components/providers/SiteRuntimeProvider";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import {
@@ -24,19 +28,10 @@ import {
   isBookingAirportPrimary,
   type BookingPrimaryArea,
 } from "@/lib/booking-locations";
-import {
-  SITE_FACEBOOK_MESSENGER_URL,
-  SITE_INSTAGRAM_DM_URL,
-  SITE_KAKAO_CHAT_URL,
-  SITE_LINE_URL,
-  SITE_PHONE_TEL,
-  SITE_WHATSAPP_URL,
-} from "@/lib/site";
-
 const LUX_EASE = [0.22, 1, 0.36, 1] as const;
 const LUX_TRANSITION = { duration: 0.8, ease: LUX_EASE } as const;
 
-type ServiceType = "airport" | "city" | "golf" | "vip";
+type ServiceType = "airport" | "city" | "golf" | "vip" | "wedding" | "tour";
 
 type Props = {
   locale: string;
@@ -50,10 +45,12 @@ const serviceOptions: {
   detail: string;
   icon: React.ComponentType<{ className?: string }>;
 }[] = [
-  { id: "airport", label: "샌딩/픽업", detail: "인천/김포", icon: PlaneTakeoff },
-  { id: "city", label: "일반 이동", detail: "시내/근교", icon: Car },
-  { id: "golf", label: "골프 이동", detail: "라운딩 일정", icon: Trophy },
-  { id: "vip", label: "의전 이동", detail: "비즈니스/VIP", icon: Crown },
+  { id: "airport", label: "공항 샌딩/픽업", detail: "인천 · 김포공항 정시 운행 및 픽업", icon: PlaneTakeoff },
+  { id: "city", label: "시내/근교 여행", detail: "서울 · 수도권 명소 및 자유로운 여정", icon: Car },
+  { id: "golf", label: "골프 라운딩 대절", detail: "새벽 라운딩부터 편안한 귀가까지", icon: Trophy },
+  { id: "vip", label: "VIP 의전 서비스", detail: "비즈니스 · 국빈급 전문 의전 서비스", icon: Crown },
+  { id: "wedding", label: "웨딩 카 서비스", detail: "결혼식 본식 및 웨딩 촬영 맞춤 지원", icon: HeartHandshake },
+  { id: "tour", label: "투어 & 맞춤 일정", detail: "당일 투어 · 장거리 및 개별 상담 일정", icon: Sparkles },
 ];
 
 const vehicleOptions = ["스타리아", "카니발", "쏠라티"];
@@ -165,6 +162,7 @@ const primaryTKey = (p: BookingPrimaryArea): string => {
 };
 
 export function BespokeBookingExperience({ locale, title, description }: Props) {
+  const { phoneTel, links } = useSiteRuntime();
   const t = useTranslations("BookingExperience");
   const tb = useTranslations("HomePage.booking");
   const datePanelRef = useRef<HTMLDivElement>(null);
@@ -465,15 +463,16 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
               <div className="mt-3 grid grid-cols-2 gap-2.5">
                 <Button
                   type="button"
+                  variant="outline"
                   onClick={() =>
                     confirmAndOpen(
-                      SITE_PHONE_TEL,
+                      phoneTel,
                       "전화 연결을 하시겠습니까?\n확인을 누르면 통화 화면으로 이동합니다.",
                     )
                   }
-                  className="h-12 w-full rounded-xl border border-brand-gold/45 bg-brand-gold/90 text-sm font-semibold text-black shadow-[0_6px_18px_rgba(212,175,55,0.22)]"
+                  className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
-                  <img src="/icons/phone.svg" alt="" className="h-5 w-5" />
+                  <Image src="/icons/phone.svg" alt="" width={24} height={24} className="h-6 w-6" />
                   전화 상담
                 </Button>
                 <Button
@@ -481,13 +480,13 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                   variant="outline"
                   onClick={() =>
                     confirmAndOpen(
-                      SITE_KAKAO_CHAT_URL,
+                      links.kakao,
                       "카카오톡 오픈채팅방으로 연결됩니다.\n이동하시겠습니까?",
                     )
                   }
                   className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
-                  <img src="/icons/kakao.svg" alt="" className="h-5 w-5" />
+                  <Image src="/icons/kakao.svg" alt="" width={20} height={20} className="h-5 w-5" />
                   카카오톡
                 </Button>
                 <Button
@@ -495,24 +494,24 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                   variant="outline"
                   onClick={() =>
                     confirmAndOpen(
-                      SITE_WHATSAPP_URL,
+                      links.whatsapp,
                       "WhatsApp 채팅으로 연결됩니다.\n이동하시겠습니까?",
                     )
                   }
                   className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
-                  <img src="/icons/whatsapp.svg" alt="" className="h-5 w-5" />
+                  <Image src="/icons/whatsapp.svg" alt="" width={20} height={20} className="h-5 w-5" />
                   WhatsApp
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() =>
-                    confirmAndOpen(SITE_LINE_URL, "LINE 채팅으로 연결됩니다.\n이동하시겠습니까?")
+                    confirmAndOpen(links.line, "LINE 채팅으로 연결됩니다.\n이동하시겠습니까?")
                   }
                   className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
-                  <img src="/icons/line.svg" alt="" className="h-5 w-5" />
+                  <Image src="/icons/line.svg" alt="" width={20} height={20} className="h-5 w-5" />
                   LINE
                 </Button>
                 <Button
@@ -520,13 +519,13 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                   variant="outline"
                   onClick={() =>
                     confirmAndOpen(
-                      SITE_INSTAGRAM_DM_URL,
+                      links.instagram,
                       "Instagram DM으로 이동합니다.\n연결하시겠습니까?",
                     )
                   }
                   className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
-                  <img src="/icons/instagram.svg" alt="" className="h-5 w-5" />
+                  <Image src="/icons/instagram.svg" alt="" width={20} height={20} className="h-5 w-5" />
                   Instagram DM
                 </Button>
                 <Button
@@ -534,14 +533,14 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                   variant="outline"
                   onClick={() =>
                     confirmAndOpen(
-                      SITE_FACEBOOK_MESSENGER_URL,
-                      "페이스북으로 연결됩니다.\n이동하시겠습니까?",
+                      links.messenger,
+                      "페이스북 메신저로 연결됩니다.\n이동하시겠습니까?",
                     )
                   }
                   className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
-                  <img src="/icons/messenger.svg" alt="" className="h-5 w-5" />
-                  페이스북
+                  <Image src="/icons/messenger.svg" alt="" width={20} height={20} className="h-5 w-5" />
+                  페이스북 메신저
                 </Button>
               </div>
             </div>
@@ -581,7 +580,7 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
               )}
             >
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-metal-bronze-strong md:text-base">Step 2. 일정 및 유형</p>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div className="mt-4 grid grid-cols-2 gap-3">
                 {serviceOptions.map((option) => {
                   const Icon = option.icon;
                   const active = serviceType === option.id;
@@ -955,7 +954,7 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                     "WhatsApp",
                     "LINE",
                     "Instagram DM",
-                    "페이스북",
+                    "페이스북 메신저",
                   ].map((channel) => (
                     <option key={channel} value={channel} className="bg-[#0a1324]">
                       {channel}

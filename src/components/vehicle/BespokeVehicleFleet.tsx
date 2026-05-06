@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { Check, Luggage, Phone, Users, X } from "lucide-react";
+import { Check, Luggage, Users, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useId, useState } from "react";
 import { Link } from "@/i18n/navigation";
+import { useSiteRuntime } from "@/components/providers/SiteRuntimeProvider";
 import { Button } from "@/components/ui/Button";
-import { BRAND_LOGO_SRC, SITE_PHONE_TEL } from "@/lib/site";
+import { BRAND_LOGO_SRC } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { VEHICLE_FLEET_MAIN, type FleetVehicleKey } from "@/constants/vehicleFleetImages";
 
@@ -42,6 +43,7 @@ type FleetRowProps = {
 
 function FleetRow({ vkey, onOpenDetail }: FleetRowProps) {
   const t = useTranslations("VehicleFleet");
+  const { phoneTel } = useSiteRuntime();
   const img = FLEET_IMAGES[vkey];
 
   return (
@@ -156,21 +158,21 @@ function FleetRow({ vkey, onOpenDetail }: FleetRowProps) {
               href="/booking"
               className={cn(
                 "inline-flex h-12 w-full items-center justify-center rounded-xl px-8 text-base font-semibold transition-[filter]",
-                "bg-brand-gold text-accent-foreground shadow-sm hover:brightness-110 active:brightness-95",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                "bg-[#5fb7ff] text-[#041325] shadow-sm hover:bg-[#79c4ff] active:bg-[#4aaeff]",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5fb7ff]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
               )}
             >
               {t("bookBtn")}
             </Link>
             <a
-              href={SITE_PHONE_TEL}
+              href={phoneTel}
               className={cn(
-                "inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-emerald-400/60 px-8 text-base font-semibold text-emerald-100",
-                "bg-emerald-600/90 transition-colors hover:bg-emerald-500 hover:border-emerald-300",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                "inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-brand-gold/45 px-8 text-base font-semibold text-black",
+                "bg-gradient-to-b from-brand-gold via-[#ddb94a] to-[#b8892a] transition-[filter] hover:brightness-110",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
               )}
             >
-              <Phone className="h-4 w-4 shrink-0" aria-hidden />
+              <Image src="/icons/phone.svg" alt="" width={20} height={20} className="h-5 w-5" aria-hidden />
               {t("phoneBtn")}
             </a>
           </div>
@@ -190,6 +192,7 @@ function VehicleDetailModal({
   onClose: () => void;
 }) {
   const t = useTranslations("VehicleFleet");
+  const { phoneTel } = useSiteRuntime();
   const titleId = useId();
   const descId = useId();
   const [previewSlot, setPreviewSlot] = useState<number | null>(null);
@@ -321,15 +324,15 @@ function VehicleDetailModal({
             {t("bookBtn")}
           </Link>
           <a
-            href={SITE_PHONE_TEL}
+            href={phoneTel}
             onClick={onClose}
             className={cn(
-              "inline-flex h-12 min-w-0 items-center justify-center gap-2 rounded-xl border border-emerald-400/60 px-8 text-base font-semibold text-emerald-100 md:min-w-[11rem]",
-              "bg-emerald-600/90 transition-colors hover:bg-emerald-500 hover:border-emerald-300",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+              "inline-flex h-12 min-w-0 items-center justify-center gap-2 rounded-xl border border-brand-gold/45 px-8 text-base font-semibold text-black md:min-w-[11rem]",
+              "bg-gradient-to-b from-brand-gold via-[#ddb94a] to-[#b8892a] transition-[filter] hover:brightness-110",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
             )}
           >
-            <Phone className="h-4 w-4 shrink-0" aria-hidden />
+            <Image src="/icons/phone.svg" alt="" width={20} height={20} className="h-5 w-5" aria-hidden />
             {t("phoneBtn")}
           </a>
         </footer>

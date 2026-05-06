@@ -4,14 +4,7 @@ import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
-import {
-  SITE_FACEBOOK_MESSENGER_URL,
-  SITE_INSTAGRAM_DM_URL,
-  SITE_KAKAO_CHAT_URL,
-  SITE_LINE_URL,
-  SITE_PHONE_TEL,
-  SITE_WHATSAPP_URL,
-} from "@/lib/site";
+import { useSiteRuntime } from "@/components/providers/SiteRuntimeProvider";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
@@ -46,27 +39,30 @@ const CHANNEL_MSG_KEY: Record<
   facebook: "contactFacebook",
 };
 
-function channelUrl(id: Exclude<QuickChannel, "">): string {
+function channelUrl(
+  id: Exclude<QuickChannel, "">,
+  runtime: ReturnType<typeof useSiteRuntime>
+): string {
   switch (id) {
     case "phone":
-      return SITE_PHONE_TEL;
+      return runtime.phoneTel;
     case "kakao":
-      return SITE_KAKAO_CHAT_URL;
+      return runtime.links.kakao;
     case "whatsapp":
-      return SITE_WHATSAPP_URL;
+      return runtime.links.whatsapp;
     case "line":
-      return SITE_LINE_URL;
+      return runtime.links.line;
     case "instagram":
-      return SITE_INSTAGRAM_DM_URL;
+      return runtime.links.instagram;
     case "facebook":
-      return SITE_FACEBOOK_MESSENGER_URL;
+      return runtime.links.messenger;
     default:
-      return SITE_PHONE_TEL;
+      return runtime.phoneTel;
   }
 }
 
-function openChannel(id: Exclude<QuickChannel, "">) {
-  const url = channelUrl(id);
+function openChannel(id: Exclude<QuickChannel, "">, runtime: ReturnType<typeof useSiteRuntime>) {
+  const url = channelUrl(id, runtime);
   if (url.startsWith("tel:")) {
     window.location.href = url;
     return;
@@ -75,6 +71,7 @@ function openChannel(id: Exclude<QuickChannel, "">) {
 }
 
 export function BespokeSupportExperience() {
+  const runtime = useSiteRuntime();
   const t = useTranslations("Support");
   const locale = useLocale();
   const [openFaq, setOpenFaq] = useState<number | null>(1);
@@ -145,7 +142,7 @@ export function BespokeSupportExperience() {
       }
       setSubmitState("success");
       if (typeof window !== "undefined") {
-        window.open(SITE_KAKAO_CHAT_URL, "_blank", "noopener,noreferrer");
+        window.open(runtime.links.kakao, "_blank", "noopener,noreferrer");
       }
       setName("");
       setPhone("");
@@ -435,7 +432,7 @@ export function BespokeSupportExperience() {
                 const ok = window.confirm(t("channelConfirm", { channel: label }));
                 e.target.value = "";
                 if (!ok) return;
-                openChannel(id);
+                openChannel(id, runtime);
               }}
               className="mt-6 h-14 w-full rounded-xl border border-metal-bronze/35 bg-black/35 px-4 text-base font-medium text-tone-strong focus:border-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold/30 md:max-w-xl"
             >

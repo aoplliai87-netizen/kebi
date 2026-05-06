@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -182,9 +183,13 @@ export function BespokeReviewExperience() {
                           rel="noreferrer"
                           className="relative aspect-square overflow-hidden rounded-xl border border-white/10 bg-black/40"
                         >
-                          {/* 동적 업로드 경로 — next/image 대신 일반 img 사용 */}
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={src} alt="" className="h-full w-full object-cover" loading="lazy" />
+                          <Image
+                            src={src}
+                            alt="리뷰 업로드 이미지"
+                            fill
+                            sizes="(max-width: 768px) 45vw, 180px"
+                            className="h-full w-full object-cover"
+                          />
                         </a>
                       ))}
                     </div>
@@ -250,8 +255,14 @@ export function BespokeReviewExperience() {
                 <div className="mt-3 flex flex-wrap gap-2">
                   {previewUrls.map((url) => (
                     <div key={url} className="relative h-20 w-20 overflow-hidden rounded-lg border border-white/15">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={url} alt="" className="h-full w-full object-cover" />
+                      <Image
+                        src={url}
+                        alt="업로드 미리보기 이미지"
+                        fill
+                        unoptimized
+                        sizes="80px"
+                        className="h-full w-full object-cover"
+                      />
                     </div>
                   ))}
                 </div>

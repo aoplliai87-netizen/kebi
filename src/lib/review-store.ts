@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { asStringArray, getSupabaseServerClient } from "@/lib/supabase-server";
 
 export type StoredReview = {
   id: string;
@@ -22,6 +23,23 @@ async function ensureStore() {
 }
 
 export async function listReviews(): Promise<StoredReview[]> {
+  const supabase = getSupabaseServerClient();
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("reviews")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (!error && data) {
+      return data.map((row) => ({
+        id: String(row.id),
+        createdAt: String(row.created_at),
+        author: String(row.author),
+        content: String(row.content),
+        images: asStringArray(row.images),
+      }));
+    }
+  }
+
   await ensureStore();
   const raw = await readFile(REVIEWS_FILE, "utf-8");
   const parsed = JSON.parse(raw) as StoredReview[];
@@ -34,6 +52,18 @@ export async function saveReviewList(reviews: StoredReview[]): Promise<void> {
 }
 
 export async function appendReview(review: StoredReview): Promise<void> {
+  const supabase = getSupabaseServerClient();
+  if (supabase) {
+    const { error } = await supabase.from("reviews").insert({
+      id: review.id,
+      created_at: review.createdAt,
+      author: review.author,
+      content: review.content,
+      images: review.images,
+    });
+    if (!error) return;
+  }
+
   const all = await listReviews();
   all.unshift(review);
   await saveReviewList(all);

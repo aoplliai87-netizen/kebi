@@ -3,7 +3,7 @@
 import { MessageCircle, Phone } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
-import { SITE_KAKAO_CHAT_URL, SITE_PHONE_TEL } from "@/lib/site";
+import { useSiteRuntime } from "@/components/providers/SiteRuntimeProvider";
 import { cn } from "@/lib/utils";
 
 /** Primary CTA와 동일한 골드 토큰 (Button primary variant와 정렬) */
@@ -18,6 +18,7 @@ const bookBtnClass =
 export function MobileFloatingBar() {
   const t = useTranslations("FloatingBar");
   const pathname = usePathname();
+  const { phoneTel, links } = useSiteRuntime();
 
   return (
     <div
@@ -36,7 +37,7 @@ export function MobileFloatingBar() {
           )}
         >
           <a
-            href={SITE_PHONE_TEL}
+            href={phoneTel}
             className={cn(
               "flex min-h-[3.75rem] flex-col items-center justify-center gap-1 rounded-xl",
               "bg-brand-deep text-primary-foreground shadow-inner ring-1 ring-white/10",
@@ -63,7 +64,7 @@ export function MobileFloatingBar() {
           </div>
 
           <a
-            href={SITE_KAKAO_CHAT_URL}
+            href={links.kakao}
             target="_blank"
             rel="noopener noreferrer"
             className={cn(

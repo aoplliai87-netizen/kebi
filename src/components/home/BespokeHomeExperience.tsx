@@ -2,18 +2,12 @@
 
 import type { ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
 import { HOME_INTRO_VISUALS } from "@/constants/homeIntroVisuals";
 import { VEHICLE_FLEET_MAIN } from "@/constants/vehicleFleetImages";
-import {
-  SITE_FACEBOOK_MESSENGER_URL,
-  SITE_INSTAGRAM_DM_URL,
-  SITE_KAKAO_CHAT_URL,
-  SITE_LINE_URL,
-  SITE_PHONE_TEL,
-  SITE_WHATSAPP_URL,
-} from "@/lib/site";
+import { SITE_PHONE_TEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 
@@ -29,6 +23,7 @@ type ReviewItem = {
 };
 
 type BespokeHomeExperienceProps = {
+  locale?: string;
   heroEyebrow: string;
   heroTitle: string;
   heroSubtitle: ReactNode;
@@ -49,6 +44,19 @@ type BespokeHomeExperienceProps = {
   reviewEyebrow: string;
   reviewTitle: string;
   reviews: ReviewItem[];
+  aboutMeTitle?: string;
+  aboutMeDescription?: string;
+  galleryImageUrls?: string[];
+  phoneTel?: string;
+  contactLinks?: {
+    kakao: string;
+    instagram: string;
+    whatsapp: string;
+    line: string;
+    messenger: string;
+  };
+  heroTitleOverride?: string;
+  heroSubtitleOverride?: string;
 };
 
 const LUX_EASE = [0.22, 1, 0.36, 1] as const;
@@ -57,20 +65,6 @@ const LUX_TRANSITION = { duration: 0.8, ease: LUX_EASE } as const;
 /** 섹션 상단 라벨(소개, AIRPORT VAN FLEET 등) — 모바일은 살짝만, md 이상에서 균형 있게 확대 */
 const homeSectionEyebrow =
   "text-[13px] font-semibold uppercase tracking-[0.2em] text-metal-bronze-strong md:text-sm md:tracking-[0.24em] lg:tracking-[0.26em]";
-
-const QUICK_CHANNELS: ReadonlyArray<{
-  label: string;
-  icon: string;
-  href: string;
-  tone?: "phone";
-}> = [
-  { label: "전화", icon: "/icons/phone.svg", href: SITE_PHONE_TEL, tone: "phone" as const },
-  { label: "카카오톡", icon: "/icons/kakao.svg", href: SITE_KAKAO_CHAT_URL },
-  { label: "WhatsApp", icon: "/icons/whatsapp.svg", href: SITE_WHATSAPP_URL },
-  { label: "LINE", icon: "/icons/line.svg", href: SITE_LINE_URL },
-  { label: "Instagram", icon: "/icons/instagram.svg", href: SITE_INSTAGRAM_DM_URL },
-  { label: "Messenger", icon: "/icons/messenger.svg", href: SITE_FACEBOOK_MESSENGER_URL },
-] as const;
 
 const HERO_BACKGROUND_SLIDES = [
   ...HOME_INTRO_VISUALS.map((item) => item.src),
@@ -86,13 +80,46 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
   });
   const heroY = useTransform(scrollYProgress, [0, 1], [0, -130]);
   const veilY = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const heroParts = props.heroTitle.split("Premium");
+  const effectiveHeroTitle = props.heroTitleOverride?.trim() || props.heroTitle;
+  const effectiveHeroSubtitle = props.heroSubtitleOverride?.trim() || null;
+  const heroParts = effectiveHeroTitle.split("Premium");
+  const phoneTel = props.phoneTel || SITE_PHONE_TEL;
+  const quickChannels: ReadonlyArray<{
+    label: string;
+    icon: string;
+    href: string;
+    tone?: "phone";
+  }> = [
+    { label: "전화", icon: "/icons/phone.svg", href: phoneTel, tone: "phone" as const },
+    {
+      label: "카카오톡",
+      icon: "/icons/kakao.svg",
+      href: props.contactLinks?.kakao || "#",
+    },
+    {
+      label: "WhatsApp",
+      icon: "/icons/whatsapp.svg",
+      href: props.contactLinks?.whatsapp || "#",
+    },
+    { label: "LINE", icon: "/icons/line.svg", href: props.contactLinks?.line || "#" },
+    {
+      label: "Instagram",
+      icon: "/icons/instagram.svg",
+      href: props.contactLinks?.instagram || "#",
+    },
+    {
+      label: "Facebook Messenger",
+      icon: "/icons/messenger.svg",
+      href: props.contactLinks?.messenger || "#",
+    },
+  ] as const;
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const homeVehiclePreviews = [
     { key: "staria", src: VEHICLE_FLEET_MAIN.staria, label: "스타리아" },
     { key: "solati", src: VEHICLE_FLEET_MAIN.solati, label: "쏠라티" },
     { key: "county", src: VEHICLE_FLEET_MAIN.county, label: "카운티" },
   ] as const;
+  const galleryImageUrls = props.galleryImageUrls ?? [];
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -116,10 +143,13 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
       <section className="relative overflow-hidden border-b border-border/50 pb-20 pt-24 md:pb-28 md:pt-32">
         <div className="pointer-events-none absolute inset-0">
           {HERO_BACKGROUND_SLIDES.map((src, index) => (
-            <img
+            <Image
               key={src}
               src={src}
               alt=""
+              fill
+              sizes="100vw"
+              priority={index === 0}
               className={cn(
                 "absolute inset-0 h-full w-full object-cover transition-opacity duration-[1300ms]",
                 heroSlideIndex === index ? "opacity-100" : "opacity-0",
@@ -151,12 +181,12 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
               </>
             ) : (
               <span className="bg-[linear-gradient(135deg,#e9f3ff_0%,#dbe9ff_45%,#f2cd76_100%)] bg-clip-text text-transparent">
-                {props.heroTitle}
+                {effectiveHeroTitle}
               </span>
             )}
           </h1>
           <p className="mx-auto mt-7 max-w-3xl text-xl leading-relaxed text-tone-body md:mt-8 md:text-2xl [&_span]:inline-block">
-            {props.heroSubtitle}
+            {effectiveHeroSubtitle ? effectiveHeroSubtitle : props.heroSubtitle}
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Link href="/booking">
@@ -164,7 +194,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
                 실시간 예약하기
               </Button>
             </Link>
-            <a href={SITE_PHONE_TEL}>
+            <a href={phoneTel}>
               <Button
                 variant="outline"
                 className="h-11 rounded-xl border-metal-bronze/45 px-7 text-sm font-semibold text-tone-sky md:h-12 md:px-8 md:text-base"
@@ -195,38 +225,69 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
 
       <section className="mx-auto max-w-content px-4 pb-16 md:px-6 md:pb-20">
         <div className="rounded-[30px] border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))] p-6 text-center shadow-[0_18px_54px_rgba(0,0,0,0.32)] md:p-10">
-          <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-metal-bronze-strong">About Me</p>
-          <p className="mx-auto mt-3 max-w-3xl text-xl font-semibold leading-relaxed text-tone-strong md:text-3xl">
-            상담 채널을 선택해 빠르게 연결하고, 대표 번호로 즉시 예약 상담받으세요.
+          <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-metal-bronze-strong">
+            {props.aboutMeTitle ?? "ABOUT ME"}
           </p>
-          <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-            {QUICK_CHANNELS.map((channel) => (
+          <p className="mx-auto mt-3 max-w-3xl text-xl font-semibold leading-relaxed text-tone-strong md:text-3xl">
+            {props.aboutMeDescription ?? "원하시는 채널로 빠르게 연결해 예약 상담을 도와드립니다."}
+          </p>
+          <div className="mx-auto mt-7 grid max-w-[17.5rem] grid-cols-3 gap-3 sm:max-w-[19rem]">
+            {quickChannels.map((channel) => (
               <a
                 key={channel.label}
                 href={channel.href}
                 target={channel.href.startsWith("http") ? "_blank" : undefined}
                 rel={channel.href.startsWith("http") ? "noopener noreferrer" : undefined}
                 className={cn(
-                  "inline-flex h-12 w-12 items-center justify-center rounded-xl border bg-black/25 transition-all hover:-translate-y-0.5",
+                  "inline-flex h-[3.25rem] w-[3.25rem] items-center justify-center rounded-xl border bg-black/25 transition-all hover:-translate-y-0.5 md:h-14 md:w-14",
                   channel.tone === "phone"
-                    ? "border-emerald-400/65 bg-emerald-500/20 shadow-[0_8px_24px_rgba(16,185,129,0.2)] hover:bg-emerald-500/28"
+                    ? "border-white/20 hover:border-brand-gold/55 hover:bg-white/[0.08]"
                     : "border-white/20 hover:border-brand-gold/55 hover:bg-white/[0.08]",
                 )}
                 aria-label={channel.label}
                 title={channel.label}
               >
-                <img src={channel.icon} alt="" className="h-5 w-5" />
+                <Image src={channel.icon} alt="" width={28} height={28} className="h-6 w-6 md:h-7 md:w-7" />
               </a>
             ))}
           </div>
           <a
-            href={SITE_PHONE_TEL}
+            href={phoneTel}
             className="mt-8 inline-flex h-14 min-w-[220px] items-center justify-center rounded-xl bg-gradient-to-b from-brand-gold via-[#ddb94a] to-[#b8892a] px-8 text-lg font-bold text-black shadow-[0_10px_26px_rgba(212,175,55,0.34)] transition hover:brightness-110"
           >
             전화걸기
           </a>
         </div>
       </section>
+
+      {galleryImageUrls.length > 0 ? (
+        <section className="mx-auto max-w-content px-4 pb-16 md:px-6 md:pb-20">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {galleryImageUrls.map((src, index) => (
+              <figure
+                key={src}
+                className="overflow-hidden rounded-2xl border border-white/12 bg-black/20 shadow-[0_10px_32px_rgba(0,0,0,0.28)]"
+              >
+                <Image
+                  src={src}
+                  alt={
+                    props.locale === "ja"
+                      ? `Kkebi サービスギャラリー画像 ${index + 1}`
+                      : props.locale === "zh"
+                        ? `Kkebi 服务画廊图片 ${index + 1}`
+                        : props.locale === "en"
+                          ? `Kkebi service gallery image ${index + 1}`
+                          : `깨비콜밴 서비스 갤러리 이미지 ${index + 1}`
+                  }
+                  width={960}
+                  height={640}
+                  className="h-48 w-full object-cover md:h-56"
+                />
+              </figure>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="mx-auto grid max-w-content gap-10 border-y border-border/45 px-4 py-20 md:px-6 md:py-24">
         <motion.div
@@ -249,7 +310,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
                 key={item.key}
                 className="overflow-hidden rounded-2xl border border-white/12 bg-black/25 shadow-[0_12px_34px_rgba(0,0,0,0.32)]"
               >
-                <img src={item.src} alt={item.label} className="h-36 w-full object-cover" />
+                <Image src={item.src} alt={item.label} width={640} height={360} className="h-36 w-full object-cover" />
                 <p className="px-3 py-2 text-sm font-semibold text-tone-strong">{item.label}</p>
               </article>
             ))}
@@ -298,7 +359,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
             {props.bookingDesc}
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
-            <a href={SITE_PHONE_TEL}>
+            <a href={phoneTel}>
               <Button className="h-11 rounded-xl px-6 text-sm font-semibold">
                 {props.bookingCall}
               </Button>

@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
-import { Menu, Phone, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
@@ -35,20 +36,79 @@ function navLinkActive(pathname: string, href: string) {
   return p === href || p.startsWith(`${href}/`);
 }
 
-export function Header() {
+export function Header({
+  phoneDisplay = SITE_PHONE_DISPLAY,
+  phoneTel = SITE_PHONE_TEL,
+}: {
+  phoneDisplay?: string;
+  phoneTel?: string;
+}) {
   const t = useTranslations("Header");
   const pathname = usePathname();
   const locale = useLocale();
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    document.body.classList.toggle("mobile-menu-open", open);
     return () => {
       document.body.style.overflow = "";
+      document.body.classList.remove("mobile-menu-open");
     };
   }, [open]);
 
+  const mobileDrawer = (
+    <div id="mobile-drawer" className={cn("fixed inset-0 z-[200] xl:hidden", open ? "pointer-events-auto" : "pointer-events-none")} aria-hidden={!open}>
+      <button
+        type="button"
+        className={cn("absolute inset-0 bg-black/80 transition-opacity", open ? "opacity-100" : "opacity-0")}
+        onClick={() => setOpen(false)}
+        aria-label={t("closeMenu")}
+      />
+
+      <div className={cn("fixed right-0 top-0 bottom-0 flex w-full max-w-[22rem] flex-col border-l border-white/10 bg-[#04070d] shadow-[0_18px_44px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-out overflow-y-auto", open ? "translate-x-0" : "translate-x-full")}>
+        <div className="flex items-center justify-between border-b border-border px-4 py-3">
+          <div className="flex min-w-0 flex-col gap-1">
+            <span className="text-sm font-semibold">{t("brand")}</span>
+            <a
+              href={phoneTel}
+              className="inline-flex items-center gap-2 rounded-full border border-brand-gold/45 bg-[linear-gradient(180deg,rgba(212,175,55,0.2),rgba(212,175,55,0.1))] px-4 py-2.5 text-sm font-bold text-brand-gold shadow-[0_4px_16px_rgba(212,175,55,0.22)]"
+              onClick={() => setOpen(false)}
+            >
+              <Image src="/icons/phone.svg" alt="" width={20} height={20} className="h-5 w-5 shrink-0" aria-hidden />
+              <span className="font-numeric tabular-nums">{phoneDisplay}</span>
+            </a>
+          </div>
+          <button type="button" className="rounded-lg p-2 text-tone-soft hover:bg-surface hover:text-tone-sky" onClick={() => setOpen(false)} aria-label={t("closeMenu")}>
+            <X className="h-5 w-5" aria-hidden />
+          </button>
+        </div>
+        <nav className="grid gap-1 p-3 pb-6" aria-label={t("navMain")}>
+          {NAV.map(({ msgKey, href }) => (
+            <Link
+              key={msgKey}
+              href={href}
+              className={cn(
+                "rounded-xl px-4 py-3 text-base font-semibold transition-colors hover:bg-white/5",
+                navLinkActive(pathname, href) ? "text-brand-gold" : "text-white/90",
+              )}
+              onClick={() => setOpen(false)}
+            >
+              {t(msgKey)}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </div>
+  );
+
   return (
+    <>
     <header className="sticky top-0 z-40 border-b border-white/10 bg-brand-black/94 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.45)]">
       <div className="mx-auto flex min-h-[3.75rem] max-w-content items-center justify-between gap-3 px-4 py-2 sm:min-h-[4.25rem] sm:gap-4 sm:px-6">
         <div className="flex min-w-0 flex-1 items-center gap-3 sm:gap-5 md:gap-6">
@@ -63,14 +123,12 @@ export function Header() {
             />
           </Link>
           <a
-            href={SITE_PHONE_TEL}
+            href={phoneTel}
             className="inline-flex min-h-[2.75rem] max-w-full shrink items-center gap-2 rounded-full border border-brand-gold/40 bg-[linear-gradient(180deg,rgba(212,175,55,0.2),rgba(212,175,55,0.1))] px-3 py-2 text-xs font-bold text-brand-gold shadow-[0_4px_18px_rgba(212,175,55,0.2)] transition hover:border-brand-gold/65 hover:text-[#f2d78e] sm:px-5 sm:text-sm md:text-base"
-            aria-label={`${t("phoneAria")}: ${SITE_PHONE_DISPLAY}`}
+            aria-label={`${t("phoneAria")}: ${phoneDisplay}`}
           >
-            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-brand-gold text-black">
-              <Phone className="h-3.5 w-3.5 shrink-0" aria-hidden />
-            </span>
-            <span className="font-numeric tabular-nums tracking-tight">{SITE_PHONE_DISPLAY}</span>
+            <Image src="/icons/phone.svg" alt="" width={20} height={20} className="h-5 w-5 shrink-0" aria-hidden />
+            <span className="font-numeric tabular-nums tracking-tight">{phoneDisplay}</span>
           </a>
         </div>
 
@@ -113,7 +171,7 @@ export function Header() {
                     : "text-white/75 hover:bg-white/10 hover:text-brand-gold",
                 )}
               >
-                {loc === "ko" ? t("langKo") : t("langEn")}
+                {loc.toUpperCase()}
               </Link>
             ))}
           </div>
@@ -132,50 +190,8 @@ export function Header() {
         </div>
       </div>
 
-      <div id="mobile-drawer" className={cn("fixed inset-0 z-[90] xl:hidden", open ? "pointer-events-auto" : "pointer-events-none")} aria-hidden={!open}>
-        <button
-          type="button"
-          className={cn("absolute inset-0 bg-black/60 transition-opacity", open ? "opacity-100" : "opacity-0")}
-          onClick={() => setOpen(false)}
-          aria-label={t("closeMenu")}
-        />
-
-        <div className={cn("fixed right-0 top-0 bottom-0 flex w-[min(100%,22rem)] flex-col border-l border-white/10 bg-[#04070d] shadow-[0_18px_44px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-out overflow-y-auto", open ? "translate-x-0" : "translate-x-full")}>
-          <div className="flex items-center justify-between border-b border-border px-4 py-3">
-            <div className="flex min-w-0 flex-col gap-1">
-              <span className="text-sm font-semibold">{t("brand")}</span>
-              <a
-                href={SITE_PHONE_TEL}
-                className="inline-flex items-center gap-2 rounded-full border border-brand-gold/45 bg-[linear-gradient(180deg,rgba(212,175,55,0.2),rgba(212,175,55,0.1))] px-4 py-2.5 text-sm font-bold text-brand-gold shadow-[0_4px_16px_rgba(212,175,55,0.22)]"
-                onClick={() => setOpen(false)}
-              >
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-brand-gold text-black">
-                  <Phone className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                </span>
-                <span className="font-numeric tabular-nums">{SITE_PHONE_DISPLAY}</span>
-              </a>
-            </div>
-            <button type="button" className="rounded-lg p-2 text-tone-soft hover:bg-surface hover:text-tone-sky" onClick={() => setOpen(false)} aria-label={t("closeMenu")}>
-              <X className="h-5 w-5" aria-hidden />
-            </button>
-          </div>
-          <nav className="grid gap-1 p-3 pb-6" aria-label={t("navMain")}>
-            {NAV.map(({ msgKey, href }) => (
-              <Link
-                key={msgKey}
-                href={href}
-                className={cn(
-                  "rounded-xl px-4 py-3 text-base font-semibold transition-colors hover:bg-white/5",
-                  navLinkActive(pathname, href) ? "text-brand-gold" : "text-white/90",
-                )}
-                onClick={() => setOpen(false)}
-              >
-                {t(msgKey)}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      </div>
     </header>
+    {mounted ? createPortal(mobileDrawer, document.body) : null}
+    </>
   );
 }
