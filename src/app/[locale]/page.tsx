@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { BespokeHomeExperience } from "@/components/home/BespokeHomeExperience";
+import { HomeDestinationsLinks } from "@/components/home/HomeDestinationsLinks";
+import { HomeFaqSection } from "@/components/home/HomeFaqSection";
+import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { getLocalizedPageMetadata } from "@/lib/page-metadata";
 import { getSiteSettings } from "@/lib/site-settings-store";
 import {
@@ -47,7 +50,12 @@ export default async function HomePage({ params }: Props) {
   setRequestLocale(locale);
   const t = await getTranslations("HomePage");
   const tIntroHero = await getTranslations("IntroPage.hero");
+  const tFaq = await getTranslations("HomeFaq");
   const siteSettings = await getSiteSettings();
+  const faqItems = ([1, 2, 3, 4, 5] as const).map((n) => ({
+    q: tFaq(`q${n}`),
+    a: tFaq(`a${n}`),
+  }));
   const localeKey = locale as "ko" | "en" | "ja" | "zh";
   const mergedLinks = {
     kakao: siteSettings.contactLinks.kakao || SITE_KAKAO_CHAT_URL,
@@ -58,6 +66,8 @@ export default async function HomePage({ params }: Props) {
   };
 
   return (
+    <>
+    <FaqJsonLd items={faqItems} />
     <BespokeHomeExperience
       locale={locale}
       heroEyebrow={t("heroEyebrow")}
@@ -124,5 +134,8 @@ export default async function HomePage({ params }: Props) {
       heroTitleOverride={siteSettings.heroTitleByLocale[localeKey] || siteSettings.heroTitle}
       heroSubtitleOverride={siteSettings.heroSubtitleByLocale[localeKey] || siteSettings.heroSubtitle}
     />
+    <HomeDestinationsLinks locale={locale} />
+    <HomeFaqSection />
+    </>
   );
 }

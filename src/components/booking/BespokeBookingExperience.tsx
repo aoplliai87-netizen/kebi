@@ -23,9 +23,11 @@ import { cn } from "@/lib/utils";
 import {
   BOOKING_PRIMARY_ORDER,
   composeRouteLine,
-  deriveLegacyAirportField,
-  getBookingSubOptions,
+  deriveLegacyAirportSummaryKey,
+  formatRouteEndForDisplay,
+  getBookingSubOptionDescriptors,
   isBookingAirportPrimary,
+  resolveBookingSubOptionLabel,
   type BookingPrimaryArea,
 } from "@/lib/booking-locations";
 const LUX_EASE = [0.22, 1, 0.36, 1] as const;
@@ -39,41 +41,50 @@ type Props = {
   description: string;
 };
 
-const serviceOptions: {
+const SERVICE_DEFS: {
   id: ServiceType;
-  label: string;
-  detail: string;
   icon: React.ComponentType<{ className?: string }>;
 }[] = [
-  { id: "airport", label: "공항 샌딩/픽업", detail: "인천 · 김포공항 정시 운행 및 픽업", icon: PlaneTakeoff },
-  { id: "city", label: "시내/근교 여행", detail: "서울 · 수도권 명소 및 자유로운 여정", icon: Car },
-  { id: "golf", label: "골프 라운딩 대절", detail: "새벽 라운딩부터 편안한 귀가까지", icon: Trophy },
-  { id: "vip", label: "VIP 의전 서비스", detail: "비즈니스 · 국빈급 전문 의전 서비스", icon: Crown },
-  { id: "wedding", label: "웨딩 카 서비스", detail: "결혼식 본식 및 웨딩 촬영 맞춤 지원", icon: HeartHandshake },
-  { id: "tour", label: "투어 & 맞춤 일정", detail: "당일 투어 · 장거리 및 개별 상담 일정", icon: Sparkles },
+  { id: "airport", icon: PlaneTakeoff },
+  { id: "city", icon: Car },
+  { id: "golf", icon: Trophy },
+  { id: "vip", icon: Crown },
+  { id: "wedding", icon: HeartHandshake },
+  { id: "tour", icon: Sparkles },
 ];
 
-const vehicleOptions = ["스타리아", "카니발", "쏠라티"];
+const VEHICLE_KEYS = ["staria", "carnival", "solati"] as const;
+type VehicleKey = (typeof VEHICLE_KEYS)[number];
 
-const completionMessage: Record<string, string> = {
-  ko: "We will check your reservation and contact you via your preferred messenger after a short wait. (운전 중일 경우 확인 후 연락드리겠습니다)",
-  en: "We will check your reservation and contact you via your preferred messenger after a short wait. (If we are driving, we will contact you after checking.)",
+/** Legacy Korean vehicle labels sent to API / admin */
+const VEHICLE_LEGACY_KO: Record<VehicleKey, string> = {
+  staria: "스타리아",
+  carnival: "카니발",
+  solati: "쏠라티",
 };
 
-const WEEKDAY_LABELS_KO = ["일", "월", "화", "수", "목", "금", "토"] as const;
+const MESSENGER_IDS = ["phone", "kakao", "whatsapp", "line", "instagram", "messenger"] as const;
+type MessengerId = (typeof MESSENGER_IDS)[number];
 
 const toISODate = (date: Date) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 
-const formatDisplayDate = (value: string, locale: string) => {
-  if (!value) return locale === "ko" ? "연도-월-일" : "YYYY-MM-DD";
+function localeTagForBooking(locale: string) {
+  if (locale === "ko") return "ko-KR";
+  if (locale === "ja") return "ja-JP";
+  if (locale === "zh") return "zh-CN";
+  return "en-US";
+}
+
+const formatDisplayDate = (value: string, locale: string, emptyLabel: string) => {
+  if (!value) return emptyLabel;
   const date = new Date(`${value}T00:00:00`);
   if (Number.isNaN(date.getTime())) return value;
-  return new Intl.DateTimeFormat(locale === "ko" ? "ko-KR" : "en-US", {
+  return new Intl.DateTimeFormat(localeTagForBooking(locale), {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-    weekday: locale === "ko" ? undefined : "short",
+    weekday: "short",
   }).format(date);
 };
 
@@ -89,11 +100,11 @@ const buildTimeOptions = () => {
 
 const TIME_OPTIONS = buildTimeOptions();
 
-/** 00:00–11:50 → AM 열, 12:00–23:50 → PM 열 (10분 간격, 구역만 구분·각 줄은 12시각만) */
+/** 00:00–11:49 → AM column; 12:00–23:50 → PM column (10-min slots) */
 const AM_TIME_OPTIONS = TIME_OPTIONS.filter((t) => Number(t.slice(0, 2)) < 12);
 const PM_TIME_OPTIONS = TIME_OPTIONS.filter((t) => Number(t.slice(0, 2)) >= 12);
 
-/** 선택된 값 표시용 — 예: AM 3:30 / PM 4:00 */
+/** Display selected time e.g. AM 3:30 */
 const formatTimeDisplay = (value: string) => {
   if (!value) return "--:--";
   const [h, m] = value.split(":").map(Number);
@@ -103,7 +114,7 @@ const formatTimeDisplay = (value: string) => {
   return `${period} ${hour12}:${String(m).padStart(2, "0")}`;
 };
 
-/** 구역 안 목록 줄 — 오전/오후 레이블 없이 12시각만 (예: 3:30) */
+/** Time row in picker — 12-hour style without AM/PM prefix on each row */
 const formatTimeSlotRow = (value: string) => {
   const [h, m] = value.split(":").map(Number);
   if (!Number.isFinite(h) || !Number.isFinite(m)) return value;
@@ -175,12 +186,13 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
   const [departure, setDeparture] = useState<RouteEndState>(() => emptyRoute());
   const [destination, setDestination] = useState<RouteEndState>(() => emptyRoute());
   const [flightNo, setFlightNo] = useState("");
-  const [vehicle, setVehicle] = useState("");
+  const [vehicle, setVehicle] = useState<VehicleKey | "">("");
   const [adultPassengers, setAdultPassengers] = useState(2);
   const [childPassengers, setChildPassengers] = useState(0);
   const [luggage, setLuggage] = useState(4);
   const [golfBags, setGolfBags] = useState(0);
-  const [preferredMessenger, setPreferredMessenger] = useState("");
+  const [preferredMessenger, setPreferredMessenger] = useState<MessengerId | "">("");
+  const [feedbackTone, setFeedbackTone] = useState<"neutral" | "success" | "error">("neutral");
   const [waypoints, setWaypoints] = useState<WaypointState[]>([]);
   const [waypointModalOpen, setWaypointModalOpen] = useState(false);
   const [waypointDraft, setWaypointDraft] = useState<RouteEndState>(() => emptyRoute());
@@ -204,9 +216,36 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
     return composeRouteLine(destination.primary, destination.sub, destination.detail);
   }, [destination]);
 
-  const airportField = useMemo(
-    () => deriveLegacyAirportField(departure.primary, destination.primary),
-    [departure.primary, destination.primary],
+  const startPointDisplay = useMemo(
+    () =>
+      !departure.primary
+        ? ""
+        : formatRouteEndForDisplay(departure.primary, departure.sub, departure.detail, locale),
+    [departure, locale],
+  );
+
+  const destPointDisplay = useMemo(
+    () =>
+      !destination.primary
+        ? ""
+        : formatRouteEndForDisplay(destination.primary, destination.sub, destination.detail, locale),
+    [destination, locale],
+  );
+
+  const airportField = useMemo(() => {
+    const k = deriveLegacyAirportSummaryKey(departure.primary, destination.primary);
+    return t(`airportSummary_${k}`);
+  }, [departure.primary, destination.primary, t]);
+
+  const serviceOptions = useMemo(
+    () =>
+      SERVICE_DEFS.map((row) => ({
+        id: row.id,
+        icon: row.icon,
+        label: t(`services.${row.id}.label`),
+        detail: t(`services.${row.id}.detail`),
+      })),
+    [t],
   );
 
   const showFlightRow = useMemo(
@@ -217,9 +256,34 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
   );
 
   const serviceLabel = useMemo(
-    () => serviceOptions.find((option) => option.id === serviceType)?.label ?? "샌딩/픽업",
-    [serviceType],
+    () => serviceOptions.find((option) => option.id === serviceType)?.label ?? t("services.airport.label"),
+    [serviceOptions, serviceType, t],
   );
+
+  const vehicleLabel = useMemo(() => {
+    if (!vehicle) return "";
+    return t(`vehicles.${vehicle}`);
+  }, [vehicle, t]);
+
+  const emptyDatePlaceholder = t("datePlaceholderEmpty");
+
+  const weekdayLabels = useMemo(() => {
+    const keys = [
+      "weekdaySun",
+      "weekdayMon",
+      "weekdayTue",
+      "weekdayWed",
+      "weekdayThu",
+      "weekdayFri",
+      "weekdaySat",
+    ] as const;
+    return keys.map((k) => t(k));
+  }, [t]);
+
+  const messengerSummaryLabel = useMemo(() => {
+    if (!preferredMessenger) return "";
+    return t(`messengerOpt.${preferredMessenger}`);
+  }, [preferredMessenger, t]);
   const totalPassengers = useMemo(
     () => adultPassengers + childPassengers,
     [adultPassengers, childPassengers],
@@ -232,6 +296,17 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
         .filter(Boolean)
         .join(" → "),
     [waypoints],
+  );
+
+  const waypointsSummaryDisplay = useMemo(
+    () =>
+      waypoints
+        .map((w) =>
+          w.primary ? formatRouteEndForDisplay(w.primary, w.sub, w.detail, locale) : "",
+        )
+        .filter(Boolean)
+        .join(" → "),
+    [waypoints, locale],
   );
 
   const confirmAndOpen = (url: string, message: string) => {
@@ -316,16 +391,19 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
       !travelTime ||
       !isRouteEndComplete(departure) ||
       !isRouteEndComplete(destination) ||
-      !vehicle.trim()
+      !vehicle
     ) {
+      setFeedbackTone("error");
       setWarning(t("validationRoute"));
       return;
     }
-    if (!preferredMessenger.trim()) {
+    if (!preferredMessenger) {
+      setFeedbackTone("error");
       setWarning(t("validationMessenger"));
       return;
     }
     setSubmitting(true);
+    setFeedbackTone("neutral");
     fetch("/api/reservations", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -340,7 +418,7 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
         destination: destPoint,
         airport: airportField,
         flightNo,
-        vehicle,
+        vehicle: VEHICLE_LEGACY_KO[vehicle],
         passengers: totalPassengers,
         adultPassengers,
         childPassengers,
@@ -353,13 +431,16 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
       .then(async (response) => {
         const result = (await response.json()) as { ok: boolean; message?: string };
         if (!result.ok) {
-          setWarning(result.message ?? "예약 저장 중 오류가 발생했습니다.");
+          setFeedbackTone("error");
+          setWarning(result.message ?? t("errorReservationSave"));
           return;
         }
-        setWarning(completionMessage[locale] ?? completionMessage.ko);
+        setFeedbackTone("success");
+        setWarning(t("completionSuccess"));
       })
       .catch(() => {
-        setWarning("예약 저장 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+        setFeedbackTone("error");
+        setWarning(t("errorReservationRetry"));
       })
       .finally(() => setSubmitting(false));
   };
@@ -370,7 +451,7 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
     onChange: (next: RouteEndState) => void,
     idPrefix: string,
   ) => {
-    const subOptions = value.primary ? getBookingSubOptions(value.primary) : [];
+    const subDescriptors = value.primary ? getBookingSubOptionDescriptors(value.primary) : [];
     return (
       <div className="space-y-3 rounded-2xl border border-metal-bronze/25 bg-black/20 p-4">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-metal-bronze-strong">{label}</p>
@@ -408,9 +489,9 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
           <option value="" className="bg-[#0a1324]">
             {t("subPlaceholder")}
           </option>
-          {subOptions.map((opt) => (
-            <option key={opt} value={opt} className="bg-[#0a1324]">
-              {opt}
+          {subDescriptors.map((desc) => (
+            <option key={desc.value} value={desc.value} className="bg-[#0a1324]">
+              {resolveBookingSubOptionLabel(desc, locale)}
             </option>
           ))}
         </select>
@@ -428,7 +509,9 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
     );
   };
 
-  const subDraftOptions = waypointDraft.primary ? getBookingSubOptions(waypointDraft.primary) : [];
+  const subDraftDescriptors = waypointDraft.primary
+    ? getBookingSubOptionDescriptors(waypointDraft.primary)
+    : [];
 
   return (
     <div className="bg-[radial-gradient(circle_at_15%_15%,rgba(97,138,196,0.12),transparent_38%),linear-gradient(180deg,#04070d_0%,#071224_55%,#05080f_100%)]">
@@ -459,88 +542,61 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
             </div>
 
             <div className="mt-8 rounded-2xl border border-metal-bronze/35 bg-white/[0.03] p-4">
-              <p className="text-sm text-tone-soft">빠른 상담</p>
+              <p className="text-sm text-tone-soft">{t("quickConsultTitle")}</p>
               <div className="mt-3 grid grid-cols-2 gap-2.5">
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() =>
-                    confirmAndOpen(
-                      phoneTel,
-                      "전화 연결을 하시겠습니까?\n확인을 누르면 통화 화면으로 이동합니다.",
-                    )
-                  }
+                  onClick={() => confirmAndOpen(phoneTel, t("confirmPhone"))}
                   className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
                   <Image src="/icons/phone.svg" alt="" width={24} height={24} className="h-6 w-6" />
-                  전화 상담
+                  {t("quickPhone")}
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() =>
-                    confirmAndOpen(
-                      links.kakao,
-                      "카카오톡 오픈채팅방으로 연결됩니다.\n이동하시겠습니까?",
-                    )
-                  }
+                  onClick={() => confirmAndOpen(links.kakao, t("confirmKakao"))}
                   className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
                   <Image src="/icons/kakao.svg" alt="" width={20} height={20} className="h-5 w-5" />
-                  카카오톡
+                  {t("quickKakao")}
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() =>
-                    confirmAndOpen(
-                      links.whatsapp,
-                      "WhatsApp 채팅으로 연결됩니다.\n이동하시겠습니까?",
-                    )
-                  }
+                  onClick={() => confirmAndOpen(links.whatsapp, t("confirmWhatsapp"))}
                   className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
                   <Image src="/icons/whatsapp.svg" alt="" width={20} height={20} className="h-5 w-5" />
-                  WhatsApp
+                  {t("quickWhatsapp")}
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() =>
-                    confirmAndOpen(links.line, "LINE 채팅으로 연결됩니다.\n이동하시겠습니까?")
-                  }
+                  onClick={() => confirmAndOpen(links.line, t("confirmLine"))}
                   className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
                   <Image src="/icons/line.svg" alt="" width={20} height={20} className="h-5 w-5" />
-                  LINE
+                  {t("quickLine")}
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() =>
-                    confirmAndOpen(
-                      links.instagram,
-                      "Instagram DM으로 이동합니다.\n연결하시겠습니까?",
-                    )
-                  }
+                  onClick={() => confirmAndOpen(links.instagram, t("confirmInstagram"))}
                   className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
                   <Image src="/icons/instagram.svg" alt="" width={20} height={20} className="h-5 w-5" />
-                  Instagram DM
+                  {t("quickInstagram")}
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() =>
-                    confirmAndOpen(
-                      links.messenger,
-                      "페이스북 메신저로 연결됩니다.\n이동하시겠습니까?",
-                    )
-                  }
+                  onClick={() => confirmAndOpen(links.messenger, t("confirmMessenger"))}
                   className="h-12 w-full rounded-xl border-metal-bronze/45 text-sm font-semibold text-tone-strong"
                 >
                   <Image src="/icons/messenger.svg" alt="" width={20} height={20} className="h-5 w-5" />
-                  페이스북 메신저
+                  {t("quickMessenger")}
                 </Button>
               </div>
             </div>
@@ -555,18 +611,20 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
             className="space-y-5 overflow-visible"
           >
             <section className="relative z-30 rounded-3xl border border-metal-bronze/30 bg-black/30 p-5 backdrop-blur-md md:p-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-metal-bronze-strong md:text-base">Step 1. 기본 정보</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-metal-bronze-strong md:text-base">
+                {t("sectionStep1")}
+              </p>
               <div className="mt-4 grid gap-3 md:grid-cols-2">
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="성함 *"
+                  placeholder={t("placeholderName")}
                   className="h-12 rounded-xl border border-metal-bronze/30 bg-black/30 px-4 text-base text-tone-strong placeholder:text-tone-soft focus:border-metal-bronze-strong focus:outline-none"
                 />
                 <input
                   value={phone}
                   onChange={(e) => setPhone(formatPhoneValue(e.target.value, locale))}
-                  placeholder="연락처 *"
+                  placeholder={t("placeholderPhone")}
                   className="h-12 rounded-xl border border-metal-bronze/30 bg-black/30 px-4 text-base text-tone-strong placeholder:text-tone-soft focus:border-metal-bronze-strong focus:outline-none"
                 />
               </div>
@@ -579,7 +637,9 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                 isDateOpen || isTimeOpen ? "z-[100]" : "z-40",
               )}
             >
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-metal-bronze-strong md:text-base">Step 2. 일정 및 유형</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-metal-bronze-strong md:text-base">
+                {t("sectionStep2")}
+              </p>
               <div className="mt-4 grid grid-cols-2 gap-3">
                 {serviceOptions.map((option) => {
                   const Icon = option.icon;
@@ -609,12 +669,12 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
               <div className="mt-4 grid gap-3 md:grid-cols-2">
                 <div ref={datePanelRef} className="relative">
                   <label htmlFor="booking-travel-date" className="mb-2 block text-sm text-tone-soft">
-                    날짜
+                    {t("fieldDate")}
                   </label>
                   <input id="booking-travel-date" type="hidden" value={travelDate} />
                   <button
                     type="button"
-                    aria-label="여행 날짜 선택"
+                    aria-label={t("ariaTravelDateButton")}
                     aria-haspopup="dialog"
                     aria-expanded={isDateOpen}
                     onClick={() => {
@@ -624,12 +684,12 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                     className="flex h-12 w-full items-center rounded-xl border border-metal-bronze/30 bg-black/30 pl-10 pr-4 text-left text-base text-tone-strong transition-colors hover:border-metal-bronze-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-metal-bronze/45"
                   >
                     <CalendarDays className="pointer-events-none absolute left-3 h-4 w-4 text-metal-bronze-strong" />
-                    <span>{formatDisplayDate(travelDate, locale)}</span>
+                    <span>{formatDisplayDate(travelDate, locale, emptyDatePlaceholder)}</span>
                   </button>
                   {isDateOpen && (
                     <div
                       role="dialog"
-                      aria-label="달력 날짜 선택기"
+                      aria-label={t("ariaCalendarDialog")}
                       className="absolute z-[110] mt-2 w-full min-w-[19rem] rounded-2xl border border-metal-bronze/35 bg-[linear-gradient(180deg,#121d33_0%,#0a1324_100%)] p-3 shadow-[0_24px_54px_rgba(0,0,0,0.52)]"
                     >
                       <div className="mb-3 flex items-center justify-between">
@@ -639,7 +699,7 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                           onClick={() =>
                             setViewMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))
                           }
-                          aria-label="이전 달"
+                          aria-label={t("ariaPrevMonth")}
                         >
                           {"<"}
                         </button>
@@ -652,14 +712,14 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                           onClick={() =>
                             setViewMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))
                           }
-                          aria-label="다음 달"
+                          aria-label={t("ariaNextMonth")}
                         >
                           {">"}
                         </button>
                       </div>
                       <div className="mb-2 grid grid-cols-7 gap-1 text-center text-xs text-tone-soft">
-                        {WEEKDAY_LABELS_KO.map((w) => (
-                          <span key={w}>{w}</span>
+                        {weekdayLabels.map((w, i) => (
+                          <span key={`wd-${i}`}>{w}</span>
                         ))}
                       </div>
                       <div className="grid grid-cols-7 gap-1">
@@ -680,7 +740,7 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                                     ? "text-tone-body hover:bg-white/10"
                                     : "text-tone-soft/40 hover:bg-white/5"
                               }`}
-                              aria-label={`${cell.iso} 선택`}
+                              aria-label={t("ariaSelectDay", { date: cell.iso })}
                             >
                               {cell.day}
                             </button>
@@ -692,12 +752,12 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                 </div>
                 <div ref={timePanelRef} className="relative">
                   <label htmlFor="booking-travel-time" className="mb-2 block text-sm text-tone-soft">
-                    시간
+                    {t("fieldTime")}
                   </label>
                   <input id="booking-travel-time" type="hidden" value={travelTime} />
                   <button
                     type="button"
-                    aria-label="여행 시간 선택"
+                    aria-label={t("ariaTravelTimeButton")}
                     aria-haspopup="listbox"
                     aria-expanded={isTimeOpen}
                     onClick={() => {
@@ -712,7 +772,7 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                   {isTimeOpen && (
                     <div
                       role="listbox"
-                      aria-label="시간 선택 목록"
+                      aria-label={t("ariaTimeListbox")}
                       className="absolute z-[110] mt-2 w-full min-w-[17rem] rounded-2xl border border-metal-bronze/35 bg-[linear-gradient(180deg,#121d33_0%,#0a1324_100%)] shadow-[0_24px_54px_rgba(0,0,0,0.52)] sm:min-w-[19rem]"
                     >
                       <div className="grid max-h-[min(22rem,70vh)] grid-cols-1 divide-y divide-white/10 sm:grid-cols-2 sm:divide-x sm:divide-y-0">
@@ -786,7 +846,7 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                 </Button>
                 {waypoints.length > 0 ? (
                   <p className="text-sm text-tone-soft">
-                    {t("waypointListLabel")}: {waypointsSummary}
+                    {t("waypointListLabel")}: {waypointsSummaryDisplay}
                   </p>
                 ) : null}
               </div>
@@ -798,7 +858,9 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                 isDateOpen || isTimeOpen ? "z-[8]" : "z-20",
               )}
             >
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-metal-bronze-strong md:text-base">Step 3. 구간 정보</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-metal-bronze-strong md:text-base">
+                {t("sectionStep3")}
+              </p>
               <div className="mt-4 space-y-4">
                 {renderRouteFields(t("routeDeparture"), departure, setDeparture, "dep")}
                 <div className="flex justify-center">
@@ -828,29 +890,34 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
             </section>
 
             <section className="rounded-3xl border border-metal-bronze/30 bg-black/30 p-5 backdrop-blur-md md:p-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-metal-bronze-strong md:text-base">Step 4. 상세 옵션</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-metal-bronze-strong md:text-base">
+                {t("sectionStep4")}
+              </p>
               <p className="mt-2 rounded-lg border border-brand-gold/35 bg-brand-gold-soft px-3 py-2 text-sm font-semibold text-[#f2d9aa]">
-                6인 이상 탑승 시 추가 요금이 발생할 수 있습니다.
+                {t("seatingFeeNotice")}
               </p>
               <div className="mt-4 grid gap-3 md:grid-cols-3">
                 <select
                   value={vehicle}
-                  onChange={(e) => setVehicle(e.target.value)}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setVehicle(v === "" ? "" : (v as VehicleKey));
+                  }}
                   required
                   className="h-12 rounded-xl border border-metal-bronze/30 bg-black/30 px-4 text-base text-tone-strong focus:border-metal-bronze-strong focus:outline-none"
                 >
                   <option value="" className="bg-[#0a1324]">
                     {t("vehiclePlaceholder")}
                   </option>
-                  {vehicleOptions.map((option) => (
-                    <option key={option} value={option} className="bg-[#0a1324]">
-                      {option}
+                  {VEHICLE_KEYS.map((key) => (
+                    <option key={key} value={key} className="bg-[#0a1324]">
+                      {t(`vehicles.${key}`)}
                     </option>
                   ))}
                 </select>
 
                 <div className="flex h-12 items-center justify-between rounded-xl border border-metal-bronze/30 bg-black/30 px-3">
-                  <span className="text-sm text-tone-soft">성인</span>
+                  <span className="text-sm text-tone-soft">{t("adultLabel")}</span>
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
@@ -942,22 +1009,18 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                 <label className="mb-2 block text-sm text-tone-soft">{t("messengerLabel")}</label>
                 <select
                   value={preferredMessenger}
-                  onChange={(e) => setPreferredMessenger(e.target.value)}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setPreferredMessenger(v === "" ? "" : (v as MessengerId));
+                  }}
                   className="h-12 w-full rounded-xl border border-metal-bronze/30 bg-black/30 px-4 text-base text-tone-strong focus:border-metal-bronze-strong focus:outline-none"
                 >
                   <option value="" className="bg-[#0a1324]">
                     {t("messengerSelectPlaceholder")}
                   </option>
-                  {[
-                    "전화",
-                    "카카오톡",
-                    "WhatsApp",
-                    "LINE",
-                    "Instagram DM",
-                    "페이스북 메신저",
-                  ].map((channel) => (
-                    <option key={channel} value={channel} className="bg-[#0a1324]">
-                      {channel}
+                  {MESSENGER_IDS.map((id) => (
+                    <option key={id} value={id} className="bg-[#0a1324]">
+                      {t(`messengerOpt.${id}`)}
                     </option>
                   ))}
                 </select>
@@ -967,20 +1030,20 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
             <section className="rounded-3xl border border-white/15 bg-white/[0.04] p-5 backdrop-blur-xl md:p-6">
               <div className="flex items-center gap-2 text-metal-bronze-strong">
                 <BriefcaseBusiness className="h-4 w-4" />
-                <p className="text-xs uppercase tracking-[0.2em]">예약 요약</p>
+                <p className="text-xs uppercase tracking-[0.2em]">{t("summaryHeading")}</p>
               </div>
               <div className="mt-4 grid gap-2 text-base text-tone-body md:grid-cols-2 md:text-lg">
                 <p>
-                  성함: <span className="text-tone-strong">{name || "-"}</span>
+                  {t("summaryNameLabel")}: <span className="text-tone-strong">{name || "-"}</span>
                 </p>
                 <p>
-                  연락처: <span className="text-tone-strong">{phone || "-"}</span>
+                  {t("summaryPhoneLabel")}: <span className="text-tone-strong">{phone || "-"}</span>
                 </p>
                 <p>
-                  서비스: <span className="text-tone-strong">{serviceLabel}</span>
+                  {t("summaryServiceLabel")}: <span className="text-tone-strong">{serviceLabel}</span>
                 </p>
                 <p>
-                  일정:{" "}
+                  {t("summaryScheduleLabel")}:{" "}
                   <span className="text-tone-strong">
                     {travelDate || "-"} {travelTime || ""}
                   </span>
@@ -988,47 +1051,43 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                 <p className="md:col-span-2">
                   {t("summaryRoute")}:{" "}
                   <span className="text-tone-strong">
-                    {startPoint || "-"} → {destPoint || "-"}
+                    {startPointDisplay || "-"} → {destPointDisplay || "-"}
                   </span>
                 </p>
                 {waypoints.length > 0 ? (
                   <p className="md:col-span-2">
-                    {t("summaryWaypoints")}: <span className="text-tone-strong">{waypointsSummary}</span>
+                    {t("summaryWaypoints")}: <span className="text-tone-strong">{waypointsSummaryDisplay}</span>
                   </p>
                 ) : null}
                 <p>
-                  공항 요약: <span className="text-tone-strong">{airportField}</span>
+                  {t("summaryAirportLabel")}: <span className="text-tone-strong">{airportField}</span>
                 </p>
                 <p>
-                  비행 편명: <span className="text-tone-strong">{flightNo || "-"}</span>
+                  {t("summaryFlightLabel")}: <span className="text-tone-strong">{flightNo || "-"}</span>
                 </p>
                 <p>
-                  차량: <span className="text-tone-strong">{vehicle || "-"}</span>
+                  {t("summaryVehicleLabel")}: <span className="text-tone-strong">{vehicleLabel || "-"}</span>
                 </p>
                 <p>
-                  인원(성인/소아):{" "}
+                  {t("summaryPassengerHeading")}:{" "}
                   <span className="text-tone-strong">
-                    {adultPassengers}명 / {childPassengers}명
+                    {t("summaryPassengerCounts", { adults: adultPassengers, children: childPassengers })}
                   </span>
                 </p>
                 <p>
-                  총 탑승 인원: <span className="text-tone-strong">{totalPassengers}명</span>
+                  {t("summaryTotalPassengersLabel")}:{" "}
+                  <span className="text-tone-strong">{t("summaryTotalPassengersValue", { total: totalPassengers })}</span>
                 </p>
+                <p>{t("summaryLuggageLine", { count: luggage })}</p>
+                <p>{t("summaryGolfLine", { count: golfBags })}</p>
                 <p>
-                  {t("luggage")}: <span className="text-tone-strong">{luggage}개</span>
-                </p>
-                <p>
-                  {t("summaryGolf")}: <span className="text-tone-strong">{golfBags}개</span>
-                </p>
-                <p>
-                  {t("messengerLabel")}:{" "}
-                  <span className="text-tone-strong">{preferredMessenger || "-"}</span>
+                  {t("messengerLabel")}: <span className="text-tone-strong">{messengerSummaryLabel || "-"}</span>
                 </p>
               </div>
               {warning ? (
                 <p
                   className={`mt-4 rounded-xl border px-4 py-3 text-sm ${
-                    warning.includes("We will check")
+                    feedbackTone === "success"
                       ? "border-[#5e8f5f]/40 bg-[#17301c]/50 text-[#b4e0b6]"
                       : "border-metal-bronze/45 bg-black/35 text-[#f2d0be]"
                   }`}
@@ -1036,11 +1095,9 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                   {warning}
                 </p>
               ) : null}
-              <p className="mt-4 text-sm text-tone-soft">
-                모든 예약은 상담 후 확정됩니다. 온라인 결제는 제공하지 않습니다.
-              </p>
+              <p className="mt-4 text-sm text-tone-soft">{t("footerConsultNote")}</p>
               <Button type="submit" size="lg" disabled={submitting} className="mt-5 h-14 w-full rounded-2xl text-base font-semibold">
-                {submitting ? "예약 접수 중..." : "예약 상담 신청하기"}
+                {submitting ? t("submittingConsult") : t("submitConsult")}
               </Button>
             </section>
           </motion.form>
@@ -1084,7 +1141,7 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                     className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-black/25 px-3 py-2 text-sm text-tone-body"
                   >
                     <span className="text-tone-strong">
-                      {w.primary ? composeRouteLine(w.primary, w.sub, w.detail) : ""}
+                      {w.primary ? formatRouteEndForDisplay(w.primary, w.sub, w.detail, locale) : ""}
                     </span>
                     <button
                       type="button"
@@ -1124,9 +1181,9 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
                 className="h-12 w-full rounded-xl border border-metal-bronze/30 bg-black/30 px-4 text-base text-tone-strong focus:border-metal-bronze-strong focus:outline-none disabled:opacity-45"
               >
                 <option value="">{t("subPlaceholder")}</option>
-                {subDraftOptions.map((opt) => (
-                  <option key={opt} value={opt} className="bg-[#0a1324]">
-                    {opt}
+                {subDraftDescriptors.map((desc) => (
+                  <option key={desc.value} value={desc.value} className="bg-[#0a1324]">
+                    {resolveBookingSubOptionLabel(desc, locale)}
                   </option>
                 ))}
               </select>

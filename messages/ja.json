@@ -1,11 +1,508 @@
 {
   "Metadata": {
     "siteName": "Kkebi",
+    "title": "Kkebi · 仁川空港プライベートバン",
+    "description": "仁川空港・金浦空港の送迎に特化。定額制・広々車内のジャンボタクシー級プライベートバンで快適にご移動ください。",
     "pages": {
       "home": {
-        "title": "仁川空港 送迎・空港送迎ジャンボタクシー | Kkebi",
-        "description": "韓国の空港送迎ならKkebi。仁川空港 送迎、金浦空港送迎、ジャンボタクシー・プライベートバンでグループ移動を快適にサポートします。"
+        "title": "仁川空港送迎 Private Van Service・Airport Transfer | Kkebi",
+        "description": "Kkebiは仁川空港送迎を中心に、Airport Shuttle、Minivan Taxi、Private Airport Pickupを含む空港移動を提供。Incheon to Seoul Private VanやVIP Airport Transfer Koreaにも対応します。"
+      },
+      "intro": {
+        "title": "Kkebiについて | 仁川空港送迎プライベートバン",
+        "description": "Kkebiは仁川空港送迎に特化したプライベートバン。快適さと安心にこだわる空港コンシェルジュパートナーです。"
+      },
+      "vehicle": {
+        "title": "車両紹介 | 空港送迎向け快適プライベートバン",
+        "description": "家族・団体向けの広い車内と荷物スペース。スタリア・ソラティ・カウンティのラインナップをご覧ください。"
+      },
+      "pricing": {
+        "title": "料金表 | 仁川・金浦空港 定額制運賃 | Kkebi",
+        "description": "高速道路料金込みの明朗な定額制。エリア別の仁川空港プライベートバン料金をご確認ください。"
+      },
+      "booking": {
+        "title": "オンライン予約 | 仁川空港プライベートバン | Kkebi",
+        "description": "ご相談のうえ確定。ルート・人数・荷物をお知らせいただければ、スムーズに予約を承ります。"
+      },
+      "review": {
+        "title": "お客様の声 | 仁川空港プライベートバン | Kkebi",
+        "description": "仁川空港送迎でKkebiをご利用いただいたお客様のレビューをご覧ください。"
+      },
+      "inquiry": {
+        "title": "ご利用案内・お問い合わせ | FAQ・オンライン",
+        "description": "首都圏以外のルートも含むFAQと、1対1のオンラインお問い合わせフォーム。"
+      },
+      "support": {
+        "title": "サポート・FAQ | Kkebi",
+        "description": "首都圏内外のご利用、予約・お支払いに関するFAQとオンラインお問い合わせ。お電話・カカオでも承ります。"
       }
     }
+  },
+  "Support": {
+    "heroEyebrow": "CUSTOMER CARE",
+    "heroTitle": "お問い合わせ・FAQ",
+    "heroDesc": "サービス案内とよくある質問をご確認のうえ、必要に応じてフォームからご連絡ください。丁寧かつ迅速にご対応します。",
+    "faqTitle": "よくある質問",
+    "faq1Q": "首都圏以外にも対応していますか？",
+    "faq1A": "はい。料金表にない地方・長距離などは、日程とルートに応じて個別にお見積りします。フォームで「首都圏外」を選択するか、お電話・メッセージでもご相談ください。",
+    "faq2Q": "予約の方法は？",
+    "faq2A": "オンライン予約フォーム、またはお電話・カカオトークでご連絡ください。迎え・送り・時間・人数・荷物を伺い、ご相談のうえ確定いたします。お急ぎの場合はお電話が確実です。",
+    "faq3Q": "お支払いはどうなりますか？",
+    "faq3A": "日程確定時にご利用可能な方法をご案内します（現金・振込など）。詳細は確定時に担当よりご説明します。",
+    "faq4Q": "往復料金はどう計算されますか？",
+    "faq4A": "待機時間や復路の有無を含め、定額パッケージでお見積りします。往復をご希望の場合は備考にご記入ください。",
+    "faq5Q": "荷物が多くても大丈夫ですか？",
+    "faq5A": "スーツケース・ゴルフ・チャイルドシート等の数量を事前にお知らせいただければ、適した車両を手配いたします。",
+    "formTitle": "オンラインお問い合わせ",
+    "formDesc": "内容を送信いただき次第、担当よりご連絡します。お急ぎの場合は下記チャネルまたはお電話ください。",
+    "fieldName": "お名前",
+    "fieldPhone": "電話・メッセンジャー",
+    "fieldDeparture": "出発地",
+    "fieldDestination": "到着地",
+    "fieldDate": "日付",
+    "fieldTime": "時間",
+    "fieldPassengers": "人数",
+    "placeholderPassengers": "例: 大人2名、子ども1名",
+    "fieldMessage": "ご要望・備考",
+    "fieldOutOfMetro": "首都圏外／料金表にないルートのお問い合わせです",
+    "fieldOutOfMetroHint": "地方移動やオーダーメイドの場合はチェックし、できるだけ具体的にルートをご記入ください。",
+    "placeholderMessage": "便名、チャイルドシート、経由地など",
+    "submit": "送信する",
+    "submitting": "送信中…",
+    "success": "お問い合わせを受け付けました。担当よりご連絡いたします。",
+    "errorGeneric": "送信に失敗しました。時間をおいて再度お試しいただくか、お電話ください。",
+    "validationRequired": "必須項目を入力してください。",
+    "validationPhone": "正しい電話番号を入力してください。",
+    "contactSectionEyebrow": "クイックリンク",
+    "contactSectionTitle": "連絡チャネルを選択",
+    "contactSectionDesc": "チャネルを選び、確認後に該当のページへ移動します。",
+    "contactMethodPlaceholder": "チャネルを選択",
+    "channelConfirm": "「{channel}」を開きますか？\nOKで続行します。",
+    "contactPhone": "電話",
+    "contactKakao": "カカオトーク",
+    "contactWhatsapp": "WhatsApp",
+    "contactLine": "LINE",
+    "contactInstagram": "Instagram DM",
+    "contactFacebook": "Facebook Messenger",
+    "submitHint": "送信後、カカオトークが新しいタブで開く場合があります。",
+    "requiredHint": "必須"
+  },
+  "InquiryPage": {
+    "eyebrow": "CONTACT",
+    "title": "サイトからのお問い合わせ",
+    "desc": "料金表にない区間やオーダーメイド日程は、オンライン予約またはお電話でご相談ください。",
+    "ctaBooking": "オンライン予約",
+    "ctaPhone": "電話で相談"
+  },
+  "PricingPage": {
+    "heroEyebrow": "PRICING GUIDE",
+    "heroTitle": "料金のご案内（定額制）",
+    "othersNotice": "該当エリアは個別お見積りとなります。お電話・カカオ・サイトお問い合わせへご連絡ください。",
+    "searchEmpty": "該当がありません。別の地名（韓国語・英語）でお試しください。",
+    "othersPhone": "電話",
+    "othersKakao": "カカオ",
+    "othersWeb": "サイトお問い合わせ",
+    "tollIncluded": "料金には高速道路通行料金が含まれています。",
+    "extraFeeNotice": "スタリアで6名以上ご乗車の場合、追加料金が発生する場合があります。",
+    "searchLabel": "地域を検索する",
+    "searchPlaceholder": "例: 江南 / Gangnam / Suwon",
+    "colRegion": "地域",
+    "colGimpo": "金浦空港",
+    "colIncheon": "仁川空港",
+    "expandSubRegions": "{count}件の詳細エリアを表示",
+    "regionSeoul": "ソウル全域",
+    "regionGyeonggi": "京畿道",
+    "regionOther": "その他の地域",
+    "currencyUnit": "ウォン"
+  },
+  "Header": {
+    "brand": "Kkebi",
+    "navHome": "ホーム",
+    "navIntro": "紹介",
+    "navVehicle": "車両",
+    "navPricing": "料金",
+    "navBooking": "予約",
+    "navReview": "レビュー",
+    "navSupport": "FAQ・お問い合わせ",
+    "openMenu": "メニューを開く",
+    "closeMenu": "メニューを閉じる",
+    "langKo": "KO",
+    "langEn": "EN",
+    "langNativeKo": "한국어",
+    "langNativeZh": "中文",
+    "langNativeJa": "日本語",
+    "langNativeEn": "English",
+    "langHint": "言語を選択",
+    "navMain": "メインメニュー",
+    "phoneAria": "電話をかける"
+  },
+  "QuickMenu": {
+    "title": "クイック連絡",
+    "label": {
+      "call": "電話",
+      "kakao": "カカオトーク",
+      "whatsapp": "WhatsApp",
+      "line": "LINE",
+      "instaDm": "Instagram DM",
+      "messenger": "Messenger",
+      "naver": "Naver",
+      "naverTalk": "NaverTalk",
+      "kakaoBiz": "KakaoBiz",
+      "sms": "SMS"
+    },
+    "aria": {
+      "naver": "Naverページを開く",
+      "kakao": "カカオトークを開く",
+      "whatsapp": "WhatsAppを開く",
+      "line": "LINEを開く",
+      "messenger": "Facebook Messengerを開く",
+      "call": "電話をかける",
+      "naverTalk": "NAVERトークを開く",
+      "kakaoBiz": "カカオビジネスを開く",
+      "sms": "SMSを送る",
+      "instaDm": "Instagram DMを開く"
+    }
+  },
+  "HomePage": {
+    "heroEyebrow": "仁川空港・プレミアム送迎",
+    "heroTitle": "仁川空港 Private Van Service・Airport Transfer",
+    "heroSubtitle": "<brand>Kkebi</brand> が仁川空港からご目的地まで、Airport Shuttle・Minivan Taxi・Private Airport Pickupを含む快適な送迎を提供します。",
+    "vehicle": {
+      "eyebrow": "AIRPORT VAN FLEET",
+      "title": "車両ラインナップ",
+      "cardTitle": "広々車内と実用的な荷室",
+      "desc": "人数・行程に合わせ、Airport TransferとKorea Chauffeur Serviceの用途に適したプレミアムバン・バスをご用意しています。",
+      "imageAlt": "車両イメージ",
+      "staria": "スタリア",
+      "solati": "ソラティ",
+      "county": "カウンティ"
+    },
+    "pricing": {
+      "eyebrow": "料金",
+      "title": "区間・日程に応じた明朗な料金",
+      "airport": {
+        "label": "空港ピックアップ／送り",
+        "price": "お問い合わせ後にお見積り",
+        "note": "時間帯・ルートにより変動します。"
+      },
+      "city": {
+        "label": "市内・近郊の移動",
+        "price": "お問い合わせ後にお見積り",
+        "note": "停留所や動線を反映します。"
+      },
+      "charter": {
+        "label": "半日／終日チャーター",
+        "price": "お問い合わせ後にお見積り",
+        "note": "行程に合わせた個別お見積りです。"
+      }
+    },
+    "booking": {
+      "eyebrow": "予約",
+      "title": "ご相談のうえスピード確定",
+      "desc": "電話・カカオ・SMSでルート・人数・荷物をお知らせください。Incheon to Seoul Private Van、Korea Golf Tour、VIP Airport Transfer Koreaの予約も迅速に確定します。",
+      "ctaCall": "電話で相談",
+      "ctaReview": "オンライン予約"
+    },
+    "ctaBookNow": "今すぐ予約",
+    "ctaCallConsult": "電話相談",
+    "ctaCallDirect": "電話をかける",
+    "galleryAlt": "Kkebi Private Van Service・Airport Transfer ギャラリー画像 {index}",
+    "channelPhone": "電話",
+    "channelKakao": "カカオトーク",
+    "review": {
+      "eyebrow": "レビュー",
+      "title": "お客様の声",
+      "heroDesc": "Kkebiをご利用いただいたお客様のレビューをご覧ください。",
+      "one": {
+        "content": "早朝便でも時間どおりのピックアップで助かりました。",
+        "author": "お客様 K**",
+        "postedAt": "2025-12-18"
+      },
+      "two": {
+        "content": "荷物が多くても最初から最後までサポートしていただけました。",
+        "author": "お客様 P**",
+        "postedAt": "2025-11-07"
+      },
+      "three": {
+        "content": "返信が早く説明も丁寧。また利用したいです。",
+        "author": "お客様 L**",
+        "postedAt": "2025-09-24"
+      }
+    }
+  },
+  "IntroPage": {
+    "hero": {
+      "brandTitle": "Kkebi",
+      "eyebrow": "紹介",
+      "title": "心地よい旅の始まりに——お客様満足へ寄り添うコンシェルジュパートナー",
+      "desc": "<brand>Kkebi</brand> はご予約からご到着まで、仁川空港送迎・ソウル市内移動に特化したプライベートバンクラスのおもてなしで、安全・スムーズ・お客様一人ひとりに合わせたサービスをご提供します。"
+    },
+    "coreValueEyebrow": "コアバリュー",
+    "coreValueTitle": "定時性・一貫性・信頼",
+    "coreValueBody": "ご予約から到着まですべての接点を統一基準で運営。派手さより洗練された運びで、落ち着いた空港送迎をお約束します。",
+    "contactEyebrow": "お問い合わせ",
+    "representativeName": "代表 ホン・ジュンピョ",
+    "representativeLine": "お客様にお会いできることを光栄に思います。",
+    "phoneCaption": "仁川・金浦空港のご予約・お問い合わせ",
+    "services": {
+      "s01": {
+        "title": "プライベート空港コンシェルジュ",
+        "body": "入国動線に合わせた待機・案内・搭乗までをスムーズにつなぎます。"
+      },
+      "s02": {
+        "title": "エグゼクティブ・ビジネスモビリティ",
+        "body": "仁川空港送迎、ドアツードアのプライベートバン、約束の間のソウル移動まで、スケジュールに沿った安全・快適な移動を設計します。"
+      },
+      "s03": {
+        "title": "ファミリー・お子様連れケア",
+        "body": "荷物・搭乗動線・停車ポイントを事前に計画し、リラックスできるご移動を。"
+      },
+      "s04": {
+        "title": "深夜・早朝の安全運行",
+        "body": "時間外でも同じ基準でご対応。安心してご到着までお支えします。"
+      }
+    }
+  },
+  "VehicleFleet": {
+    "sectionEyebrow": "PREMIUM AIRPORT FLEET",
+    "sectionTitle": "車種別のご案内",
+    "sectionDesc": "人数・日程に合わせてスタリア・ソラティ・カウンティから最適な一台をご提案します。",
+    "detailBtn": "詳細を見る",
+    "bookBtn": "オンライン予約",
+    "phoneBtn": "電話で問い合わせ",
+    "galleryHeading": "ギャラリー",
+    "galleryNote": "高精細な車両写真は順次、以下のスロットに追加予定です。",
+    "tourAvailable": "ツアー対応可",
+    "gallerySlotLabel": "写真",
+    "modalClose": "閉じる",
+    "staria": {
+      "badge": "プレミアムバン",
+      "name": "ヒョンデ スタリア",
+      "seat45": "4〜5名席",
+      "seat67": "6〜7名席",
+      "luggage": "スーツケース・ベビーカー・ゴルフバッグに対応",
+      "imageAlt": "ヒョンデ スタリア ミニバン 側面",
+      "f1": "最新の快適・安全装備で長距離も安心",
+      "f2": "ゆとりのレッグルーム・ヘッドルーム",
+      "f3": "ビジネス・ファミリー両方に対応できるシート構成",
+      "f4": "空港ピックアップ／送りに最適な荷物動線"
+    },
+    "solati": {
+      "badge": "大型バン",
+      "name": "ヒョンデ ソラティ",
+      "capacity": "13〜15名席",
+      "luggage": "団体荷物・機材にも対応",
+      "imageAlt": "ヒョンデ ソラティ 大型ワゴン",
+      "f1": "中規模グループ・団体の移動に最適",
+      "f2": "広い荷室で機材・荷物の多い行程にも",
+      "f3": "空港・市内送迎に安定した走行フィール",
+      "f4": "ゴルフ・セミナー・団体イベントに"
+    },
+    "county": {
+      "badge": "ミニ／中型バス級",
+      "name": "ヒョンデ カウンティ",
+      "capacity": "15〜25名席",
+      "luggage": "大量の手荷物・機材に対応",
+      "imageAlt": "ヒョンデ カウンティ ミニバス",
+      "f1": "大人数の移動やVIP移送に適したサイズ",
+      "f2": "安全基準に沿った団体搭乗動線",
+      "f3": "空港アクセス・長距離ルートにも対応",
+      "f4": "長時間移動も快適な広い車内"
+    }
+  },
+  "BookingExperience": {
+    "steps": {
+      "s1": "1) 連絡先",
+      "s2": "2) 日程・サービス種別",
+      "s3": "3) 迎え・送り",
+      "s4": "4) 車両・人数・荷物"
+    },
+    "onlineTitle": "オンライン予約",
+    "dateHint": "日付・時間は選択するか直接入力できます。",
+    "routeDeparture": "出発（ピックアップ）",
+    "routeDestination": "到着（ドロップ）",
+    "swapRoute": "出発と到着を入れ替える",
+    "primaryPlaceholder": "エリア種別を選択",
+    "subPlaceholder": "詳細エリアを選択",
+    "detailPlaceholder": "住所・建物名・ゲートなど",
+    "flightOptional": "便名（任意）",
+    "waypointCta": "経由地を追加",
+    "waypointModalTitle": "経由地",
+    "waypointAdd": "経由地を入力",
+    "waypointAppend": "リストに追加",
+    "modalClose": "閉じる",
+    "waypointRemove": "削除",
+    "waypointEmpty": "経由地はまだありません。下から追加してください。",
+    "waypointListLabel": "登録済みの経由地",
+    "vehiclePlaceholder": "車両を選択",
+    "luggage": "手荷物",
+    "golfBags": "ゴルフバッグ",
+    "summaryRoute": "ピックアップ／ドロップ",
+    "summaryWaypoints": "経由地",
+    "summaryGolf": "ゴルフバッグ",
+    "validationRoute": "迎え・送りのエリア・詳細住所・車両をすべて入力してください。",
+    "validationMessenger": "メッセンジャーを選択してください。",
+    "primary_incheon_airport": "仁川空港",
+    "primary_gimpo_airport": "金浦空港",
+    "primary_seoul": "ソウル全域",
+    "primary_gyeonggi": "京畿道",
+    "primary_other": "その他の地域",
+    "airportSummary_incheon": "仁川空港",
+    "airportSummary_gimpo": "金浦空港",
+    "airportSummary_none": "空港利用なし",
+    "messengerLabel": "メッセンジャー",
+    "messengerSelectPlaceholder": "メッセンジャーを選択",
+    "childLabelMain": "お子様",
+    "childLabelSub": "（7歳未満）",
+    "sectionStep1": "Step 1 · 基本情報",
+    "sectionStep2": "Step 2 · 日程・サービス種別",
+    "sectionStep3": "Step 3 · 区間情報",
+    "sectionStep4": "Step 4 · 詳細オプション",
+    "placeholderName": "お名前 *",
+    "placeholderPhone": "電話番号 *",
+    "quickConsultTitle": "クイック相談",
+    "quickPhone": "電話",
+    "quickKakao": "カカオトーク",
+    "quickWhatsapp": "WhatsApp",
+    "quickLine": "LINE",
+    "quickInstagram": "Instagram DM",
+    "quickMessenger": "Messenger",
+    "confirmPhone": "電話をかけますか？\nOKで発信画面へ移動します。",
+    "confirmKakao": "カカオトークを開きます。\n移動しますか？",
+    "confirmWhatsapp": "WhatsAppを開きます。\n移動しますか？",
+    "confirmLine": "LINEを開きます。\n移動しますか？",
+    "confirmInstagram": "Instagram DMを開きます。\n移動しますか？",
+    "confirmMessenger": "Facebook Messengerを開きます。\n移動しますか？",
+    "fieldDate": "日付",
+    "fieldTime": "時間",
+    "datePlaceholderEmpty": "YYYY-MM-DD",
+    "ariaTravelDateButton": "旅行日を選択",
+    "ariaCalendarDialog": "カレンダー",
+    "ariaPrevMonth": "前の月",
+    "ariaNextMonth": "次の月",
+    "ariaSelectDay": "{date} を選択",
+    "ariaTravelTimeButton": "時間を選択",
+    "ariaTimeListbox": "時間リスト",
+    "weekdaySun": "日",
+    "weekdayMon": "月",
+    "weekdayTue": "火",
+    "weekdayWed": "水",
+    "weekdayThu": "木",
+    "weekdayFri": "金",
+    "weekdaySat": "土",
+    "seatingFeeNotice": "6名以上の場合、追加料金が発生することがあります。",
+    "adultLabel": "大人",
+    "summaryHeading": "予約サマリー",
+    "summaryNameLabel": "お名前",
+    "summaryPhoneLabel": "連絡先",
+    "summaryServiceLabel": "サービス",
+    "summaryScheduleLabel": "日程",
+    "summaryAirportLabel": "空港まわり",
+    "summaryFlightLabel": "便名",
+    "summaryVehicleLabel": "車両",
+    "summaryPassengerHeading": "人数（大人／お子様）",
+    "summaryPassengerCounts": "大人 {adults}名 · お子様 {children}名",
+    "summaryTotalPassengersLabel": "総人数",
+    "summaryTotalPassengersValue": "{total}名",
+    "summaryLuggageLine": "手荷物: {count} 点",
+    "summaryGolfLine": "ゴルフバッグ: {count} 本",
+    "footerConsultNote": "すべての予約はご相談のうえ確定します。オンライン決済は行っておりません。",
+    "submitConsult": "予約の相談を申し込む",
+    "submittingConsult": "送信中…",
+    "completionSuccess": "内容を確認し、ご指定のメッセンジャーでご連絡いたします。（運転中は確認後にご連絡する場合があります）",
+    "errorReservationSave": "予約を保存できませんでした。",
+    "errorReservationRetry": "予約を保存できませんでした。時間をおいて再度お試しください。",
+    "messengerOpt": {
+      "phone": "電話",
+      "kakao": "カカオトーク",
+      "whatsapp": "WhatsApp",
+      "line": "LINE",
+      "instagram": "Instagram DM",
+      "messenger": "Facebook Messenger"
+    },
+    "services": {
+      "airport": {
+        "label": "空港送迎・ピックアップ",
+        "detail": "仁川・金浦空港の定刻運行とお迎え"
+      },
+      "city": {
+        "label": "市内・近郊観光",
+        "detail": "ソウル・首都圏の名所と自由なプラン"
+      },
+      "golf": {
+        "label": "ゴルフラウンド送迎",
+        "detail": "早朝ラウンドから帰路まで快適に"
+      },
+      "vip": {
+        "label": "VIPアテンド",
+        "detail": "ビジネス・要人向けプロのおもてなし"
+      },
+      "wedding": {
+        "label": "ウェディングカー",
+        "detail": "挙式・前撮りに合わせた専用サポート"
+      },
+      "tour": {
+        "label": "ツアー・オーダーメイド",
+        "detail": "日帰り・長距離・個別相談スケジュール"
+      }
+    },
+    "vehicles": {
+      "staria": "スタリア",
+      "carnival": "カーニバル",
+      "solati": "ソラティ"
+    }
+  },
+  "ReviewBoard": {
+    "sampleBadge": "サンプル {n}",
+    "userSectionTitle": "レビュー掲示板",
+    "writeReviewBtn": "投稿する",
+    "writeReviewHint": "下のボタンからレビューフォームを開けます。",
+    "formTitle": "レビューを書く",
+    "authorLabel": "ニックネーム（任意）",
+    "authorPlaceholder": "匿名",
+    "contentLabel": "レビュー内容",
+    "contentPlaceholder": "ご利用の感想をお書きください（10文字以上）",
+    "imagesLabel": "写真（任意・最大4枚）",
+    "submit": "送信",
+    "submitting": "送信中…",
+    "success": "レビューを投稿しました。ありがとうございます。",
+    "error": "送信に失敗しました。しばらくしてからお試しください。",
+    "validationContent": "10文字以上入力してください。",
+    "emptyUser": "まだレビューがありません。最初の投稿をお待ちしています。",
+    "loadError": "レビューを読み込めませんでした。",
+    "imageAlt": "レビュー画像",
+    "previewAlt": "プレビュー画像"
+  },
+  "FloatingBar": {
+    "call": "電話",
+    "callAria": "電話をかける",
+    "book": "予約",
+    "bookAria": "オンライン予約へ",
+    "kakao": "カカオ",
+    "kakaoAria": "カカオトークを開く"
+  },
+  "HomeDestinations": {
+    "eyebrow": "DESTINATIONS",
+    "title": "人気ルート・ランディングページ",
+    "description": "仁川空港、ソウル、江南、ゴルフツアーなどよく検索される区間へのリンクです。各ページで料金目安・FAQ・お問い合わせをご確認いただけます。",
+    "toBooking": "オンライン予約へ",
+    "pricingSection": "料金のご案内",
+    "faqSection": "よくある質問",
+    "ctaSection": "ご予約・お問い合わせ",
+    "relatedSection": "関連する人気ルート"
+  },
+  "HomeFaq": {
+    "eyebrow": "FAQ",
+    "title": "よくある質問",
+    "q1": "荷物は何個まで積めますか？",
+    "a1": "スタリア・カーニバルなら大型スーツケース4〜6個対応可能です。ゴルフバッグやベビーカーなどはご予約時にお知らせください。適した車両をご用意します。",
+    "q2": "深夜や早朝のフライトにも対応していますか？",
+    "a2": "はい、24時間365日対応しております。フライト時間に合わせてお迎えに参りますので、ご安心ください。",
+    "q3": "日本語での対応は可能ですか？",
+    "a3": "基本的な日本語でのコミュニケーションが可能です。ご予約前にメッセージでお問い合わせいただくと迅速にご案内します。",
+    "q4": "料金はどのくらいですか？",
+    "a4": "出発地・目的地・人数・荷物量に応じたオーダーメイドのお見積りをご提供します。高速料金込み、追加費用なしの定額制です。",
+    "q5": "予約はどうすればいいですか？",
+    "a5": "オンライン予約フォーム、お電話、KakaoTalk、WhatsAppなどでお問い合わせいただけます。迅速に対応いたします。"
   }
 }

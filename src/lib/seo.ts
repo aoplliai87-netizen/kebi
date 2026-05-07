@@ -117,6 +117,16 @@ export function buildPageMetadata(opts: {
     locales.map((loc) => [loc, absoluteUrl(localizedPath(loc, page))])
   ) as Record<string, string>;
 
+  const naverVerification = process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION;
+  const baiduVerification = process.env.NEXT_PUBLIC_BAIDU_SITE_VERIFICATION;
+  const otherVerification =
+    naverVerification || baiduVerification
+      ? {
+          ...(naverVerification ? { "naver-site-verification": naverVerification } : {}),
+          ...(baiduVerification ? { "baidu-site-verification": baiduVerification } : {}),
+        }
+      : undefined;
+
   return {
     title,
     description,
@@ -158,6 +168,99 @@ export function buildPageMetadata(opts: {
         index: true,
         follow: true,
       },
+    },
+    other: {
+      ...(otherVerification ?? {}),
+      "format-detection": "telephone=no",
+    },
+  };
+}
+
+const OG_LOCALE_MAP: Record<string, string> = {
+  ko: "ko_KR",
+  en: "en_US",
+  ja: "ja_JP",
+  zh: "zh_CN",
+};
+
+const HREFLANG_LOCALES = ["ko", "en", "ja", "zh"] as const;
+
+/**
+ * `/[locale]/destinations/[slug]` 전용 — hreflang·canonical·OG 패턴은 buildPageMetadata 와 동일
+ */
+export function buildDestinationMetadata(opts: {
+  locale: string;
+  slug: string;
+  title: string;
+  description: string;
+  keywords: string[];
+  siteName: string;
+}): Metadata {
+  const { locale, slug, title, description, keywords, siteName } = opts;
+  const pathFor = (loc: string) => `/${loc}/destinations/${slug}`;
+  const canonical = absoluteUrl(pathFor(locale));
+  const ogImage = absoluteUrl(SITE_OG_IMAGE_PATH);
+  const ogLocale = OG_LOCALE_MAP[locale] ?? "en_US";
+  const alternateOgLocale = Object.values(OG_LOCALE_MAP).filter((v) => v !== ogLocale);
+  const languages = Object.fromEntries(
+    HREFLANG_LOCALES.map((loc) => [loc, absoluteUrl(pathFor(loc))]),
+  ) as Record<string, string>;
+
+  const naverVerification = process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION;
+  const baiduVerification = process.env.NEXT_PUBLIC_BAIDU_SITE_VERIFICATION;
+  const otherVerification =
+    naverVerification || baiduVerification
+      ? {
+          ...(naverVerification ? { "naver-site-verification": naverVerification } : {}),
+          ...(baiduVerification ? { "baidu-site-verification": baiduVerification } : {}),
+        }
+      : undefined;
+
+  return {
+    title,
+    description,
+    keywords,
+    alternates: {
+      canonical,
+      languages: {
+        ...languages,
+        "x-default": absoluteUrl(pathFor("ko")),
+      },
+    },
+    openGraph: {
+      type: "website",
+      url: canonical,
+      title,
+      description,
+      siteName,
+      locale: ogLocale,
+      alternateLocale: alternateOgLocale,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
+    other: {
+      ...(otherVerification ?? {}),
+      "format-detection": "telephone=no",
     },
   };
 }

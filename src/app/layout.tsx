@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Montserrat } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import "./globals.css";
@@ -14,6 +14,12 @@ const montserrat = Montserrat({
 /** canonical·OG 상대 경로 해석 기준 — 언어별 세부 메타는 `[locale]` 페이지에서 설정합니다 */
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default async function RootLayout({

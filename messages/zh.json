@@ -1,11 +1,508 @@
 {
   "Metadata": {
     "siteName": "Kkebi",
+    "title": "Kkebi · 首尔仁川机场包车接送",
+    "description": "专注仁川机场、金浦机场包车接送，明码标价，宽敞商务车/包车门到门服务。",
     "pages": {
       "home": {
-        "title": "韩国机场接送｜首尔包车｜仁川机场接送 - Kkebi",
-        "description": "提供韩国旅游包车、首尔包车与机场接送服务。覆盖仁川机场接送、金浦机场接送，多人出行更舒适高效。"
+        "title": "仁川机场 Private Van Service · Airport Transfer | Kkebi",
+        "description": "Kkebi 提供 Private Van Service、Airport Shuttle、Minivan Taxi 与 Private Airport Pickup，覆盖 Incheon Airport Transfer、Incheon to Seoul Private Van、Korea Golf Tour 及 VIP Airport Transfer Korea。"
+      },
+      "intro": {
+        "title": "关于 Kkebi | 仁川机场包车接送",
+        "description": "Kkebi 专注仁川机场接送与舒适包车体验，是您可靠的出行管家伙伴。"
+      },
+      "vehicle": {
+        "title": "车型介绍 | 舒适机场包车",
+        "description": "宽敞车内空间与行李容量，适合家庭与商务出行——查看 Kkebi 车队。"
+      },
+      "pricing": {
+        "title": "价格说明 | 仁川·金浦机场明码标价 | Kkebi",
+        "description": "含高速费等透明定报价。按区域查询仁川机场包车费用。"
+      },
+      "booking": {
+        "title": "在线预约 | 仁川机场包车 | Kkebi",
+        "description": "先沟通再确认。提交行程、人数与行李信息，我们将尽快为您确认用车。"
+      },
+      "review": {
+        "title": "用户评价 | 仁川机场包车 | Kkebi",
+        "description": "查看选择 Kkebi 仁川机场接送服务的旅客真实评价。"
+      },
+      "inquiry": {
+        "title": "使用指南与咨询 | FAQ 与在线留言",
+        "description": "含首都圈以外路线等常见问题，以及一对一在线留言表单。"
+      },
+      "support": {
+        "title": "客服支持 · FAQ | Kkebi",
+        "description": "首都圈及外围区域、预订与支付等常见问题与在线表单。亦可电话或 Kakao 联系。"
       }
     }
+  },
+  "Support": {
+    "heroEyebrow": "CUSTOMER CARE",
+    "heroTitle": "咨询与常见问题",
+    "heroDesc": "请先阅读服务说明与常见问题，需要时再填写表单联系我们。我们将尽快、清晰地回复。",
+    "faqTitle": "常见问题",
+    "faq1Q": "首都圈以外地区可以服务吗？",
+    "faq1A": "可以。未列入价格表的地区或长途行程将按您的日程与路线单独报价。请在表单中选择「首都圈外咨询」，或直接电话/留言说明。",
+    "faq2Q": "如何预约？",
+    "faq2A": "可通过在线预约或电话、Kakao 告知上下车地点、时间、人数与行李。我们会沟通后确认订单。紧急情况下建议直接来电。",
+    "faq3Q": "如何付款？",
+    "faq3A": "行程确认后会说明可选方式（现金、转账等）。具体以确认阶段客服告知为准。",
+    "faq4Q": "往返如何计费？",
+    "faq4A": "往返按固定套餐报价，含等候及是否含回程等因素。若有往返需求请在备注中说明。",
+    "faq5Q": "行李很多可以吗？",
+    "faq5A": "请提前告知行李箱、高尔夫球具、儿童用品数量，我们会安排合适车型妥善装载。",
+    "formTitle": "在线留言",
+    "formDesc": "提交后我们会尽快联系。如需即时协助，请选择下方渠道或直接来电。",
+    "fieldName": "姓名",
+    "fieldPhone": "电话 / 通讯软件",
+    "fieldDeparture": "出发地",
+    "fieldDestination": "目的地",
+    "fieldDate": "日期",
+    "fieldTime": "时间",
+    "fieldPassengers": "人数",
+    "placeholderPassengers": "例：成人2名，儿童1名",
+    "fieldMessage": "备注 / 特殊需求",
+    "fieldOutOfMetro": "本次咨询为首都圈外 / 未列入价格表路线",
+    "fieldOutOfMetroHint": "若为地方或定制行程，请勾选并尽量详细描述路线。",
+    "placeholderMessage": "航班号、儿童座椅、经停点等",
+    "submit": "提交咨询",
+    "submitting": "发送中…",
+    "success": "已收到您的留言，我们会尽快与您联系。",
+    "errorGeneric": "发送失败，请稍后重试或直接致电。",
+    "validationRequired": "请填写所有必填项。",
+    "validationPhone": "请输入有效的电话号码。",
+    "contactSectionEyebrow": "快捷连接",
+    "contactSectionTitle": "选择联系渠道",
+    "contactSectionDesc": "选择渠道并确认后将为您跳转。",
+    "contactMethodPlaceholder": "请选择渠道",
+    "channelConfirm": "是否打开「{channel}」？\n确定即继续。",
+    "contactPhone": "电话",
+    "contactKakao": "KakaoTalk",
+    "contactWhatsapp": "WhatsApp",
+    "contactLine": "LINE",
+    "contactInstagram": "Instagram 私信",
+    "contactFacebook": "Facebook Messenger",
+    "submitHint": "提交后可能会在新标签页打开 KakaoTalk。",
+    "requiredHint": "必填"
+  },
+  "InquiryPage": {
+    "eyebrow": "CONTACT",
+    "title": "网站咨询",
+    "desc": "价格表未列路线或定制行程，请通过在线预约或电话咨询。",
+    "ctaBooking": "在线预约",
+    "ctaPhone": "电话咨询"
+  },
+  "PricingPage": {
+    "heroEyebrow": "PRICING GUIDE",
+    "heroTitle": "价格说明（定报价）",
+    "othersNotice": "该区域需单独报价。请通过电话、Kakao 或网站留言联系我们。",
+    "searchEmpty": "未找到结果，请尝试其他地名（韩文或英文）。",
+    "othersPhone": "电话",
+    "othersKakao": "Kakao",
+    "othersWeb": "网站留言",
+    "tollIncluded": "以上费用均含高速公路通行费。",
+    "extraFeeNotice": "Staria搭乘6人及以上时，可能收取额外费用。",
+    "searchLabel": "搜索您所在地区",
+    "searchPlaceholder": "例：江南 / Gangnam / Suwon",
+    "colRegion": "地区",
+    "colGimpo": "金浦机场",
+    "colIncheon": "仁川机场",
+    "expandSubRegions": "展开 {count} 个子地区",
+    "regionSeoul": "首尔全境",
+    "regionGyeonggi": "京畿道",
+    "regionOther": "其他地区",
+    "currencyUnit": "韩元"
+  },
+  "Header": {
+    "brand": "Kkebi",
+    "navHome": "首页",
+    "navIntro": "介绍",
+    "navVehicle": "车型",
+    "navPricing": "价格",
+    "navBooking": "预约",
+    "navReview": "评价",
+    "navSupport": "常见问题",
+    "openMenu": "打开菜单",
+    "closeMenu": "关闭菜单",
+    "langKo": "KO",
+    "langEn": "EN",
+    "langNativeKo": "한국어",
+    "langNativeZh": "中文",
+    "langNativeJa": "日本語",
+    "langNativeEn": "English",
+    "langHint": "选择语言",
+    "navMain": "主导航",
+    "phoneAria": "拨打电话"
+  },
+  "QuickMenu": {
+    "title": "快捷联系",
+    "label": {
+      "call": "电话",
+      "kakao": "KakaoTalk",
+      "whatsapp": "WhatsApp",
+      "line": "LINE",
+      "instaDm": "Instagram",
+      "messenger": "Messenger",
+      "naver": "Naver",
+      "naverTalk": "NaverTalk",
+      "kakaoBiz": "KakaoBiz",
+      "sms": "短信"
+    },
+    "aria": {
+      "naver": "打开 Naver 页面",
+      "kakao": "打开 Kakao 聊天",
+      "whatsapp": "打开 WhatsApp",
+      "line": "打开 LINE",
+      "messenger": "打开 Facebook Messenger",
+      "call": "拨打电话",
+      "naverTalk": "打开 Naver Talk",
+      "kakaoBiz": "打开 Kakao Business",
+      "sms": "发送短信",
+      "instaDm": "打开 Instagram 私信"
+    }
+  },
+  "HomePage": {
+    "heroEyebrow": "仁川机场 · 高端接送",
+    "heroTitle": "仁川机场 Private Van Service · Airport Transfer",
+    "heroSubtitle": "<brand>Kkebi</brand> 提供从仁川机场到首尔及周边的 Airport Shuttle、Minivan Taxi 与 Private Airport Pickup 接送体验。",
+    "vehicle": {
+      "eyebrow": "AIRPORT VAN FLEET",
+      "title": "车队一览",
+      "cardTitle": "宽敞车厢与实用行李空间",
+      "desc": "根据人数与行程匹配高端商务车与中巴，适用于 Airport Transfer 与 Korea Chauffeur Service 场景。",
+      "imageAlt": "车辆示意",
+      "staria": "斯塔利亚",
+      "solati": "索拉蒂",
+      "county": "县"
+    },
+    "pricing": {
+      "eyebrow": "价格",
+      "title": "按路线与行程透明报价",
+      "airport": {
+        "label": "机场接机/送机",
+        "price": "咨询后报价",
+        "note": "因时段与路线而异。"
+      },
+      "city": {
+        "label": "市区/近郊接送",
+        "price": "咨询后报价",
+        "note": "按停留点与行驶路线计算。"
+      },
+      "charter": {
+        "label": "半日/全天包车",
+        "price": "咨询后报价",
+        "note": "按行程单独报价。"
+      }
+    },
+    "booking": {
+      "eyebrow": "预约",
+      "title": "沟通后快速确认",
+      "desc": "通过电话、Kakao 或短信告知路线、人数与行李，我们会尽快确认 Incheon to Seoul Private Van、Korea Golf Tour、VIP Airport Transfer Korea 订单。",
+      "ctaCall": "电话咨询",
+      "ctaReview": "在线预约"
+    },
+    "ctaBookNow": "立即预订",
+    "ctaCallConsult": "电话咨询",
+    "ctaCallDirect": "立即致电",
+    "galleryAlt": "Kkebi Private Van Service 与 Airport Transfer 画廊图片 {index}",
+    "channelPhone": "电话",
+    "channelKakao": "KakaoTalk",
+    "review": {
+      "eyebrow": "评价",
+      "title": "客户反馈",
+      "heroDesc": "看看旅客如何评价 Kkebi 的接送服务。",
+      "one": {
+        "content": "早班机也能准时来接，非常省心。",
+        "author": "客户 K**",
+        "postedAt": "2025-12-18"
+      },
+      "two": {
+        "content": "行李很多也全程照顾周到。",
+        "author": "客户 P**",
+        "postedAt": "2025-11-07"
+      },
+      "three": {
+        "content": "回复快、说明清楚，会再预约。",
+        "author": "客户 L**",
+        "postedAt": "2025-09-24"
+      }
+    }
+  },
+  "IntroPage": {
+    "hero": {
+      "brandTitle": "Kkebi",
+      "eyebrow": "介绍",
+      "title": "舒适旅程的起点——用心服务的出行管家伙伴",
+      "desc": "<brand>Kkebi</brand> 从预约到抵达全程陪伴，专注仁川机场接送与首尔包车需求，以商务车级的细致服务，让每位客人安全、顺畅、量身定制。"
+    },
+    "coreValueEyebrow": "核心价值",
+    "coreValueTitle": "准时 · 一致 · 可信",
+    "coreValueBody": "从预约到抵达统一服务标准，沉稳可靠的机场接送体验。",
+    "contactEyebrow": "联系",
+    "representativeName": "代表 洪俊彪",
+    "representativeLine": "竭诚为您服务。",
+    "phoneCaption": "仁川 · 金浦机场预约咨询",
+    "services": {
+      "s01": {
+        "title": "私人机场礼宾",
+        "body": "配合入境流程，从等候、引导到登机顺畅衔接。"
+      },
+      "s02": {
+        "title": "高端商务出行",
+        "body": "围绕您的日程规划仁川机场接送、门到门包车或首尔市内接驳，安全高效。"
+      },
+      "s03": {
+        "title": "亲子家庭关怀",
+        "body": "提前规划行李、登车路线与停靠点，旅途更轻松。"
+      },
+      "s04": {
+        "title": "深夜与凌晨安全运营",
+        "body": "非营业时间同样标准响应，直至您安全抵达。"
+      }
+    }
+  },
+  "VehicleFleet": {
+    "sectionEyebrow": "PREMIUM AIRPORT FLEET",
+    "sectionTitle": "按车型介绍",
+    "sectionDesc": "根据人数与行程，从 Staria、Solati、County 中选择最合适车型。",
+    "detailBtn": "查看详情",
+    "bookBtn": "在线预约",
+    "phoneBtn": "电话咨询",
+    "galleryHeading": "图集",
+    "galleryNote": "高清车辆照片将陆续添加至下方位置。",
+    "tourAvailable": "可安排观光",
+    "gallerySlotLabel": "照片",
+    "modalClose": "关闭",
+    "staria": {
+      "badge": "高端商务车",
+      "name": "现代 Staria",
+      "seat45": "4–5 座",
+      "seat67": "6–7 座",
+      "luggage": "可容纳行李箱、婴儿车、高尔夫球袋",
+      "imageAlt": "现代 Staria 商务车侧面",
+      "f1": "长距离亦舒适安全",
+      "f2": "腿部与头部空间宽裕",
+      "f3": "商务与家庭场景皆宜的座椅布局",
+      "f4": "机场接送行李动线友好"
+    },
+    "solati": {
+      "badge": "大型商务车",
+      "name": "现代 Solati",
+      "capacity": "13–15 座",
+      "luggage": "适合团体行李与器材",
+      "imageAlt": "现代 Solati 大型客车",
+      "f1": "适合中小型团体与考察团",
+      "f2": "载物空间大",
+      "f3": "机场与城市路况行驶稳健",
+      "f4": "高尔夫、会务、团体活动皆宜"
+    },
+    "county": {
+      "badge": "中巴级",
+      "name": "现代 County",
+      "capacity": "15–25 座",
+      "luggage": "大件行李与器材友好",
+      "imageAlt": "现代 County 中巴",
+      "f1": "适合大型团体与接待用车",
+      "f2": "团体登车符合安全规范",
+      "f3": "机场及长途路线皆可",
+      "f4": "车厢宽敞适合长时间乘坐"
+    }
+  },
+  "BookingExperience": {
+    "steps": {
+      "s1": "1) 联系方式",
+      "s2": "2) 行程与服务类型",
+      "s3": "3) 上下车地点",
+      "s4": "4) 车型、人数与行李"
+    },
+    "onlineTitle": "在线预约",
+    "dateHint": "日期与时间可选择或直接输入。",
+    "routeDeparture": "出发（接）",
+    "routeDestination": "到达（送）",
+    "swapRoute": "交换出发与到达",
+    "primaryPlaceholder": "选择区域类型",
+    "subPlaceholder": "选择子区域",
+    "detailPlaceholder": "详细地址、建筑名、登机口等",
+    "flightOptional": "航班号（选填）",
+    "waypointCta": "添加经停",
+    "waypointModalTitle": "经停点",
+    "waypointAdd": "输入经停",
+    "waypointAppend": "加入列表",
+    "modalClose": "关闭",
+    "waypointRemove": "删除",
+    "waypointEmpty": "暂无经停，请在下方添加。",
+    "waypointListLabel": "已添加经停",
+    "vehiclePlaceholder": "选择车型",
+    "luggage": "行李",
+    "golfBags": "高尔夫球袋",
+    "summaryRoute": "接车 / 送车",
+    "summaryWaypoints": "经停",
+    "summaryGolf": "高尔夫球袋",
+    "validationRoute": "请完整填写上下车区域、详细地址并选择车型。",
+    "validationMessenger": "请选择通讯方式。",
+    "primary_incheon_airport": "仁川机场",
+    "primary_gimpo_airport": "金浦机场",
+    "primary_seoul": "首尔全境",
+    "primary_gyeonggi": "京畿道",
+    "primary_other": "其他地区",
+    "airportSummary_incheon": "仁川机场",
+    "airportSummary_gimpo": "金浦机场",
+    "airportSummary_none": "非机场行程",
+    "messengerLabel": "通讯软件",
+    "messengerSelectPlaceholder": "选择通讯软件",
+    "childLabelMain": "儿童",
+    "childLabelSub": "（未满 7 岁）",
+    "sectionStep1": "Step 1 · 基本信息",
+    "sectionStep2": "Step 2 · 行程与服务类型",
+    "sectionStep3": "Step 3 · 行程路线",
+    "sectionStep4": "Step 4 · 详细选项",
+    "placeholderName": "姓名 *",
+    "placeholderPhone": "电话 *",
+    "quickConsultTitle": "快速咨询",
+    "quickPhone": "电话咨询",
+    "quickKakao": "KakaoTalk",
+    "quickWhatsapp": "WhatsApp",
+    "quickLine": "LINE",
+    "quickInstagram": "Instagram 私信",
+    "quickMessenger": "Messenger",
+    "confirmPhone": "是否拨打电话？\n确定后将跳转拨号界面。",
+    "confirmKakao": "将打开 KakaoTalk。\n是否继续？",
+    "confirmWhatsapp": "将打开 WhatsApp。\n是否继续？",
+    "confirmLine": "将打开 LINE。\n是否继续？",
+    "confirmInstagram": "将打开 Instagram 私信。\n是否继续？",
+    "confirmMessenger": "将打开 Facebook Messenger。\n是否继续？",
+    "fieldDate": "日期",
+    "fieldTime": "时间",
+    "datePlaceholderEmpty": "YYYY-MM-DD",
+    "ariaTravelDateButton": "选择出行日期",
+    "ariaCalendarDialog": "日历",
+    "ariaPrevMonth": "上个月",
+    "ariaNextMonth": "下个月",
+    "ariaSelectDay": "选择 {date}",
+    "ariaTravelTimeButton": "选择出行时间",
+    "ariaTimeListbox": "时间列表",
+    "weekdaySun": "日",
+    "weekdayMon": "一",
+    "weekdayTue": "二",
+    "weekdayWed": "三",
+    "weekdayThu": "四",
+    "weekdayFri": "五",
+    "weekdaySat": "六",
+    "seatingFeeNotice": "乘车满 6 人及以上可能产生额外费用。",
+    "adultLabel": "成人",
+    "summaryHeading": "预约摘要",
+    "summaryNameLabel": "姓名",
+    "summaryPhoneLabel": "联系方式",
+    "summaryServiceLabel": "服务",
+    "summaryScheduleLabel": "日程",
+    "summaryAirportLabel": "机场行程",
+    "summaryFlightLabel": "航班号",
+    "summaryVehicleLabel": "车辆",
+    "summaryPassengerHeading": "人数（成人/儿童）",
+    "summaryPassengerCounts": "成人 {adults} / 儿童 {children}",
+    "summaryTotalPassengersLabel": "总人数",
+    "summaryTotalPassengersValue": "{total} 人",
+    "summaryLuggageLine": "行李件数: {count}",
+    "summaryGolfLine": "高尔夫球袋: {count}",
+    "footerConsultNote": "所有预约均需人工确认后生效，不提供在线支付。",
+    "submitConsult": "提交预约咨询",
+    "submittingConsult": "提交中…",
+    "completionSuccess": "我们会尽快查看并通过您选择的通讯方式与您联系。（驾驶中可能稍后回复）",
+    "errorReservationSave": "无法保存预约。",
+    "errorReservationRetry": "无法保存预约，请稍后重试。",
+    "messengerOpt": {
+      "phone": "电话",
+      "kakao": "KakaoTalk",
+      "whatsapp": "WhatsApp",
+      "line": "LINE",
+      "instagram": "Instagram 私信",
+      "messenger": "Facebook Messenger"
+    },
+    "services": {
+      "airport": {
+        "label": "机场送机/接机",
+        "detail": "仁川·金浦机场准点运营与接送"
+      },
+      "city": {
+        "label": "市区/近郊旅行",
+        "detail": "首尔·首都圈景点与自由行程"
+      },
+      "golf": {
+        "label": "高尔夫包车",
+        "detail": "从清晨打球到舒适返程"
+      },
+      "vip": {
+        "label": "VIP 礼宾服务",
+        "detail": "商务与国宾级专业随行服务"
+      },
+      "wedding": {
+        "label": "婚礼用车",
+        "detail": "典礼与婚纱照量身定制支持"
+      },
+      "tour": {
+        "label": "观光与定制行程",
+        "detail": "一日游·长途及一对一咨询安排"
+      }
+    },
+    "vehicles": {
+      "staria": "斯塔尼亚",
+      "carnival": "嘉华",
+      "solati": "索拉蒂"
+    }
+  },
+  "ReviewBoard": {
+    "sampleBadge": "示例 {n}",
+    "userSectionTitle": "评价墙",
+    "writeReviewBtn": "发帖",
+    "writeReviewHint": "点击下方按钮打开评价表单。",
+    "formTitle": "撰写评价",
+    "authorLabel": "昵称（选填）",
+    "authorPlaceholder": "匿名",
+    "contentLabel": "评价内容",
+    "contentPlaceholder": "请分享您的体验（至少 10 个字）",
+    "imagesLabel": "图片（选填，最多 4 张）",
+    "submit": "提交",
+    "submitting": "提交中…",
+    "success": "感谢您的评价，已发布。",
+    "error": "提交失败，请稍后重试。",
+    "validationContent": "请输入至少 10 个字。",
+    "emptyUser": "暂无评价，欢迎首发。",
+    "loadError": "无法加载评价。",
+    "imageAlt": "评论图片",
+    "previewAlt": "预览图片"
+  },
+  "FloatingBar": {
+    "call": "电话",
+    "callAria": "拨打电话",
+    "book": "预约",
+    "bookAria": "前往在线预约",
+    "kakao": "Kakao",
+    "kakaoAria": "打开 KakaoTalk"
+  },
+  "HomeDestinations": {
+    "eyebrow": "DESTINATIONS",
+    "title": "热门路线与专题落地页",
+    "description": "仁川机场、首尔、江南、高尔夫旅游等常用路线一站式入口。各页提供价格说明、常见问题与联系方式。",
+    "toBooking": "前往在线预约",
+    "pricingSection": "价格说明",
+    "faqSection": "常见问题",
+    "ctaSection": "预约与咨询",
+    "relatedSection": "相关热门路线"
+  },
+  "HomeFaq": {
+    "eyebrow": "FAQ",
+    "title": "常见问题",
+    "q1": "能放多少件行李？",
+    "a1": "Staria和Carnival可装4至6件大型行李箱。如携带高尔夫球包或婴儿车，请在预订时提前告知，我们将为您安排合适的车辆。",
+    "q2": "能接深夜或凌晨的航班吗？",
+    "a2": "是的，我们全年24小时运营。只需告知您的航班时间，我们会准时接机。",
+    "q3": "支持中文沟通吗？",
+    "a3": "可以进行基本中文交流。预订前欢迎通过消息与我们联系，我们会迅速回复。",
+    "q4": "费用如何计算？",
+    "a4": "根据出发地、目的地、人数和行李量提供定制报价。含高速公路费用，无隐藏收费。",
+    "q5": "如何预订？",
+    "a5": "可通过在线预约表单、电话、KakaoTalk或WhatsApp联系我们，我们会迅速确认。"
   }
 }

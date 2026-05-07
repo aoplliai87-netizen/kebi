@@ -14,11 +14,26 @@ type Props = {
   initial: SiteSettings;
 };
 
+function pickLegacyText(by: LocalizedText, fallback: string): string {
+  const v =
+    by.ko.trim() || by.en.trim() || by.ja.trim() || by.zh.trim() || fallback.trim();
+  return v;
+}
+
+function tiersLegacyFromKo(rows: ManagedPricingTier[] | undefined): ManagedPricingTier[] {
+  if (!rows?.length) return [];
+  return rows
+    .map((row) => ({
+      label: row.label.trim(),
+      price: row.price.trim(),
+      note: row.note.trim(),
+    }))
+    .filter((row) => row.label && row.price && row.note);
+}
+
 export function AdminSiteSettingsForm({ initial }: Props) {
   const localeOptions: LocaleKey[] = ["ko", "en", "ja", "zh"];
   const [selectedLocale, setSelectedLocale] = useState<LocaleKey>("ko");
-  const [aboutMeTitle, setAboutMeTitle] = useState(initial.aboutMeTitle);
-  const [aboutMeDescription, setAboutMeDescription] = useState(initial.aboutMeDescription);
   const [galleryText, setGalleryText] = useState(initial.galleryImageUrls.join("\n"));
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -27,20 +42,12 @@ export function AdminSiteSettingsForm({ initial }: Props) {
   const [changeLogs, setChangeLogs] = useState<
     Array<{ id: string; createdAt: string; summary: string }>
   >([]);
-  const [vehicleSectionTitle, setVehicleSectionTitle] = useState(initial.vehicleSectionTitle);
-  const [vehicleSectionDescription, setVehicleSectionDescription] = useState(
-    initial.vehicleSectionDescription
-  );
-  const [seoHomeTitle, setSeoHomeTitle] = useState(initial.seoHomeTitle);
-  const [seoHomeDescription, setSeoHomeDescription] = useState(initial.seoHomeDescription);
   const [phoneDisplay, setPhoneDisplay] = useState(initial.phoneDisplay);
   const [kakaoUrl, setKakaoUrl] = useState(initial.contactLinks.kakao);
   const [instagramUrl, setInstagramUrl] = useState(initial.contactLinks.instagram);
   const [whatsappUrl, setWhatsappUrl] = useState(initial.contactLinks.whatsapp);
   const [lineUrl, setLineUrl] = useState(initial.contactLinks.line);
   const [messengerUrl, setMessengerUrl] = useState(initial.contactLinks.messenger);
-  const [heroTitle, setHeroTitle] = useState(initial.heroTitle);
-  const [heroSubtitle, setHeroSubtitle] = useState(initial.heroSubtitle);
   const [aboutMeTitleByLocale, setAboutMeTitleByLocale] = useState<LocalizedText>(
     initial.aboutMeTitleByLocale
   );
@@ -64,15 +71,6 @@ export function AdminSiteSettingsForm({ initial }: Props) {
     useState<LocalizedText>(initial.vehicleSectionDescriptionByLocale);
   const [pricingTiersByLocale, setPricingTiersByLocale] = useState<LocalizedPricingTiers>(
     initial.pricingTiersByLocale
-  );
-  const [pricingRows, setPricingRows] = useState<ManagedPricingTier[]>(
-    initial.pricingTiers.length > 0
-      ? initial.pricingTiers
-      : [
-          { label: "", price: "", note: "" },
-          { label: "", price: "", note: "" },
-          { label: "", price: "", note: "" },
-        ]
   );
 
   const galleryPreview = useMemo(
@@ -110,6 +108,34 @@ export function AdminSiteSettingsForm({ initial }: Props) {
     setSaving(true);
     setMessage("");
 
+    /** Supabase·레거시 컬럼은 한국어 로케일 값을 우선으로 동기화 (미입력 시 다른 언어 → 초기값) */
+    const aboutMeTitle = pickLegacyText(aboutMeTitleByLocale, initial.aboutMeTitle);
+    const aboutMeDescription = pickLegacyText(
+      aboutMeDescriptionByLocale,
+      initial.aboutMeDescription,
+    );
+    const heroTitle = pickLegacyText(heroTitleByLocale, initial.heroTitle);
+    const heroSubtitle = pickLegacyText(heroSubtitleByLocale, initial.heroSubtitle);
+    const seoHomeTitle = pickLegacyText(seoHomeTitleByLocale, initial.seoHomeTitle);
+    const seoHomeDescription = pickLegacyText(
+      seoHomeDescriptionByLocale,
+      initial.seoHomeDescription,
+    );
+    const vehicleSectionTitle = pickLegacyText(
+      vehicleSectionTitleByLocale,
+      initial.vehicleSectionTitle,
+    );
+    const vehicleSectionDescription = pickLegacyText(
+      vehicleSectionDescriptionByLocale,
+      initial.vehicleSectionDescription,
+    );
+    const pricingTiers =
+      tiersLegacyFromKo(pricingTiersByLocale.ko).length > 0
+        ? tiersLegacyFromKo(pricingTiersByLocale.ko)
+        : tiersLegacyFromKo(initial.pricingTiersByLocale.ko).length > 0
+          ? tiersLegacyFromKo(initial.pricingTiersByLocale.ko)
+          : initial.pricingTiers;
+
     const response = await fetch("/api/admin/site-settings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -119,13 +145,7 @@ export function AdminSiteSettingsForm({ initial }: Props) {
         galleryImageUrls: galleryPreview,
         vehicleSectionTitle,
         vehicleSectionDescription,
-        pricingTiers: pricingRows
-          .map((row) => ({
-            label: row.label.trim(),
-            price: row.price.trim(),
-            note: row.note.trim(),
-          }))
-          .filter((row) => row.label && row.price && row.note),
+        pricingTiers,
         seoHomeTitle,
         seoHomeDescription,
         phoneDisplay,
@@ -196,9 +216,6 @@ export function AdminSiteSettingsForm({ initial }: Props) {
     );
   };
 
-  const updatePricingRow = (index: number, key: keyof ManagedPricingTier, value: string) => {
-    setPricingRows((prev) => prev.map((row, i) => (i === index ? { ...row, [key]: value } : row)));
-  };
   const updateLocalized = (setter: (v: (prev: LocalizedText) => LocalizedText) => void, value: string) => {
     setter((prev) => ({ ...prev, [selectedLocale]: value }));
   };
@@ -339,6 +356,14 @@ export function AdminSiteSettingsForm({ initial }: Props) {
           ))}
         </div>
       </div>
+
+      <div className="border-t border-white/10 pt-6">
+        <p className="text-sm font-semibold text-tone-sky">전역 설정 (모든 언어 공통)</p>
+        <p className="mt-1 text-xs text-tone-soft">
+          연락처·SNS·갤러리는 사이트 전역에서 동일하게 사용됩니다. 텍스트 콘텐츠는 위 다국어 탭에서만
+          편집하세요.
+        </p>
+      </div>
       <div>
         <p className="text-sm font-semibold text-tone-strong">헤더 직통 전화번호</p>
         <input
@@ -382,100 +407,6 @@ export function AdminSiteSettingsForm({ initial }: Props) {
             placeholder="Facebook Messenger URL"
           />
         </div>
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-tone-strong">홈 히어로 타이틀</p>
-        <input
-          value={heroTitle}
-          onChange={(e) => setHeroTitle(e.target.value)}
-          className="mt-2 h-11 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm text-tone-strong"
-        />
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-tone-strong">홈 히어로 서브 텍스트</p>
-        <textarea
-          value={heroSubtitle}
-          onChange={(e) => setHeroSubtitle(e.target.value)}
-          className="mt-2 min-h-20 w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm text-tone-strong"
-        />
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-tone-strong">SEO 메인 타이틀 (홈)</p>
-        <input
-          value={seoHomeTitle}
-          onChange={(e) => setSeoHomeTitle(e.target.value)}
-          className="mt-2 h-11 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm text-tone-strong"
-          placeholder="예: 인천공항 콜밴 1위 깨비 - 서울/경기/의정부 24시간 예약"
-        />
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-tone-strong">SEO 메인 설명 (홈)</p>
-        <textarea
-          value={seoHomeDescription}
-          onChange={(e) => setSeoHomeDescription(e.target.value)}
-          className="mt-2 min-h-24 w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm text-tone-strong"
-        />
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-tone-strong">차량 섹션 제목</p>
-        <input
-          value={vehicleSectionTitle}
-          onChange={(e) => setVehicleSectionTitle(e.target.value)}
-          className="mt-2 h-11 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm text-tone-strong"
-          placeholder="예: AIRPORT VAN FLEET"
-        />
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-tone-strong">차량 섹션 설명 문구</p>
-        <textarea
-          value={vehicleSectionDescription}
-          onChange={(e) => setVehicleSectionDescription(e.target.value)}
-          className="mt-2 min-h-24 w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm text-tone-strong"
-        />
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-tone-strong">요금표 관리 (서비스별 기본 문구)</p>
-        <div className="mt-2 space-y-3">
-          {pricingRows.map((row, index) => (
-            <div key={index} className="rounded-lg border border-white/15 bg-black/25 p-3">
-              <p className="text-xs font-semibold text-tone-soft">요금 항목 {index + 1}</p>
-              <input
-                value={row.label}
-                onChange={(e) => updatePricingRow(index, "label", e.target.value)}
-                className="mt-2 h-10 w-full rounded-md border border-white/20 bg-black/30 px-3 text-sm text-tone-strong"
-                placeholder="항목명"
-              />
-              <input
-                value={row.price}
-                onChange={(e) => updatePricingRow(index, "price", e.target.value)}
-                className="mt-2 h-10 w-full rounded-md border border-white/20 bg-black/30 px-3 text-sm text-tone-strong"
-                placeholder="요금"
-              />
-              <textarea
-                value={row.note}
-                onChange={(e) => updatePricingRow(index, "note", e.target.value)}
-                className="mt-2 min-h-20 w-full rounded-md border border-white/20 bg-black/30 px-3 py-2 text-sm text-tone-strong"
-                placeholder="설명"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-tone-strong">About Me 제목</p>
-        <input
-          value={aboutMeTitle}
-          onChange={(e) => setAboutMeTitle(e.target.value)}
-          className="mt-2 h-11 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm text-tone-strong"
-        />
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-tone-strong">About Me 설명 문구</p>
-        <textarea
-          value={aboutMeDescription}
-          onChange={(e) => setAboutMeDescription(e.target.value)}
-          className="mt-2 min-h-24 w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm text-tone-strong"
-        />
       </div>
       <div>
         <p className="text-sm font-semibold text-tone-strong">갤러리 이미지 URL 목록 (한 줄에 1개)</p>

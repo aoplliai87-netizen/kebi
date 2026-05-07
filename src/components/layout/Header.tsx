@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { BRAND_LOGO_SRC, SITE_PHONE_DISPLAY, SITE_PHONE_TEL } from "@/lib/site";
 
 const NAV = [
@@ -45,7 +46,6 @@ export function Header({
 }) {
   const t = useTranslations("Header");
   const pathname = usePathname();
-  const locale = useLocale();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -154,27 +154,7 @@ export function Header({
           </nav>
 
         <div className="flex items-center gap-2">
-          <div
-            className="flex rounded-xl border border-white/12 bg-black/30 p-0.5 shadow-inner shadow-black/40"
-            role="group"
-            aria-label={t("langHint")}
-          >
-            {routing.locales.map((loc) => (
-              <Link
-                key={loc}
-                href={pathname}
-                locale={loc}
-                className={cn(
-                  "min-w-[2.75rem] rounded-lg px-2.5 py-2 text-center text-xs font-bold uppercase tracking-wide transition-colors sm:text-[13px]",
-                  locale === loc
-                    ? "bg-brand-gold text-black shadow-[0_2px_12px_rgba(212,175,55,0.4)]"
-                    : "text-white/75 hover:bg-white/10 hover:text-brand-gold",
-                )}
-              >
-                {loc.toUpperCase()}
-              </Link>
-            ))}
-          </div>
+          <LanguageSwitcher />
 
           <button
             type="button"

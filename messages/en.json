@@ -5,8 +5,8 @@
     "description": "Premium private transfers from Incheon Airport — reliable, comfortable door-to-door service with Kkebi.",
     "pages": {
       "home": {
-        "title": "Private Van Transfer Seoul & Incheon Airport Taxi - Kkebi",
-        "description": "Incheon Airport Transfer and Incheon Airport Private Van in one service: book Kkebi for door-to-door rides from Incheon and Gimpo, fixed-fare van service across Seoul and Gyeonggi, and punctual pickups you can count on."
+        "title": "Private Van Service, Airport Shuttle & Incheon Airport Transfer | Kkebi",
+        "description": "Kkebi provides Private Van Service, Minivan Taxi, and Airport Shuttle routes with reliable Airport Transfer support, including Private Airport Pickup, Incheon Airport Transfer, and VIP Airport Transfer Korea."
       },
       "intro": {
         "title": "About Kkebi | Incheon Airport Private Van",
@@ -62,6 +62,7 @@
     "fieldDate": "Date",
     "fieldTime": "Time",
     "fieldPassengers": "Passengers",
+    "placeholderPassengers": "e.g. 2 adults, 1 child",
     "fieldMessage": "Additional requests",
     "fieldOutOfMetro": "This inquiry is outside Greater Seoul / not on the fare table",
     "fieldOutOfMetroHint": "If your trip is regional or custom, check this box and describe the route as clearly as you can.",
@@ -100,7 +101,19 @@
     "searchEmpty": "No results. Try another place name in Korean or English.",
     "othersPhone": "Call",
     "othersKakao": "Kakao",
-    "othersWeb": "Website inquiry"
+    "othersWeb": "Website inquiry",
+    "tollIncluded": "All prices include highway toll fees.",
+    "extraFeeNotice": "An extra charge may apply for 6+ passengers in the Staria.",
+    "searchLabel": "Search your area",
+    "searchPlaceholder": "e.g. Gangnam / Suwon / 강남",
+    "colRegion": "Area",
+    "colGimpo": "Gimpo",
+    "colIncheon": "Incheon",
+    "expandSubRegions": "Show {count} sub-areas",
+    "regionSeoul": "Seoul",
+    "regionGyeonggi": "Gyeonggi-do",
+    "regionOther": "Other areas",
+    "currencyUnit": " KRW"
   },
   "Header": {
     "brand": "Kkebi",
@@ -115,6 +128,10 @@
     "closeMenu": "Close menu",
     "langKo": "KO",
     "langEn": "EN",
+    "langNativeKo": "한국어",
+    "langNativeZh": "中文",
+    "langNativeJa": "日本語",
+    "langNativeEn": "English",
     "langHint": "Choose language",
     "navMain": "Main menu",
     "phoneAria": "Call phone number"
@@ -122,17 +139,23 @@
   "QuickMenu": {
     "title": "Quick Contact Menu",
     "label": {
-      "naver": "Naver",
-      "kakao": "Kakao",
       "call": "Call",
+      "kakao": "KakaoTalk",
+      "whatsapp": "WhatsApp",
+      "line": "LINE",
+      "instaDm": "Instagram DM",
+      "messenger": "Messenger",
+      "naver": "Naver",
       "naverTalk": "NaverTalk",
       "kakaoBiz": "KakaoBiz",
-      "sms": "SMS",
-      "instaDm": "InstaDM"
+      "sms": "SMS"
     },
     "aria": {
       "naver": "Open Naver page",
       "kakao": "Open Kakao chat",
+      "whatsapp": "Open WhatsApp",
+      "line": "Open LINE",
+      "messenger": "Open Facebook Messenger",
       "call": "Call phone number",
       "naverTalk": "Open Naver TalkTalk",
       "kakaoBiz": "Open Kakao Business",
@@ -142,14 +165,17 @@
   },
   "HomePage": {
     "heroEyebrow": "Incheon Airport · Premium Transfer",
-    "heroTitle": "Premium Incheon Airport Private Van Service",
-    "heroSubtitle": "Experience the most reliable and comfortable private transfer from Incheon Airport to your destination with <brand>Kkebi</brand>.",
+    "heroTitle": "Private Van Service for Incheon Airport Transfer",
+    "heroSubtitle": "Book <brand>Kkebi</brand> for Airport Shuttle, Minivan Taxi, and Private Airport Pickup routes from Incheon to Seoul with reliable door-to-door Airport Transfer support.",
     "vehicle": {
       "eyebrow": "AIRPORT VAN FLEET",
       "title": "Vehicle lineup",
       "cardTitle": "Comfortable interior, practical luggage space",
-      "desc": "Premium vans and buses matched to your party size and itinerary.",
-      "imageAlt": "Vehicle image placeholder"
+      "desc": "Premium vans and buses matched to your party size and itinerary for Korea Chauffeur Service and Airport Transfer rides.",
+      "imageAlt": "Vehicle image placeholder",
+      "staria": "Staria",
+      "solati": "Solati",
+      "county": "County"
     },
     "pricing": {
       "eyebrow": "Pricing",
@@ -173,10 +199,16 @@
     "booking": {
       "eyebrow": "Booking",
       "title": "Fast booking after quick consultation",
-      "desc": "Send your route, passenger count and luggage details via phone, Kakao or SMS. We confirm quickly and lock your booking.",
+      "desc": "Send your route, passenger count and luggage details via phone, Kakao or SMS. We confirm quickly for Incheon to Seoul Private Van, VIP Airport Transfer Korea, and Korea Golf Tour requests.",
       "ctaCall": "Call us",
       "ctaReview": "Book online"
     },
+    "ctaBookNow": "Book Online",
+    "ctaCallConsult": "Call Us",
+    "ctaCallDirect": "Call Now",
+    "galleryAlt": "Kkebi Private Van Service and Airport Transfer image {index}",
+    "channelPhone": "Phone",
+    "channelKakao": "KakaoTalk",
     "review": {
       "eyebrow": "REVIEWS",
       "title": "Customer feedback",
@@ -313,12 +345,112 @@
     "primary_incheon_airport": "Incheon Airport",
     "primary_gimpo_airport": "Gimpo Airport",
     "primary_seoul": "Seoul",
-    "primary_gyeonggi": "Gyeonggi / Greater Seoul",
+    "primary_gyeonggi": "Gyeonggi-do",
     "primary_other": "Other regions",
+    "airportSummary_incheon": "Incheon Airport",
+    "airportSummary_gimpo": "Gimpo Airport",
+    "airportSummary_none": "Not via airport",
     "messengerLabel": "Messenger",
     "messengerSelectPlaceholder": "Choose messenger",
     "childLabelMain": "Child",
-    "childLabelSub": "(under 7)"
+    "childLabelSub": "(under 7)",
+    "sectionStep1": "Step 1 · Basic information",
+    "sectionStep2": "Step 2 · Schedule & service type",
+    "sectionStep3": "Step 3 · Route details",
+    "sectionStep4": "Step 4 · Vehicle & passengers",
+    "placeholderName": "Full name *",
+    "placeholderPhone": "Phone *",
+    "quickConsultTitle": "Quick contact",
+    "quickPhone": "Call",
+    "quickKakao": "KakaoTalk",
+    "quickWhatsapp": "WhatsApp",
+    "quickLine": "LINE",
+    "quickInstagram": "Instagram DM",
+    "quickMessenger": "Messenger",
+    "confirmPhone": "Place a phone call?\nPress OK to open your dialer.",
+    "confirmKakao": "Open KakaoTalk?\nPress OK to continue.",
+    "confirmWhatsapp": "Open WhatsApp?\nPress OK to continue.",
+    "confirmLine": "Open LINE?\nPress OK to continue.",
+    "confirmInstagram": "Open Instagram DM?\nPress OK to continue.",
+    "confirmMessenger": "Open Facebook Messenger?\nPress OK to continue.",
+    "fieldDate": "Date",
+    "fieldTime": "Time",
+    "datePlaceholderEmpty": "YYYY-MM-DD",
+    "ariaTravelDateButton": "Select travel date",
+    "ariaCalendarDialog": "Calendar date picker",
+    "ariaPrevMonth": "Previous month",
+    "ariaNextMonth": "Next month",
+    "ariaSelectDay": "Select {date}",
+    "ariaTravelTimeButton": "Select travel time",
+    "ariaTimeListbox": "Time slots",
+    "weekdaySun": "Su",
+    "weekdayMon": "Mo",
+    "weekdayTue": "Tu",
+    "weekdayWed": "We",
+    "weekdayThu": "Th",
+    "weekdayFri": "Fr",
+    "weekdaySat": "Sa",
+    "seatingFeeNotice": "Additional charges may apply for parties of 6 or more.",
+    "adultLabel": "Adults",
+    "summaryHeading": "Booking summary",
+    "summaryNameLabel": "Name",
+    "summaryPhoneLabel": "Contact",
+    "summaryServiceLabel": "Service",
+    "summaryScheduleLabel": "Schedule",
+    "summaryAirportLabel": "Airport routing",
+    "summaryFlightLabel": "Flight number",
+    "summaryVehicleLabel": "Vehicle",
+    "summaryPassengerHeading": "Passengers (adults / children)",
+    "summaryPassengerCounts": "{adults} adults / {children} children",
+    "summaryTotalPassengersLabel": "Total passengers",
+    "summaryTotalPassengersValue": "{total}",
+    "summaryLuggageLine": "Luggage (pieces): {count}",
+    "summaryGolfLine": "Golf bags: {count}",
+    "footerConsultNote": "All bookings are confirmed after consultation. Online payment is not available.",
+    "submitConsult": "Request booking consultation",
+    "submittingConsult": "Submitting…",
+    "completionSuccess": "We will review your request and contact you via your preferred messenger. (If we are driving, we may reply after checking.)",
+    "errorReservationSave": "Could not save your reservation.",
+    "errorReservationRetry": "Could not save your reservation. Please try again shortly.",
+    "messengerOpt": {
+      "phone": "Phone",
+      "kakao": "KakaoTalk",
+      "whatsapp": "WhatsApp",
+      "line": "LINE",
+      "instagram": "Instagram DM",
+      "messenger": "Facebook Messenger"
+    },
+    "services": {
+      "airport": {
+        "label": "Airport send-off / pickup",
+        "detail": "On-time Incheon & Gimpo airport runs and pickups"
+      },
+      "city": {
+        "label": "City & nearby travel",
+        "detail": "Seoul & capital-area sights with flexible itineraries"
+      },
+      "golf": {
+        "label": "Golf round charter",
+        "detail": "From dawn tee times to a comfortable ride home"
+      },
+      "vip": {
+        "label": "VIP concierge",
+        "detail": "Business & VIP-grade professional chauffeur service"
+      },
+      "wedding": {
+        "label": "Wedding car service",
+        "detail": "Ceremony & wedding-shoot support tailored to you"
+      },
+      "tour": {
+        "label": "Tours & custom schedules",
+        "detail": "Day tours, long-distance trips & bespoke planning"
+      }
+    },
+    "vehicles": {
+      "staria": "Staria",
+      "carnival": "Carnival",
+      "solati": "Solati"
+    }
   },
   "ReviewBoard": {
     "sampleBadge": "Sample {n}",
@@ -337,6 +469,40 @@
     "error": "Could not submit. Please try again shortly.",
     "validationContent": "Please enter at least 10 characters.",
     "emptyUser": "No guest reviews yet — be the first.",
-    "loadError": "Could not load reviews."
+    "loadError": "Could not load reviews.",
+    "imageAlt": "Review image",
+    "previewAlt": "Image preview"
+  },
+  "FloatingBar": {
+    "call": "Call",
+    "callAria": "Call phone number",
+    "book": "Book",
+    "bookAria": "Go to online booking",
+    "kakao": "Kakao",
+    "kakaoAria": "Open KakaoTalk chat"
+  },
+  "HomeDestinations": {
+    "eyebrow": "DESTINATIONS",
+    "title": "Popular routes & travel landings",
+    "description": "Quick links for Incheon Airport, Seoul, Gangnam, golf tours, and more. Each page includes pricing guidance, FAQs, and contact options.",
+    "toBooking": "Go to online booking",
+    "pricingSection": "Pricing",
+    "faqSection": "FAQ",
+    "ctaSection": "Book or contact us",
+    "relatedSection": "Related destination routes"
+  },
+  "HomeFaq": {
+    "eyebrow": "FAQ",
+    "title": "Frequently Asked Questions",
+    "q1": "How much luggage can fit?",
+    "a1": "Our Staria and Carnival can fit 4–6 large suitcases. If you have golf bags, strollers, or other bulky items, just let us know when booking and we'll arrange the right vehicle.",
+    "q2": "Can I book a late-night or early-morning pickup?",
+    "a2": "Yes, we operate 24/7, 365 days a year. Just share your flight time and we'll be there for you.",
+    "q3": "Do you support English, Japanese, or Chinese?",
+    "a3": "Basic communication in English, Japanese, and Chinese is available. Feel free to message us before booking and we'll assist you quickly.",
+    "q4": "How is the fare calculated?",
+    "a4": "We provide a custom quote based on origin, destination, passengers, and luggage. Highway tolls are included — no hidden fees.",
+    "q5": "How do I book?",
+    "a5": "Use our online booking form, call us, or reach out via KakaoTalk or WhatsApp. We confirm quickly."
   }
 }

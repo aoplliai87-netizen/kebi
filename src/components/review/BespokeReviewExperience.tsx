@@ -185,7 +185,7 @@ export function BespokeReviewExperience() {
                         >
                           <Image
                             src={src}
-                            alt="리뷰 업로드 이미지"
+                            alt={t("imageAlt")}
                             fill
                             sizes="(max-width: 768px) 45vw, 180px"
                             className="h-full w-full object-cover"
@@ -257,7 +257,7 @@ export function BespokeReviewExperience() {
                     <div key={url} className="relative h-20 w-20 overflow-hidden rounded-lg border border-white/15">
                       <Image
                         src={url}
-                        alt="업로드 미리보기 이미지"
+                        alt={t("previewAlt")}
                         fill
                         unoptimized
                         sizes="80px"

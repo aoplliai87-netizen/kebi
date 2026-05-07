@@ -41,12 +41,12 @@ export function QuickMenu() {
   const t = useTranslations("QuickMenu");
   const { phoneTel, links } = useSiteRuntime();
   const quickItems: QuickItem[] = [
-    { key: "call", label: "전화", iconSrc: "/icons/phone.svg", href: phoneTel, emphasis: true },
-    { key: "kakao", label: "카카오톡", iconSrc: "/icons/kakao.svg", href: links.kakao, external: true, emphasis: true },
-    { key: "whatsapp", label: "WhatsApp", iconSrc: "/icons/whatsapp.svg", href: links.whatsapp, external: true },
-    { key: "line", label: "라인", iconSrc: "/icons/line.svg", href: links.line, external: true },
-    { key: "instaDm", label: "인스타DM", iconSrc: "/icons/instagram.svg", href: links.instagram, external: true },
-    { key: "messenger", label: "페이스북 메신저", iconSrc: "/icons/messenger.svg", href: links.messenger, external: true },
+    { key: "call", label: t("label.call"), iconSrc: "/icons/phone.svg", href: phoneTel, emphasis: true },
+    { key: "kakao", label: t("label.kakao"), iconSrc: "/icons/kakao.svg", href: links.kakao, external: true, emphasis: true },
+    { key: "whatsapp", label: t("label.whatsapp"), iconSrc: "/icons/whatsapp.svg", href: links.whatsapp, external: true },
+    { key: "line", label: t("label.line"), iconSrc: "/icons/line.svg", href: links.line, external: true },
+    { key: "instaDm", label: t("label.instaDm"), iconSrc: "/icons/instagram.svg", href: links.instagram, external: true },
+    { key: "messenger", label: t("label.messenger"), iconSrc: "/icons/messenger.svg", href: links.messenger, external: true },
   ];
 
   return (

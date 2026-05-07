@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { getAllDestinationSlugs } from "../../data/landing-pages";
 import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/seo";
 
@@ -26,6 +27,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
         lastModified: new Date(),
         changeFrequency: route === "" ? "weekly" : "monthly",
         priority: route === "" ? 1 : 0.85,
+      });
+    }
+    for (const slug of getAllDestinationSlugs()) {
+      entries.push({
+        url: `${base}/${locale}/destinations/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.8,
       });
     }
   }

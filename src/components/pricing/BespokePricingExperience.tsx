@@ -64,11 +64,11 @@ export function BespokePricingExperience() {
     const seoul = pricingRegions.find((region) => region.id === "seoul");
     const metro = pricingRegions.find((region) => region.id === "gyeonggi");
     return [
-      seoul ? { ...seoul, name: "서울", nameEn: "Seoul" } : null,
-      metro ? { ...metro, name: "경기/수도권", nameEn: "Gyeonggi / Metro Area" } : null,
-      { id: "others", name: "기타/그 외 지역", nameEn: "Other areas (Contact us)", rows: [] },
+      seoul ? { ...seoul, name: t("regionSeoul"), nameEn: "Seoul" } : null,
+      metro ? { ...metro, name: t("regionGyeonggi"), nameEn: "Gyeonggi-do" } : null,
+      { id: "others", name: t("regionOther"), nameEn: "Other areas (Contact us)", rows: [] },
     ].filter(Boolean) as PricingRegion[];
-  }, []);
+  }, [t]);
 
   const [activeRegion, setActiveRegion] = useState(displayRegions[0]?.id ?? "seoul");
   const [query, setQuery] = useState("");
@@ -81,8 +81,8 @@ export function BespokePricingExperience() {
     () =>
       displayRegions.find((region) => region.id === activeRegion) ??
       displayRegions[0] ??
-      { id: "others", name: "기타/그 외 지역", nameEn: "Other areas (Contact us)", rows: [] },
-    [displayRegions, activeRegion]
+      { id: "others", name: t("regionOther"), nameEn: "Other areas (Contact us)", rows: [] },
+    [displayRegions, activeRegion, t]
   );
 
   const queryNorm = useMemo(() => normalize(query.trim()), [query]);
@@ -164,10 +164,10 @@ export function BespokePricingExperience() {
               </div>
               <div className="flex min-w-0 flex-1 flex-col gap-3">
                 <p className="rounded-xl border border-metal-bronze/30 bg-black/20 px-3 py-2.5 text-sm text-tone-body md:text-base">
-                  본 요금표는 고속도로 통행료가 포함된 금액입니다.
+                  {t("tollIncluded")}
                 </p>
                 <div className="rounded-xl border border-brand-gold/45 bg-brand-gold-soft px-3 py-2.5 text-xs font-semibold text-[#f6e8bd] md:text-sm">
-                  스타리아 6인 이상 탑승 시 추가 요금이 발생할 수 있습니다.
+                  {t("extraFeeNotice")}
                 </div>
               </div>
             </div>
@@ -274,22 +274,22 @@ export function BespokePricingExperience() {
 
             <div className="mt-5">
               <label htmlFor="pricing-search" className="mb-2 block text-sm text-tone-soft md:text-base">
-                내 지역 검색하기 (Search your area)
+                {t("searchLabel")}
               </label>
               <input
                 id="pricing-search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="예: 강남 / Gangnam / Suwon"
+                placeholder={t("searchPlaceholder")}
                 className="h-12 w-full rounded-xl border border-white/15 bg-black/25 px-4 text-base text-tone-strong outline-none transition-colors placeholder:text-tone-soft focus:border-metal-bronze-strong md:text-lg"
               />
             </div>
 
             <div className="mt-6 overflow-hidden rounded-2xl border border-white/10">
               <div className="grid grid-cols-[1.6fr_1fr_1fr] bg-brand-deep/65 px-4 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-metal-bronze-strong md:grid-cols-[1.9fr_1fr_1fr] md:px-5 md:text-base">
-                <p>지역</p>
-                <p className="font-numeric tabular-nums text-[10px] leading-tight md:text-base">김포<br className="md:hidden"/>공항</p>
-                <p className="font-numeric tabular-nums text-[10px] leading-tight md:text-base">인천<br className="md:hidden"/>공항</p>
+                <p>{t("colRegion")}</p>
+                <p className="font-numeric tabular-nums text-[10px] leading-tight md:text-base">{t("colGimpo")}</p>
+                <p className="font-numeric tabular-nums text-[10px] leading-tight md:text-base">{t("colIncheon")}</p>
               </div>
               <motion.div
                 className="divide-y divide-white/10 bg-[#081121]/80"
@@ -371,7 +371,7 @@ export function BespokePricingExperience() {
                               onClick={() => toggleMetroGroup(entry.id)}
                               className="inline-flex items-center rounded-full border border-tone-sky/35 bg-tone-sky/10 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-tone-sky transition hover:bg-tone-sky/15"
                             >
-                              세부 지역 {entry.rows.length}개 펼쳐보기
+                              {t("expandSubRegions", { count: entry.rows.length })}
                             </button>
                           </div>
                         )}
@@ -388,10 +388,10 @@ export function BespokePricingExperience() {
                                   <span className="font-normal text-tone-soft">({row.nameEn})</span>
                                 </p>
                                 <p className="font-numeric tabular-nums text-[12px] text-metal-bronze-strong md:text-base">
-                                  {KRW.format(row.gimpo)}원
+                                  {KRW.format(row.gimpo)}{t("currencyUnit")}
                                 </p>
                                 <p className="font-numeric tabular-nums text-[12px] text-metal-bronze-strong md:text-base">
-                                  {KRW.format(row.incheon)}원
+                                  {KRW.format(row.incheon)}{t("currencyUnit")}
                                 </p>
                               </motion.article>
                             ))}
@@ -409,10 +409,10 @@ export function BespokePricingExperience() {
                           <span className="font-normal text-tone-soft">({entry.nameEn})</span>
                         </p>
                         <p className="font-numeric tabular-nums text-[12px] text-metal-bronze-strong md:text-base">
-                          {KRW.format(entry.gimpo)}원
+                          {KRW.format(entry.gimpo)}{t("currencyUnit")}
                         </p>
                         <p className="font-numeric tabular-nums text-[12px] text-metal-bronze-strong md:text-base">
-                          {KRW.format(entry.incheon)}원
+                          {KRW.format(entry.incheon)}{t("currencyUnit")}
                         </p>
                       </motion.article>
                     ),

@@ -349,7 +349,7 @@ export function BespokeSupportExperience() {
                   id="sup-pax"
                   value={passengers}
                   onChange={(e) => setPassengers(e.target.value)}
-                  placeholder="예: 성인 2, 유아 1"
+                  placeholder={t("placeholderPassengers")}
                   className={inputCls}
                   disabled={submitState === "loading"}
                 />

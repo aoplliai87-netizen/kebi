@@ -1,0 +1,1022 @@
+[
+  {
+    "value": "인천공항 제1여객터미널 (T1)",
+    "slug": "incheon_terminal_t1",
+    "nameKo": "인천공항 제1여객터미널 (T1)",
+    "nameEn": "Incheon Airport Terminal 1 (T1)"
+  },
+  {
+    "value": "인천공항 제2여객터미널 (T2)",
+    "slug": "incheon_terminal_t2",
+    "nameKo": "인천공항 제2여객터미널 (T2)",
+    "nameEn": "Incheon Airport Terminal 2 (T2)"
+  },
+  {
+    "value": "김포공항 (국내선)",
+    "slug": "gimpo_terminal_domestic",
+    "nameKo": "김포공항 (국내선)",
+    "nameEn": "Gimpo Airport (Domestic)"
+  },
+  {
+    "value": "김포공항 (국제선)",
+    "slug": "gimpo_terminal_intl",
+    "nameKo": "김포공항 (국제선)",
+    "nameEn": "Gimpo Airport (International)"
+  },
+  {
+    "value": "김포공항",
+    "slug": "seoul__gimpo_airport",
+    "nameKo": "김포공항",
+    "nameEn": "Gimpo Airport"
+  },
+  {
+    "value": "강남구",
+    "slug": "seoul__gangnam_gu",
+    "nameKo": "강남구",
+    "nameEn": "Gangnam-gu"
+  },
+  {
+    "value": "개포동",
+    "slug": "seoul__gaepo_dong",
+    "nameKo": "개포동",
+    "nameEn": "Gaepo-dong"
+  },
+  {
+    "value": "일원, 세곡, 자곡",
+    "slug": "seoul__irwon_segok_jagok",
+    "nameKo": "일원, 세곡, 자곡",
+    "nameEn": "Irwon, Segok, Jagok"
+  },
+  {
+    "value": "강동구",
+    "slug": "seoul__gangdong_gu",
+    "nameKo": "강동구",
+    "nameEn": "Gangdong-gu"
+  },
+  {
+    "value": "상일, 명일동",
+    "slug": "seoul__sangil_myeongil_dong",
+    "nameKo": "상일, 명일동",
+    "nameEn": "Sangil, Myeongil-dong"
+  },
+  {
+    "value": "강북구",
+    "slug": "seoul__gangbuk_gu",
+    "nameKo": "강북구",
+    "nameEn": "Gangbuk-gu"
+  },
+  {
+    "value": "강서구",
+    "slug": "seoul__gangseo_gu",
+    "nameKo": "강서구",
+    "nameEn": "Gangseo-gu"
+  },
+  {
+    "value": "관악구",
+    "slug": "seoul__gwanak_gu",
+    "nameKo": "관악구",
+    "nameEn": "Gwanak-gu"
+  },
+  {
+    "value": "광진구",
+    "slug": "seoul__gwangjin_gu",
+    "nameKo": "광진구",
+    "nameEn": "Gwangjin-gu"
+  },
+  {
+    "value": "구로구",
+    "slug": "seoul__guro_gu",
+    "nameKo": "구로구",
+    "nameEn": "Guro-gu"
+  },
+  {
+    "value": "금천구",
+    "slug": "seoul__geumcheon_gu",
+    "nameKo": "금천구",
+    "nameEn": "Geumcheon-gu"
+  },
+  {
+    "value": "노원구",
+    "slug": "seoul__nowon_gu",
+    "nameKo": "노원구",
+    "nameEn": "Nowon-gu"
+  },
+  {
+    "value": "도봉구",
+    "slug": "seoul__dobong_gu",
+    "nameKo": "도봉구",
+    "nameEn": "Dobong-gu"
+  },
+  {
+    "value": "동대문구",
+    "slug": "seoul__dongdaemun_gu",
+    "nameKo": "동대문구",
+    "nameEn": "Dongdaemun-gu"
+  },
+  {
+    "value": "동작구",
+    "slug": "seoul__dongjak_gu",
+    "nameKo": "동작구",
+    "nameEn": "Dongjak-gu"
+  },
+  {
+    "value": "마포구",
+    "slug": "seoul__mapo_gu",
+    "nameKo": "마포구",
+    "nameEn": "Mapo-gu"
+  },
+  {
+    "value": "서대문구",
+    "slug": "seoul__seodaemun_gu",
+    "nameKo": "서대문구",
+    "nameEn": "Seodaemun-gu"
+  },
+  {
+    "value": "서초구",
+    "slug": "seoul__seocho_gu",
+    "nameKo": "서초구",
+    "nameEn": "Seocho-gu"
+  },
+  {
+    "value": "성동구",
+    "slug": "seoul__seongdong_gu",
+    "nameKo": "성동구",
+    "nameEn": "Seongdong-gu"
+  },
+  {
+    "value": "성북구",
+    "slug": "seoul__seongbuk_gu",
+    "nameKo": "성북구",
+    "nameEn": "Seongbuk-gu"
+  },
+  {
+    "value": "송파구",
+    "slug": "seoul__songpa_gu",
+    "nameKo": "송파구",
+    "nameEn": "Songpa-gu"
+  },
+  {
+    "value": "양천구",
+    "slug": "seoul__yangcheon_gu",
+    "nameKo": "양천구",
+    "nameEn": "Yangcheon-gu"
+  },
+  {
+    "value": "영등포구",
+    "slug": "seoul__yeongdeungpo_gu",
+    "nameKo": "영등포구",
+    "nameEn": "Yeongdeungpo-gu"
+  },
+  {
+    "value": "용산구",
+    "slug": "seoul__yongsan_gu",
+    "nameKo": "용산구",
+    "nameEn": "Yongsan-gu"
+  },
+  {
+    "value": "은평구",
+    "slug": "seoul__eunpyeong_gu",
+    "nameKo": "은평구",
+    "nameEn": "Eunpyeong-gu"
+  },
+  {
+    "value": "종로구",
+    "slug": "seoul__jongno_gu",
+    "nameKo": "종로구",
+    "nameEn": "Jongno-gu"
+  },
+  {
+    "value": "중구",
+    "slug": "seoul__jung_gu",
+    "nameKo": "중구",
+    "nameEn": "Jung-gu"
+  },
+  {
+    "value": "중랑구",
+    "slug": "seoul__jungnang_gu",
+    "nameKo": "중랑구",
+    "nameEn": "Jungnang-gu"
+  },
+  {
+    "value": "가평역",
+    "slug": "gyeonggi__gapyeong_station_area",
+    "nameKo": "가평역",
+    "nameEn": "Gapyeong Station area"
+  },
+  {
+    "value": "고양시 (일산, 덕양 포함)",
+    "slug": "gyeonggi__goyang_si_ilsan_deogyang",
+    "nameKo": "고양시 (일산, 덕양 포함)",
+    "nameEn": "Goyang-si (Ilsan, Deogyang)"
+  },
+  {
+    "value": "고양 벽제",
+    "slug": "gyeonggi__goyang_byeokje",
+    "nameKo": "고양 벽제",
+    "nameEn": "Goyang Byeokje"
+  },
+  {
+    "value": "과천시",
+    "slug": "gyeonggi__gwacheon_si",
+    "nameKo": "과천시",
+    "nameEn": "Gwacheon-si"
+  },
+  {
+    "value": "광명[역]",
+    "slug": "gyeonggi__gwangmyeong_station",
+    "nameKo": "광명[역]",
+    "nameEn": "Gwangmyeong (station)"
+  },
+  {
+    "value": "광주시",
+    "slug": "gyeonggi__gwangju_si",
+    "nameKo": "광주시",
+    "nameEn": "Gwangju-si"
+  },
+  {
+    "value": "곤지암",
+    "slug": "gyeonggi__gonjiam",
+    "nameKo": "곤지암",
+    "nameEn": "Gonjiam"
+  },
+  {
+    "value": "구리시",
+    "slug": "gyeonggi__guri_si",
+    "nameKo": "구리시",
+    "nameEn": "Guri-si"
+  },
+  {
+    "value": "군포시",
+    "slug": "gyeonggi__gunpo_si",
+    "nameKo": "군포시",
+    "nameEn": "Gunpo-si"
+  },
+  {
+    "value": "김포시 (신도시)",
+    "slug": "gyeonggi__gimpo_si_new_town",
+    "nameKo": "김포시 (신도시)",
+    "nameEn": "Gimpo-si (new town)"
+  },
+  {
+    "value": "남양주시 · 덕소",
+    "slug": "gyeonggi__namyangju__deokso",
+    "nameKo": "남양주시 · 덕소",
+    "nameEn": "Namyangju-si · Deokso"
+  },
+  {
+    "value": "남양주시 · 별내, 다산",
+    "slug": "gyeonggi__namyangju__byeollae_dasan",
+    "nameKo": "남양주시 · 별내, 다산",
+    "nameEn": "Namyangju-si · Byeollae, Dasan"
+  },
+  {
+    "value": "남양주시 · 수동, 조안",
+    "slug": "gyeonggi__namyangju__sudong_joan",
+    "nameKo": "남양주시 · 수동, 조안",
+    "nameEn": "Namyangju-si · Sudong, Joan"
+  },
+  {
+    "value": "남양주시 · 진접, 화도",
+    "slug": "gyeonggi__namyangju__jinjeop_hwado",
+    "nameKo": "남양주시 · 진접, 화도",
+    "nameEn": "Namyangju-si · Jinjeop, Hwado"
+  },
+  {
+    "value": "동두천시",
+    "slug": "gyeonggi__dongducheon_si",
+    "nameKo": "동두천시",
+    "nameEn": "Dongducheon-si"
+  },
+  {
+    "value": "부천시",
+    "slug": "gyeonggi__bucheon_si",
+    "nameKo": "부천시",
+    "nameEn": "Bucheon-si"
+  },
+  {
+    "value": "성남시 (분당 포함)",
+    "slug": "gyeonggi__seongnam_si_incl_bundang",
+    "nameKo": "성남시 (분당 포함)",
+    "nameEn": "Seongnam-si (incl. Bundang)"
+  },
+  {
+    "value": "수원시",
+    "slug": "gyeonggi__suwon_si",
+    "nameKo": "수원시",
+    "nameEn": "Suwon-si"
+  },
+  {
+    "value": "수원 광교",
+    "slug": "gyeonggi__suwon_gwanggyo",
+    "nameKo": "수원 광교",
+    "nameEn": "Suwon Gwanggyo"
+  },
+  {
+    "value": "수원 영통",
+    "slug": "gyeonggi__suwon_yeongtong",
+    "nameKo": "수원 영통",
+    "nameEn": "Suwon Yeongtong"
+  },
+  {
+    "value": "시흥시 (목감 포함)",
+    "slug": "gyeonggi__siheung_si_incl_mokgam",
+    "nameKo": "시흥시 (목감 포함)",
+    "nameEn": "Siheung-si (incl. Mokgam)"
+  },
+  {
+    "value": "시흥 정왕동",
+    "slug": "gyeonggi__siheung_jeongwang_dong",
+    "nameKo": "시흥 정왕동",
+    "nameEn": "Siheung Jeongwang-dong"
+  },
+  {
+    "value": "안산시",
+    "slug": "gyeonggi__ansan_si",
+    "nameKo": "안산시",
+    "nameEn": "Ansan-si"
+  },
+  {
+    "value": "안산 건건동",
+    "slug": "gyeonggi__ansan_geongeon_dong",
+    "nameKo": "안산 건건동",
+    "nameEn": "Ansan Geongeon-dong"
+  },
+  {
+    "value": "안산 대부도",
+    "slug": "gyeonggi__ansan_daebudo",
+    "nameKo": "안산 대부도",
+    "nameEn": "Ansan Daebudo"
+  },
+  {
+    "value": "안산 팔곡동",
+    "slug": "gyeonggi__ansan_palgok_dong",
+    "nameKo": "안산 팔곡동",
+    "nameEn": "Ansan Palgok-dong"
+  },
+  {
+    "value": "안성시",
+    "slug": "gyeonggi__anseong_si",
+    "nameKo": "안성시",
+    "nameEn": "Anseong-si"
+  },
+  {
+    "value": "안성 공도",
+    "slug": "gyeonggi__anseong_gongdo",
+    "nameKo": "안성 공도",
+    "nameEn": "Anseong Gongdo"
+  },
+  {
+    "value": "안양시",
+    "slug": "gyeonggi__anyang_si",
+    "nameKo": "안양시",
+    "nameEn": "Anyang-si"
+  },
+  {
+    "value": "양주시",
+    "slug": "gyeonggi__yangju_si",
+    "nameKo": "양주시",
+    "nameEn": "Yangju-si"
+  },
+  {
+    "value": "양평군",
+    "slug": "gyeonggi__yangpyeong_gun",
+    "nameKo": "양평군",
+    "nameEn": "Yangpyeong-gun"
+  },
+  {
+    "value": "여주시",
+    "slug": "gyeonggi__yeoju_si",
+    "nameKo": "여주시",
+    "nameEn": "Yeoju-si"
+  },
+  {
+    "value": "연천군",
+    "slug": "gyeonggi__yeoncheon_gun",
+    "nameKo": "연천군",
+    "nameEn": "Yeoncheon-gun"
+  },
+  {
+    "value": "오산시",
+    "slug": "gyeonggi__osan_si",
+    "nameKo": "오산시",
+    "nameEn": "Osan-si"
+  },
+  {
+    "value": "용인시 · 용인 기흥, 죽전, 동백, 수지",
+    "slug": "gyeonggi__yongin__yongin_giheung_jukjeon_dongbaek_suji",
+    "nameKo": "용인시 · 용인 기흥, 죽전, 동백, 수지",
+    "nameEn": "Yongin-si · Yongin Giheung, Jukjeon, Dongbaek, Suji"
+  },
+  {
+    "value": "용인시 · 용인 남사",
+    "slug": "gyeonggi__yongin__yongin_namsa",
+    "nameKo": "용인시 · 용인 남사",
+    "nameEn": "Yongin-si · Yongin Namsa"
+  },
+  {
+    "value": "용인시 · 용인 양지, 모현",
+    "slug": "gyeonggi__yongin__yongin_yangji_mohyeon",
+    "nameKo": "용인시 · 용인 양지, 모현",
+    "nameEn": "Yongin-si · Yongin Yangji, Mohyeon"
+  },
+  {
+    "value": "용인시 · 용인 이동",
+    "slug": "gyeonggi__yongin__yongin_idong",
+    "nameKo": "용인시 · 용인 이동",
+    "nameEn": "Yongin-si · Yongin Idong"
+  },
+  {
+    "value": "용인시 · 용인 처인구",
+    "slug": "gyeonggi__yongin__yongin_cheoin_gu",
+    "nameKo": "용인시 · 용인 처인구",
+    "nameEn": "Yongin-si · Yongin Cheoin-gu"
+  },
+  {
+    "value": "위례",
+    "slug": "gyeonggi__wirye",
+    "nameKo": "위례",
+    "nameEn": "Wirye"
+  },
+  {
+    "value": "의왕, 평촌",
+    "slug": "gyeonggi__uiwang_pyeongchon",
+    "nameKo": "의왕, 평촌",
+    "nameEn": "Uiwang, Pyeongchon"
+  },
+  {
+    "value": "의정부시",
+    "slug": "gyeonggi__uijeongbu_si",
+    "nameKo": "의정부시",
+    "nameEn": "Uijeongbu-si"
+  },
+  {
+    "value": "이천시",
+    "slug": "gyeonggi__icheon_si",
+    "nameKo": "이천시",
+    "nameEn": "Icheon-si"
+  },
+  {
+    "value": "인천광역시 · 강화",
+    "slug": "gyeonggi__incheon_metro__ganghwa",
+    "nameKo": "인천광역시 · 강화",
+    "nameEn": "Incheon · Ganghwa"
+  },
+  {
+    "value": "인천광역시 · 검단, 계양",
+    "slug": "gyeonggi__incheon_metro__geomdan_gyeyang",
+    "nameKo": "인천광역시 · 검단, 계양",
+    "nameEn": "Incheon · Geomdan, Gyeyang"
+  },
+  {
+    "value": "인천광역시 · 인천 서구, 부평",
+    "slug": "gyeonggi__incheon_metro__incheon_seo_gu_bupyeong",
+    "nameKo": "인천광역시 · 인천 서구, 부평",
+    "nameEn": "Incheon · Incheon Seo-gu, Bupyeong"
+  },
+  {
+    "value": "인천광역시 · 연수동, 송도, 간석, 남동",
+    "slug": "gyeonggi__incheon_metro__yeonsu_songdo_ganseok_namdong",
+    "nameKo": "인천광역시 · 연수동, 송도, 간석, 남동",
+    "nameEn": "Incheon · Yeonsu, Songdo, Ganseok, Namdong"
+  },
+  {
+    "value": "인천광역시 · 청라",
+    "slug": "gyeonggi__incheon_metro__cheongna",
+    "nameKo": "인천광역시 · 청라",
+    "nameEn": "Incheon · Cheongna"
+  },
+  {
+    "value": "일산",
+    "slug": "gyeonggi__ilsan",
+    "nameKo": "일산",
+    "nameEn": "Ilsan"
+  },
+  {
+    "value": "일산 탄현",
+    "slug": "gyeonggi__ilsan_tanhyeon",
+    "nameKo": "일산 탄현",
+    "nameEn": "Ilsan Tanhyeon"
+  },
+  {
+    "value": "일산 화정, 행신",
+    "slug": "gyeonggi__ilsan_hwajeong_haengsin",
+    "nameKo": "일산 화정, 행신",
+    "nameEn": "Ilsan Hwajeong, Haengsin"
+  },
+  {
+    "value": "장호원",
+    "slug": "gyeonggi__janghowon",
+    "nameKo": "장호원",
+    "nameEn": "Janghowon"
+  },
+  {
+    "value": "청평",
+    "slug": "gyeonggi__cheongpyeong",
+    "nameKo": "청평",
+    "nameEn": "Cheongpyeong"
+  },
+  {
+    "value": "파주시 · 파주 LCD",
+    "slug": "gyeonggi__paju__paju_lcd",
+    "nameKo": "파주시 · 파주 LCD",
+    "nameEn": "Paju-si · Paju LCD"
+  },
+  {
+    "value": "파주시 · 파주 광탄",
+    "slug": "gyeonggi__paju__paju_gwangtan",
+    "nameKo": "파주시 · 파주 광탄",
+    "nameEn": "Paju-si · Paju Gwangtan"
+  },
+  {
+    "value": "파주시 · 파주 금촌",
+    "slug": "gyeonggi__paju__paju_geumchon",
+    "nameKo": "파주시 · 파주 금촌",
+    "nameEn": "Paju-si · Paju Geumchon"
+  },
+  {
+    "value": "파주시 · 파주 문산",
+    "slug": "gyeonggi__paju__paju_munsan",
+    "nameKo": "파주시 · 파주 문산",
+    "nameEn": "Paju-si · Paju Munsan"
+  },
+  {
+    "value": "파주시 · 파주 봉일천",
+    "slug": "gyeonggi__paju__paju_bongilcheon",
+    "nameKo": "파주시 · 파주 봉일천",
+    "nameEn": "Paju-si · Paju Bongilcheon"
+  },
+  {
+    "value": "파주시 · 파주 운정",
+    "slug": "gyeonggi__paju__paju_unjeong",
+    "nameKo": "파주시 · 파주 운정",
+    "nameEn": "Paju-si · Paju Unjeong"
+  },
+  {
+    "value": "평택시",
+    "slug": "gyeonggi__pyeongtaek_si",
+    "nameKo": "평택시",
+    "nameEn": "Pyeongtaek-si"
+  },
+  {
+    "value": "포천시",
+    "slug": "gyeonggi__pocheon_si",
+    "nameKo": "포천시",
+    "nameEn": "Pocheon-si"
+  },
+  {
+    "value": "하남시",
+    "slug": "gyeonggi__hanam_si",
+    "nameKo": "하남시",
+    "nameEn": "Hanam-si"
+  },
+  {
+    "value": "화성시 · 화성 동탄 1, 발안, 향남",
+    "slug": "gyeonggi__hwaseong__hwaseong_dongtan_1_balan_hyangnam",
+    "nameKo": "화성시 · 화성 동탄 1, 발안, 향남",
+    "nameEn": "Hwaseong-si · Hwaseong Dongtan 1, Balan, Hyangnam"
+  },
+  {
+    "value": "화성시 · 화성 동탄 2",
+    "slug": "gyeonggi__hwaseong__hwaseong_dongtan_2",
+    "nameKo": "화성시 · 화성 동탄 2",
+    "nameEn": "Hwaseong-si · Hwaseong Dongtan 2"
+  },
+  {
+    "value": "화성시 · 화성 병점",
+    "slug": "gyeonggi__hwaseong__hwaseong_byeongjeom",
+    "nameKo": "화성시 · 화성 병점",
+    "nameEn": "Hwaseong-si · Hwaseong Byeongjeom"
+  },
+  {
+    "value": "화성시 · 화성 봉담",
+    "slug": "gyeonggi__hwaseong__hwaseong_bongdam",
+    "nameKo": "화성시 · 화성 봉담",
+    "nameEn": "Hwaseong-si · Hwaseong Bongdam"
+  },
+  {
+    "value": "화성시 · 화성 새솔동, 송산",
+    "slug": "gyeonggi__hwaseong__hwaseong_saesol_songsan",
+    "nameKo": "화성시 · 화성 새솔동, 송산",
+    "nameEn": "Hwaseong-si · Hwaseong Saesol, Songsan"
+  },
+  {
+    "value": "화성시 · 화성 제부도",
+    "slug": "gyeonggi__hwaseong__hwaseong_jebudo",
+    "nameKo": "화성시 · 화성 제부도",
+    "nameEn": "Hwaseong-si · Hwaseong Jebudo"
+  },
+  {
+    "value": "화성시 · 화성시청",
+    "slug": "gyeonggi__hwaseong__hwaseong_city_hall",
+    "nameKo": "화성시 · 화성시청",
+    "nameEn": "Hwaseong-si · Hwaseong City Hall"
+  },
+  {
+    "value": "강원도 · 강릉",
+    "slug": "gangwon__gangneung",
+    "nameKo": "강원도 · 강릉",
+    "nameEn": "Gangwon-do · Gangneung"
+  },
+  {
+    "value": "강원도 · 동해",
+    "slug": "gangwon__donghae",
+    "nameKo": "강원도 · 동해",
+    "nameEn": "Gangwon-do · Donghae"
+  },
+  {
+    "value": "강원도 · 속초",
+    "slug": "gangwon__sokcho",
+    "nameKo": "강원도 · 속초",
+    "nameEn": "Gangwon-do · Sokcho"
+  },
+  {
+    "value": "강원도 · 양양",
+    "slug": "gangwon__yangyang",
+    "nameKo": "강원도 · 양양",
+    "nameEn": "Gangwon-do · Yangyang"
+  },
+  {
+    "value": "강원도 · 원주",
+    "slug": "gangwon__wonju",
+    "nameKo": "강원도 · 원주",
+    "nameEn": "Gangwon-do · Wonju"
+  },
+  {
+    "value": "강원도 · 춘천",
+    "slug": "gangwon__chuncheon",
+    "nameKo": "강원도 · 춘천",
+    "nameEn": "Gangwon-do · Chuncheon"
+  },
+  {
+    "value": "강원도 · 태백",
+    "slug": "gangwon__taebaek",
+    "nameKo": "강원도 · 태백",
+    "nameEn": "Gangwon-do · Taebaek"
+  },
+  {
+    "value": "강원도 · 평창",
+    "slug": "gangwon__pyeongchang",
+    "nameKo": "강원도 · 평창",
+    "nameEn": "Gangwon-do · Pyeongchang"
+  },
+  {
+    "value": "강원도 · 홍천",
+    "slug": "gangwon__hongcheon",
+    "nameKo": "강원도 · 홍천",
+    "nameEn": "Gangwon-do · Hongcheon"
+  },
+  {
+    "value": "충청남도 · 공주",
+    "slug": "chungnam__gongju",
+    "nameKo": "충청남도 · 공주",
+    "nameEn": "Chungcheongnam-do · Gongju"
+  },
+  {
+    "value": "충청남도 · 논산",
+    "slug": "chungnam__nonsan",
+    "nameKo": "충청남도 · 논산",
+    "nameEn": "Chungcheongnam-do · Nonsan"
+  },
+  {
+    "value": "충청남도 · 당진",
+    "slug": "chungnam__dangjin",
+    "nameKo": "충청남도 · 당진",
+    "nameEn": "Chungcheongnam-do · Dangjin"
+  },
+  {
+    "value": "충청남도 · 보령",
+    "slug": "chungnam__boryeong",
+    "nameKo": "충청남도 · 보령",
+    "nameEn": "Chungcheongnam-do · Boryeong"
+  },
+  {
+    "value": "충청남도 · 서산",
+    "slug": "chungnam__seosan",
+    "nameKo": "충청남도 · 서산",
+    "nameEn": "Chungcheongnam-do · Seosan"
+  },
+  {
+    "value": "충청남도 · 아산",
+    "slug": "chungnam__asan",
+    "nameKo": "충청남도 · 아산",
+    "nameEn": "Chungcheongnam-do · Asan"
+  },
+  {
+    "value": "충청남도 · 천안",
+    "slug": "chungnam__cheonan",
+    "nameKo": "충청남도 · 천안",
+    "nameEn": "Chungcheongnam-do · Cheonan"
+  },
+  {
+    "value": "충청남도 · 태안",
+    "slug": "chungnam__taean",
+    "nameKo": "충청남도 · 태안",
+    "nameEn": "Chungcheongnam-do · Taean"
+  },
+  {
+    "value": "충청북도 · 단양",
+    "slug": "chungbuk__danyang",
+    "nameKo": "충청북도 · 단양",
+    "nameEn": "Chungcheongbuk-do · Danyang"
+  },
+  {
+    "value": "충청북도 · 보은",
+    "slug": "chungbuk__boeun",
+    "nameKo": "충청북도 · 보은",
+    "nameEn": "Chungcheongbuk-do · Boeun"
+  },
+  {
+    "value": "충청북도 · 영동",
+    "slug": "chungbuk__yeongdong",
+    "nameKo": "충청북도 · 영동",
+    "nameEn": "Chungcheongbuk-do · Yeongdong"
+  },
+  {
+    "value": "충청북도 · 제천",
+    "slug": "chungbuk__jecheon",
+    "nameKo": "충청북도 · 제천",
+    "nameEn": "Chungcheongbuk-do · Jecheon"
+  },
+  {
+    "value": "충청북도 · 증평",
+    "slug": "chungbuk__jeungpyeong",
+    "nameKo": "충청북도 · 증평",
+    "nameEn": "Chungcheongbuk-do · Jeungpyeong"
+  },
+  {
+    "value": "충청북도 · 진천",
+    "slug": "chungbuk__jincheon",
+    "nameKo": "충청북도 · 진천",
+    "nameEn": "Chungcheongbuk-do · Jincheon"
+  },
+  {
+    "value": "충청북도 · 청주",
+    "slug": "chungbuk__cheongju",
+    "nameKo": "충청북도 · 청주",
+    "nameEn": "Chungcheongbuk-do · Cheongju"
+  },
+  {
+    "value": "충청북도 · 충주",
+    "slug": "chungbuk__chungju",
+    "nameKo": "충청북도 · 충주",
+    "nameEn": "Chungcheongbuk-do · Chungju"
+  },
+  {
+    "value": "전라남도 · 강진",
+    "slug": "jeonnam__gangjin",
+    "nameKo": "전라남도 · 강진",
+    "nameEn": "Jeollanam-do · Gangjin"
+  },
+  {
+    "value": "전라남도 · 고흥",
+    "slug": "jeonnam__goheung",
+    "nameKo": "전라남도 · 고흥",
+    "nameEn": "Jeollanam-do · Goheung"
+  },
+  {
+    "value": "전라남도 · 광양",
+    "slug": "jeonnam__gwangyang",
+    "nameKo": "전라남도 · 광양",
+    "nameEn": "Jeollanam-do · Gwangyang"
+  },
+  {
+    "value": "전라남도 · 나주",
+    "slug": "jeonnam__naju",
+    "nameKo": "전라남도 · 나주",
+    "nameEn": "Jeollanam-do · Naju"
+  },
+  {
+    "value": "전라남도 · 목포",
+    "slug": "jeonnam__mokpo",
+    "nameKo": "전라남도 · 목포",
+    "nameEn": "Jeollanam-do · Mokpo"
+  },
+  {
+    "value": "전라남도 · 무안",
+    "slug": "jeonnam__muan",
+    "nameKo": "전라남도 · 무안",
+    "nameEn": "Jeollanam-do · Muan"
+  },
+  {
+    "value": "전라남도 · 순천",
+    "slug": "jeonnam__suncheon",
+    "nameKo": "전라남도 · 순천",
+    "nameEn": "Jeollanam-do · Suncheon"
+  },
+  {
+    "value": "전라남도 · 여수",
+    "slug": "jeonnam__yeosu",
+    "nameKo": "전라남도 · 여수",
+    "nameEn": "Jeollanam-do · Yeosu"
+  },
+  {
+    "value": "전라남도 · 완도",
+    "slug": "jeonnam__wando",
+    "nameKo": "전라남도 · 완도",
+    "nameEn": "Jeollanam-do · Wando"
+  },
+  {
+    "value": "전라남도 · 장흥",
+    "slug": "jeonnam__jangheung",
+    "nameKo": "전라남도 · 장흥",
+    "nameEn": "Jeollanam-do · Jangheung"
+  },
+  {
+    "value": "전라남도 · 해남",
+    "slug": "jeonnam__haenam",
+    "nameKo": "전라남도 · 해남",
+    "nameEn": "Jeollanam-do · Haenam"
+  },
+  {
+    "value": "전라북도 · 고창",
+    "slug": "jeonbuk__gochang",
+    "nameKo": "전라북도 · 고창",
+    "nameEn": "Jeollabuk-do · Gochang"
+  },
+  {
+    "value": "전라북도 · 군산",
+    "slug": "jeonbuk__gunsan",
+    "nameKo": "전라북도 · 군산",
+    "nameEn": "Jeollabuk-do · Gunsan"
+  },
+  {
+    "value": "전라북도 · 김제",
+    "slug": "jeonbuk__gimje",
+    "nameKo": "전라북도 · 김제",
+    "nameEn": "Jeollabuk-do · Gimje"
+  },
+  {
+    "value": "전라북도 · 남원",
+    "slug": "jeonbuk__namwon",
+    "nameKo": "전라북도 · 남원",
+    "nameEn": "Jeollabuk-do · Namwon"
+  },
+  {
+    "value": "전라북도 · 무주",
+    "slug": "jeonbuk__muju",
+    "nameKo": "전라북도 · 무주",
+    "nameEn": "Jeollabuk-do · Muju"
+  },
+  {
+    "value": "전라북도 · 부안",
+    "slug": "jeonbuk__buan",
+    "nameKo": "전라북도 · 부안",
+    "nameEn": "Jeollabuk-do · Buan"
+  },
+  {
+    "value": "전라북도 · 순창",
+    "slug": "jeonbuk__sunchang",
+    "nameKo": "전라북도 · 순창",
+    "nameEn": "Jeollabuk-do · Sunchang"
+  },
+  {
+    "value": "전라북도 · 익산",
+    "slug": "jeonbuk__iksan",
+    "nameKo": "전라북도 · 익산",
+    "nameEn": "Jeollabuk-do · Iksan"
+  },
+  {
+    "value": "전라북도 · 임실",
+    "slug": "jeonbuk__imsil",
+    "nameKo": "전라북도 · 임실",
+    "nameEn": "Jeollabuk-do · Imsil"
+  },
+  {
+    "value": "전라북도 · 전주",
+    "slug": "jeonbuk__jeonju",
+    "nameKo": "전라북도 · 전주",
+    "nameEn": "Jeollabuk-do · Jeonju"
+  },
+  {
+    "value": "전라북도 · 정읍",
+    "slug": "jeonbuk__jeongeup",
+    "nameKo": "전라북도 · 정읍",
+    "nameEn": "Jeollabuk-do · Jeongeup"
+  },
+  {
+    "value": "경상남도 · 거제",
+    "slug": "gyeongnam__geoje",
+    "nameKo": "경상남도 · 거제",
+    "nameEn": "Gyeongsangnam-do · Geoje"
+  },
+  {
+    "value": "경상남도 · 김해",
+    "slug": "gyeongnam__gimhae",
+    "nameKo": "경상남도 · 김해",
+    "nameEn": "Gyeongsangnam-do · Gimhae"
+  },
+  {
+    "value": "경상남도 · 남해",
+    "slug": "gyeongnam__namhae",
+    "nameKo": "경상남도 · 남해",
+    "nameEn": "Gyeongsangnam-do · Namhae"
+  },
+  {
+    "value": "경상남도 · 밀양",
+    "slug": "gyeongnam__miryang",
+    "nameKo": "경상남도 · 밀양",
+    "nameEn": "Gyeongsangnam-do · Miryang"
+  },
+  {
+    "value": "경상남도 · 사천",
+    "slug": "gyeongnam__sacheon",
+    "nameKo": "경상남도 · 사천",
+    "nameEn": "Gyeongsangnam-do · Sacheon"
+  },
+  {
+    "value": "경상남도 · 양산",
+    "slug": "gyeongnam__yangsan",
+    "nameKo": "경상남도 · 양산",
+    "nameEn": "Gyeongsangnam-do · Yangsan"
+  },
+  {
+    "value": "경상남도 · 진주",
+    "slug": "gyeongnam__jinju",
+    "nameKo": "경상남도 · 진주",
+    "nameEn": "Gyeongsangnam-do · Jinju"
+  },
+  {
+    "value": "경상남도 · 창원",
+    "slug": "gyeongnam__changwon",
+    "nameKo": "경상남도 · 창원",
+    "nameEn": "Gyeongsangnam-do · Changwon"
+  },
+  {
+    "value": "경상남도 · 통영",
+    "slug": "gyeongnam__tongyeong",
+    "nameKo": "경상남도 · 통영",
+    "nameEn": "Gyeongsangnam-do · Tongyeong"
+  },
+  {
+    "value": "경상북도 · 경산",
+    "slug": "gyeongbuk__gyeongsan",
+    "nameKo": "경상북도 · 경산",
+    "nameEn": "Gyeongsangbuk-do · Gyeongsan"
+  },
+  {
+    "value": "경상북도 · 경주",
+    "slug": "gyeongbuk__gyeongju",
+    "nameKo": "경상북도 · 경주",
+    "nameEn": "Gyeongsangbuk-do · Gyeongju"
+  },
+  {
+    "value": "경상북도 · 구미",
+    "slug": "gyeongbuk__gumi",
+    "nameKo": "경상북도 · 구미",
+    "nameEn": "Gyeongsangbuk-do · Gumi"
+  },
+  {
+    "value": "경상북도 · 김천",
+    "slug": "gyeongbuk__gimcheon",
+    "nameKo": "경상북도 · 김천",
+    "nameEn": "Gyeongsangbuk-do · Gimcheon"
+  },
+  {
+    "value": "경상북도 · 문경",
+    "slug": "gyeongbuk__mungyeong",
+    "nameKo": "경상북도 · 문경",
+    "nameEn": "Gyeongsangbuk-do · Mungyeong"
+  },
+  {
+    "value": "경상북도 · 상주",
+    "slug": "gyeongbuk__sangju",
+    "nameKo": "경상북도 · 상주",
+    "nameEn": "Gyeongsangbuk-do · Sangju"
+  },
+  {
+    "value": "경상북도 · 안동",
+    "slug": "gyeongbuk__andong",
+    "nameKo": "경상북도 · 안동",
+    "nameEn": "Gyeongsangbuk-do · Andong"
+  },
+  {
+    "value": "경상북도 · 영덕",
+    "slug": "gyeongbuk__yeongdeok",
+    "nameKo": "경상북도 · 영덕",
+    "nameEn": "Gyeongsangbuk-do · Yeongdeok"
+  },
+  {
+    "value": "경상북도 · 영주",
+    "slug": "gyeongbuk__yeongju",
+    "nameKo": "경상북도 · 영주",
+    "nameEn": "Gyeongsangbuk-do · Yeongju"
+  },
+  {
+    "value": "경상북도 · 영천",
+    "slug": "gyeongbuk__yeongcheon",
+    "nameKo": "경상북도 · 영천",
+    "nameEn": "Gyeongsangbuk-do · Yeongcheon"
+  },
+  {
+    "value": "경상북도 · 포항",
+    "slug": "gyeongbuk__pohang",
+    "nameKo": "경상북도 · 포항",
+    "nameEn": "Gyeongsangbuk-do · Pohang"
+  },
+  {
+    "value": "제주도 (별도 문의)",
+    "slug": "jeju__inquiry",
+    "nameKo": "제주도 (별도 문의)",
+    "nameEn": "Jeju-do (inquire separately)"
+  }
+]

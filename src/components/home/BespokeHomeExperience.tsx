@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
 import { HOME_INTRO_VISUALS } from "@/constants/homeIntroVisuals";
@@ -73,6 +74,8 @@ const HERO_BACKGROUND_SLIDES = [
 ] as const;
 
 export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
+  const t = useTranslations("HomePage");
+  const locale = props.locale ?? "ko";
   const rootRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: rootRef,
@@ -90,9 +93,9 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
     href: string;
     tone?: "phone";
   }> = [
-    { label: "전화", icon: "/icons/phone.svg", href: phoneTel, tone: "phone" as const },
+    { label: t("channelPhone"), icon: "/icons/phone.svg", href: phoneTel, tone: "phone" as const },
     {
-      label: "카카오톡",
+      label: t("channelKakao"),
       icon: "/icons/kakao.svg",
       href: props.contactLinks?.kakao || "#",
     },
@@ -115,11 +118,19 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
   ] as const;
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const homeVehiclePreviews = [
-    { key: "staria", src: VEHICLE_FLEET_MAIN.staria, label: "스타리아" },
-    { key: "solati", src: VEHICLE_FLEET_MAIN.solati, label: "쏠라티" },
-    { key: "county", src: VEHICLE_FLEET_MAIN.county, label: "카운티" },
+    { key: "staria", src: VEHICLE_FLEET_MAIN.staria, label: t("vehicle.staria") },
+    { key: "solati", src: VEHICLE_FLEET_MAIN.solati, label: t("vehicle.solati") },
+    { key: "county", src: VEHICLE_FLEET_MAIN.county, label: t("vehicle.county") },
   ] as const;
   const galleryImageUrls = props.galleryImageUrls ?? [];
+  const vehicleAltTail =
+    locale === "en"
+      ? "Private Van Service and Airport Transfer vehicle"
+      : locale === "ja"
+        ? "空港送迎・貸切バンサービス車両"
+        : locale === "zh"
+          ? "机场接送与私人包车服务车辆"
+          : "공항 픽업·샌딩 프라이빗 밴 서비스 차량";
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -191,7 +202,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Link href="/booking">
               <Button className="h-11 rounded-xl px-7 text-sm font-semibold md:h-12 md:px-8 md:text-base">
-                실시간 예약하기
+                {t("ctaBookNow")}
               </Button>
             </Link>
             <a href={phoneTel}>
@@ -199,7 +210,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
                 variant="outline"
                 className="h-11 rounded-xl border-metal-bronze/45 px-7 text-sm font-semibold text-tone-sky md:h-12 md:px-8 md:text-base"
               >
-                전화 상담하기
+                {t("ctaCallConsult")}
               </Button>
             </a>
           </div>
@@ -229,7 +240,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
             {props.aboutMeTitle ?? "ABOUT ME"}
           </p>
           <p className="mx-auto mt-3 max-w-3xl text-xl font-semibold leading-relaxed text-tone-strong md:text-3xl">
-            {props.aboutMeDescription ?? "원하시는 채널로 빠르게 연결해 예약 상담을 도와드립니다."}
+            {props.aboutMeDescription}
           </p>
           <div className="mx-auto mt-7 grid max-w-[17.5rem] grid-cols-3 gap-3 sm:max-w-[19rem]">
             {quickChannels.map((channel) => (
@@ -255,7 +266,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
             href={phoneTel}
             className="mt-8 inline-flex h-14 min-w-[220px] items-center justify-center rounded-xl bg-gradient-to-b from-brand-gold via-[#ddb94a] to-[#b8892a] px-8 text-lg font-bold text-black shadow-[0_10px_26px_rgba(212,175,55,0.34)] transition hover:brightness-110"
           >
-            전화걸기
+            {t("ctaCallDirect")}
           </a>
         </div>
       </section>
@@ -270,15 +281,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
               >
                 <Image
                   src={src}
-                  alt={
-                    props.locale === "ja"
-                      ? `Kkebi サービスギャラリー画像 ${index + 1}`
-                      : props.locale === "zh"
-                        ? `Kkebi 服务画廊图片 ${index + 1}`
-                        : props.locale === "en"
-                          ? `Kkebi service gallery image ${index + 1}`
-                          : `깨비콜밴 서비스 갤러리 이미지 ${index + 1}`
-                  }
+                  alt={t("galleryAlt", { index: index + 1 })}
                   width={960}
                   height={640}
                   className="h-48 w-full object-cover md:h-56"
@@ -310,7 +313,13 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
                 key={item.key}
                 className="overflow-hidden rounded-2xl border border-white/12 bg-black/25 shadow-[0_12px_34px_rgba(0,0,0,0.32)]"
               >
-                <Image src={item.src} alt={item.label} width={640} height={360} className="h-36 w-full object-cover" />
+                <Image
+                  src={item.src}
+                  alt={`${item.label} - ${vehicleAltTail}`}
+                  width={640}
+                  height={360}
+                  className="h-36 w-full object-cover"
+                />
                 <p className="px-3 py-2 text-sm font-semibold text-tone-strong">{item.label}</p>
               </article>
             ))}

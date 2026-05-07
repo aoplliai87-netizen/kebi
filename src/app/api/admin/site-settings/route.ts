@@ -61,6 +61,13 @@ function parseLocalizedPricingTiers(value: unknown): LocalizedPricingTiers {
   );
 }
 
+/** 레거시 단일 컬럼은 요청 본문 값 우선, 비었으면 다국어 필드에서 채움 */
+function coalesceLegacyField(legacy: string | undefined, loc: LocalizedText): string {
+  const trimmed = typeof legacy === "string" ? legacy.trim() : "";
+  if (trimmed) return trimmed;
+  return loc.ko || loc.en || loc.ja || loc.zh || "";
+}
+
 function toPhoneTel(display: string) {
   const digits = display.replace(/\D/g, "");
   if (!digits) return "tel:+821041357621";
@@ -134,39 +141,57 @@ export async function POST(request: Request) {
     }
 
     const before = await getSiteSettings();
+
+    const aboutMeTitleByLocale = parseLocalizedText(body.aboutMeTitleByLocale);
+    const aboutMeDescriptionByLocale = parseLocalizedText(body.aboutMeDescriptionByLocale);
+    const heroTitleByLocale = parseLocalizedText(body.heroTitleByLocale);
+    const heroSubtitleByLocale = parseLocalizedText(body.heroSubtitleByLocale);
+    const seoHomeTitleByLocale = parseLocalizedText(body.seoHomeTitleByLocale);
+    const seoHomeDescriptionByLocale = parseLocalizedText(body.seoHomeDescriptionByLocale);
+    const vehicleSectionTitleByLocale = parseLocalizedText(body.vehicleSectionTitleByLocale);
+    const vehicleSectionDescriptionByLocale = parseLocalizedText(
+      body.vehicleSectionDescriptionByLocale,
+    );
+    const pricingTiersByLocale = parseLocalizedPricingTiers(body.pricingTiersByLocale);
+
+    let pricingTiers = parsePricingTiers(body.pricingTiers);
+    if (pricingTiers.length === 0 && pricingTiersByLocale.ko.length > 0) {
+      pricingTiers = parsePricingTiers(pricingTiersByLocale.ko);
+    }
+
     const nextSettings: SiteSettings = {
-      aboutMeTitle: typeof body.aboutMeTitle === "string" ? body.aboutMeTitle.trim() : "",
-      aboutMeDescription:
-        typeof body.aboutMeDescription === "string" ? body.aboutMeDescription.trim() : "",
+      aboutMeTitle: coalesceLegacyField(body.aboutMeTitle, aboutMeTitleByLocale),
+      aboutMeDescription: coalesceLegacyField(body.aboutMeDescription, aboutMeDescriptionByLocale),
       galleryImageUrls: Array.isArray(body.galleryImageUrls)
         ? body.galleryImageUrls.filter(
             (v): v is string => typeof v === "string" && v.trim().length > 0
           )
         : [],
-      vehicleSectionTitle:
-        typeof body.vehicleSectionTitle === "string" ? body.vehicleSectionTitle.trim() : "",
-      vehicleSectionDescription:
-        typeof body.vehicleSectionDescription === "string"
-          ? body.vehicleSectionDescription.trim()
-          : "",
-      pricingTiers: parsePricingTiers(body.pricingTiers),
-      seoHomeTitle: typeof body.seoHomeTitle === "string" ? body.seoHomeTitle.trim() : "",
-      seoHomeDescription:
-        typeof body.seoHomeDescription === "string" ? body.seoHomeDescription.trim() : "",
+      vehicleSectionTitle: coalesceLegacyField(body.vehicleSectionTitle, vehicleSectionTitleByLocale),
+      vehicleSectionDescription: coalesceLegacyField(
+        body.vehicleSectionDescription,
+        vehicleSectionDescriptionByLocale,
+      ),
+      pricingTiers,
+      seoHomeTitle: coalesceLegacyField(body.seoHomeTitle, seoHomeTitleByLocale),
+      seoHomeDescription: coalesceLegacyField(
+        body.seoHomeDescription,
+        seoHomeDescriptionByLocale,
+      ),
       phoneDisplay: normalizedPhoneDisplay,
       phoneTel: toPhoneTel(normalizedPhoneDisplay),
       contactLinks: parsedLinks,
-      heroTitle: typeof body.heroTitle === "string" ? body.heroTitle.trim() : "",
-      heroSubtitle: typeof body.heroSubtitle === "string" ? body.heroSubtitle.trim() : "",
-      aboutMeTitleByLocale: parseLocalizedText(body.aboutMeTitleByLocale),
-      aboutMeDescriptionByLocale: parseLocalizedText(body.aboutMeDescriptionByLocale),
-      heroTitleByLocale: parseLocalizedText(body.heroTitleByLocale),
-      heroSubtitleByLocale: parseLocalizedText(body.heroSubtitleByLocale),
-      seoHomeTitleByLocale: parseLocalizedText(body.seoHomeTitleByLocale),
-      seoHomeDescriptionByLocale: parseLocalizedText(body.seoHomeDescriptionByLocale),
-      vehicleSectionTitleByLocale: parseLocalizedText(body.vehicleSectionTitleByLocale),
-      vehicleSectionDescriptionByLocale: parseLocalizedText(body.vehicleSectionDescriptionByLocale),
-      pricingTiersByLocale: parseLocalizedPricingTiers(body.pricingTiersByLocale),
+      heroTitle: coalesceLegacyField(body.heroTitle, heroTitleByLocale),
+      heroSubtitle: coalesceLegacyField(body.heroSubtitle, heroSubtitleByLocale),
+      aboutMeTitleByLocale,
+      aboutMeDescriptionByLocale,
+      heroTitleByLocale,
+      heroSubtitleByLocale,
+      seoHomeTitleByLocale,
+      seoHomeDescriptionByLocale,
+      vehicleSectionTitleByLocale,
+      vehicleSectionDescriptionByLocale,
+      pricingTiersByLocale,
     };
 
     if (!nextSettings.aboutMeTitle || !nextSettings.aboutMeDescription) {
