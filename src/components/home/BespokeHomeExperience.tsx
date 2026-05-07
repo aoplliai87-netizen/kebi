@@ -6,11 +6,12 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
-import { HOME_INTRO_VISUALS } from "@/constants/homeIntroVisuals";
 import { VEHICLE_FLEET_MAIN } from "@/constants/vehicleFleetImages";
+import type { FleetVehicleKey } from "@/constants/vehicleFleetImages";
+import { getDefaultHomeHeroSlides } from "@/lib/home-hero-slides";
 import { SITE_PHONE_TEL } from "@/lib/site";
 import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type PricingTier = {
   label: string;
@@ -28,6 +29,7 @@ type BespokeHomeExperienceProps = {
   heroEyebrow: string;
   heroTitle: string;
   heroSubtitle: ReactNode;
+  heroSlides?: string[];
   introEyebrow: string;
   introTitle: string;
   introDesc: ReactNode;
@@ -58,6 +60,7 @@ type BespokeHomeExperienceProps = {
   };
   heroTitleOverride?: string;
   heroSubtitleOverride?: string;
+  vehicleMainImages?: Record<FleetVehicleKey, string>;
 };
 
 const LUX_EASE = [0.22, 1, 0.36, 1] as const;
@@ -66,12 +69,6 @@ const LUX_TRANSITION = { duration: 0.8, ease: LUX_EASE } as const;
 /** 섹션 상단 라벨(소개, AIRPORT VAN FLEET 등) — 모바일은 살짝만, md 이상에서 균형 있게 확대 */
 const homeSectionEyebrow =
   "text-[13px] font-semibold uppercase tracking-[0.2em] text-metal-bronze-strong md:text-sm md:tracking-[0.24em] lg:tracking-[0.26em]";
-
-const HERO_BACKGROUND_SLIDES = [
-  ...HOME_INTRO_VISUALS.map((item) => item.src),
-  VEHICLE_FLEET_MAIN.staria,
-  VEHICLE_FLEET_MAIN.solati,
-] as const;
 
 export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
   const t = useTranslations("HomePage");
@@ -117,12 +114,28 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
     },
   ] as const;
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
+  const vehicleMainImages = props.vehicleMainImages ?? VEHICLE_FLEET_MAIN;
+  const heroSlides = useMemo(
+    () => (props.heroSlides?.length ? props.heroSlides : getDefaultHomeHeroSlides(vehicleMainImages)),
+    [props.heroSlides, vehicleMainImages],
+  );
+  useEffect(() => {
+    setHeroSlideIndex(0);
+  }, [heroSlides]);
   const homeVehiclePreviews = [
-    { key: "staria", src: VEHICLE_FLEET_MAIN.staria, label: t("vehicle.staria") },
-    { key: "solati", src: VEHICLE_FLEET_MAIN.solati, label: t("vehicle.solati") },
-    { key: "county", src: VEHICLE_FLEET_MAIN.county, label: t("vehicle.county") },
+    { key: "staria", src: vehicleMainImages.staria, label: t("vehicle.staria") },
+    { key: "solati", src: vehicleMainImages.solati, label: t("vehicle.solati") },
+    { key: "county", src: vehicleMainImages.county, label: t("vehicle.county") },
   ] as const;
   const galleryImageUrls = props.galleryImageUrls ?? [];
+  const emptyReviewLabel =
+    locale === "en"
+      ? "No published reviews yet."
+      : locale === "ja"
+        ? "登録されたレビューはまだありません。"
+        : locale === "zh"
+          ? "暂无已登记的评价。"
+          : "등록된 후기가 없습니다.";
   const vehicleAltTail =
     locale === "en"
       ? "Private Van Service and Airport Transfer vehicle"
@@ -134,10 +147,10 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
 
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setHeroSlideIndex((prev) => (prev + 1) % HERO_BACKGROUND_SLIDES.length);
+      setHeroSlideIndex((prev) => (prev + 1) % heroSlides.length);
     }, 4200);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [heroSlides.length]);
 
   return (
     <div
@@ -153,7 +166,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
 
       <section className="relative overflow-hidden border-b border-border/50 pb-20 pt-24 md:pb-28 md:pt-32">
         <div className="pointer-events-none absolute inset-0">
-          {HERO_BACKGROUND_SLIDES.map((src, index) => (
+          {heroSlides.map((src, index) => (
             <Image
               key={src}
               src={src}
@@ -196,7 +209,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
               </span>
             )}
           </h1>
-          <p className="mx-auto mt-7 max-w-3xl text-xl leading-relaxed text-tone-body md:mt-8 md:text-2xl [&_span]:inline-block">
+          <p className="mx-auto mt-7 max-w-3xl whitespace-pre-line text-xl leading-relaxed text-tone-body md:mt-8 md:text-2xl [&_span]:inline-block">
             {effectiveHeroSubtitle ? effectiveHeroSubtitle : props.heroSubtitle}
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
@@ -228,7 +241,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           <h2 className='font-sans text-4xl font-bold leading-tight tracking-[-0.02em] text-tone-sky md:text-5xl'>
             {props.introTitle}
           </h2>
-          <div className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-tone-body md:text-lg">
+          <div className="mx-auto mt-5 max-w-3xl whitespace-pre-line text-base leading-relaxed text-tone-body md:text-lg">
             {props.introDesc}
           </div>
         </motion.div>
@@ -239,7 +252,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-metal-bronze-strong">
             {props.aboutMeTitle ?? "ABOUT ME"}
           </p>
-          <p className="mx-auto mt-3 max-w-3xl text-xl font-semibold leading-relaxed text-tone-strong md:text-3xl">
+          <p className="mx-auto mt-3 max-w-3xl whitespace-pre-line text-xl font-semibold leading-relaxed text-tone-strong md:text-3xl">
             {props.aboutMeDescription}
           </p>
           <div className="mx-auto mt-7 grid max-w-[17.5rem] grid-cols-3 gap-3 sm:max-w-[19rem]">
@@ -304,7 +317,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           <h2 className='mt-3 font-sans text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
             {props.vehicleTitle}
           </h2>
-          <p className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-tone-body md:text-lg">
+          <p className="mx-auto mt-5 max-w-3xl whitespace-pre-line text-base leading-relaxed text-tone-body md:text-lg">
             {props.vehicleDesc}
           </p>
           <div className="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-3">
@@ -345,7 +358,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
               >
                 <p className="text-sm font-semibold text-tone-strong">{tier.label}</p>
                 <p className="mt-1 text-lg font-semibold text-metal-bronze-strong">{tier.price}</p>
-                <p className="mt-1 text-sm text-tone-soft">{tier.note}</p>
+                <p className="mt-1 whitespace-pre-line text-sm text-tone-soft">{tier.note}</p>
               </div>
             ))}
           </div>
@@ -364,7 +377,7 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           <h2 className='mt-3 font-sans text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
             {props.bookingTitle}
           </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-tone-body md:text-lg">
+          <p className="mx-auto mt-4 max-w-3xl whitespace-pre-line text-base leading-relaxed text-tone-body md:text-lg">
             {props.bookingDesc}
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
@@ -390,23 +403,27 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
         <h2 className='mt-3 font-sans text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
           {props.reviewTitle}
         </h2>
-        <div className="mt-8 grid gap-5 md:grid-cols-3">
-          {props.reviews.map((review, idx) => (
-            <motion.blockquote
-              key={`${review.author}-${idx}`}
-              className="rounded-[24px] border border-white/10 bg-white/[0.02] p-6 text-sm leading-relaxed text-tone-body"
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ ...LUX_TRANSITION, delay: idx * 0.08 }}
-            >
-              <p>{review.content}</p>
-              <footer className="mt-4 text-xs font-semibold text-tone-strong">
-                {review.author}
-              </footer>
-            </motion.blockquote>
-          ))}
-        </div>
+        {props.reviews.length > 0 ? (
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            {props.reviews.map((review, idx) => (
+              <motion.blockquote
+                key={`${review.author}-${idx}`}
+                className="rounded-[24px] border border-white/10 bg-white/[0.02] p-6 text-sm leading-relaxed text-tone-body"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ ...LUX_TRANSITION, delay: idx * 0.08 }}
+              >
+                <p className="whitespace-pre-line">{review.content}</p>
+                <footer className="mt-4 text-xs font-semibold text-tone-strong">
+                  {review.author}
+                </footer>
+              </motion.blockquote>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-8 text-sm text-tone-soft">{emptyReviewLabel}</p>
+        )}
       </section>
     </div>
   );

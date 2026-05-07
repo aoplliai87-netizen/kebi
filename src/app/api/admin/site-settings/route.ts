@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { isAdminRequestAuthenticated } from "@/lib/admin-auth";
 import { appendAdminChangeLog } from "@/lib/admin-change-log-store";
+import { parseHomeSections } from "@/lib/home-sections";
+import { parseSeoPagesSettings } from "@/lib/seo-settings";
+import { parseSubpagesContent } from "@/lib/subpages-content";
 import {
   type ContactLinks,
   getSiteSettings,
@@ -68,6 +71,15 @@ function coalesceLegacyField(legacy: string | undefined, loc: LocalizedText): st
   return loc.ko || loc.en || loc.ja || loc.zh || "";
 }
 
+function coalesceLocalized(primary: LocalizedText, fallback: LocalizedText): LocalizedText {
+  return {
+    ko: primary.ko || fallback.ko || "",
+    en: primary.en || fallback.en || "",
+    ja: primary.ja || fallback.ja || "",
+    zh: primary.zh || fallback.zh || "",
+  };
+}
+
 function toPhoneTel(display: string) {
   const digits = display.replace(/\D/g, "");
   if (!digits) return "tel:+821041357621";
@@ -100,6 +112,10 @@ function isValidExternalUrl(value: string) {
   } catch {
     return false;
   }
+}
+
+function sameJson(a: unknown, b: unknown) {
+  return JSON.stringify(a) === JSON.stringify(b);
 }
 
 export async function GET(request: Request) {
@@ -146,13 +162,23 @@ export async function POST(request: Request) {
     const aboutMeDescriptionByLocale = parseLocalizedText(body.aboutMeDescriptionByLocale);
     const heroTitleByLocale = parseLocalizedText(body.heroTitleByLocale);
     const heroSubtitleByLocale = parseLocalizedText(body.heroSubtitleByLocale);
-    const seoHomeTitleByLocale = parseLocalizedText(body.seoHomeTitleByLocale);
-    const seoHomeDescriptionByLocale = parseLocalizedText(body.seoHomeDescriptionByLocale);
+    const seoHomeTitleByLocaleRaw = parseLocalizedText(body.seoHomeTitleByLocale);
+    const seoHomeDescriptionByLocaleRaw = parseLocalizedText(body.seoHomeDescriptionByLocale);
     const vehicleSectionTitleByLocale = parseLocalizedText(body.vehicleSectionTitleByLocale);
     const vehicleSectionDescriptionByLocale = parseLocalizedText(
       body.vehicleSectionDescriptionByLocale,
     );
     const pricingTiersByLocale = parseLocalizedPricingTiers(body.pricingTiersByLocale);
+    const home = body.home !== undefined ? parseHomeSections(body.home) : before.home;
+    const subpages = body.subpages !== undefined ? parseSubpagesContent(body.subpages) : before.subpages;
+    const seo = body.seo !== undefined ? parseSeoPagesSettings(body.seo) : before.seo;
+    const seoHomeTitleByLocaleFromSeo = seo.home.metaTitle;
+    const seoHomeDescriptionByLocaleFromSeo = seo.home.metaDescription;
+    const seoHomeTitleByLocale = coalesceLocalized(seoHomeTitleByLocaleRaw, seoHomeTitleByLocaleFromSeo);
+    const seoHomeDescriptionByLocale = coalesceLocalized(
+      seoHomeDescriptionByLocaleRaw,
+      seoHomeDescriptionByLocaleFromSeo,
+    );
 
     let pricingTiers = parsePricingTiers(body.pricingTiers);
     if (pricingTiers.length === 0 && pricingTiersByLocale.ko.length > 0) {
@@ -192,6 +218,9 @@ export async function POST(request: Request) {
       vehicleSectionTitleByLocale,
       vehicleSectionDescriptionByLocale,
       pricingTiersByLocale,
+      home,
+      subpages,
+      seo,
     };
 
     if (!nextSettings.aboutMeTitle || !nextSettings.aboutMeDescription) {
@@ -202,6 +231,37 @@ export async function POST(request: Request) {
     }
 
     await saveSiteSettings(nextSettings);
+    const persisted = await getSiteSettings();
+    const verificationFailures: string[] = [];
+    const checks: Array<[name: string, persistedValue: unknown, expectedValue: unknown]> = [
+      ["heroTitleByLocale", persisted.heroTitleByLocale, nextSettings.heroTitleByLocale],
+      ["heroSubtitleByLocale", persisted.heroSubtitleByLocale, nextSettings.heroSubtitleByLocale],
+      ["aboutMeTitleByLocale", persisted.aboutMeTitleByLocale, nextSettings.aboutMeTitleByLocale],
+      ["aboutMeDescriptionByLocale", persisted.aboutMeDescriptionByLocale, nextSettings.aboutMeDescriptionByLocale],
+      ["vehicleSectionTitleByLocale", persisted.vehicleSectionTitleByLocale, nextSettings.vehicleSectionTitleByLocale],
+      ["vehicleSectionDescriptionByLocale", persisted.vehicleSectionDescriptionByLocale, nextSettings.vehicleSectionDescriptionByLocale],
+      ["pricingTiersByLocale", persisted.pricingTiersByLocale, nextSettings.pricingTiersByLocale],
+      ["seoHomeTitleByLocale", persisted.seoHomeTitleByLocale, nextSettings.seoHomeTitleByLocale],
+      ["seoHomeDescriptionByLocale", persisted.seoHomeDescriptionByLocale, nextSettings.seoHomeDescriptionByLocale],
+      ["galleryImageUrls", persisted.galleryImageUrls, nextSettings.galleryImageUrls],
+      ["contactLinks", persisted.contactLinks, nextSettings.contactLinks],
+      ["home", persisted.home, nextSettings.home],
+      ["subpages", persisted.subpages, nextSettings.subpages],
+      ["seo", persisted.seo, nextSettings.seo],
+    ];
+    for (const [name, actual, expected] of checks) {
+      if (!sameJson(actual, expected)) verificationFailures.push(name);
+    }
+
+    if (verificationFailures.length > 0) {
+      return NextResponse.json(
+        {
+          ok: false,
+          message: `저장 검증에 실패했습니다: ${verificationFailures.join(", ")}. DB 컬럼/권한 상태를 확인해주세요.`,
+        },
+        { status: 500 },
+      );
+    }
     const changes: Record<string, { before: unknown; after: unknown }> = {};
     const tracked: Array<keyof SiteSettings> = [
       "phoneDisplay",
@@ -226,6 +286,9 @@ export async function POST(request: Request) {
       "vehicleSectionTitleByLocale",
       "vehicleSectionDescriptionByLocale",
       "pricingTiersByLocale",
+      "home",
+      "subpages",
+      "seo",
     ];
     for (const key of tracked) {
       const prevVal = before[key];
@@ -246,7 +309,11 @@ export async function POST(request: Request) {
       });
     }
     return NextResponse.json({ ok: true });
-  } catch {
+  } catch (error) {
+    console.error("[api/admin/site-settings] POST failed", {
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     return NextResponse.json({ ok: false, message: "저장 중 오류가 발생했습니다." }, { status: 500 });
   }
 }

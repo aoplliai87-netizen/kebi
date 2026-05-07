@@ -108,7 +108,10 @@ create table if not exists public.site_settings (
   pricing_tiers_ko jsonb not null default '[]'::jsonb,
   pricing_tiers_en jsonb not null default '[]'::jsonb,
   pricing_tiers_ja jsonb not null default '[]'::jsonb,
-  pricing_tiers_zh jsonb not null default '[]'::jsonb
+  pricing_tiers_zh jsonb not null default '[]'::jsonb,
+  home_sections jsonb not null default '{}'::jsonb,
+  subpages_content jsonb not null default '{}'::jsonb,
+  seo_pages jsonb not null default '{}'::jsonb
 );
 
 create table if not exists public.admin_change_logs (
@@ -174,6 +177,9 @@ alter table public.site_settings add column if not exists pricing_tiers_ko jsonb
 alter table public.site_settings add column if not exists pricing_tiers_en jsonb not null default '[]'::jsonb;
 alter table public.site_settings add column if not exists pricing_tiers_ja jsonb not null default '[]'::jsonb;
 alter table public.site_settings add column if not exists pricing_tiers_zh jsonb not null default '[]'::jsonb;
+alter table public.site_settings add column if not exists home_sections jsonb not null default '{}'::jsonb;
+alter table public.site_settings add column if not exists subpages_content jsonb not null default '{}'::jsonb;
+alter table public.site_settings add column if not exists seo_pages jsonb not null default '{}'::jsonb;
 
 insert into public.site_settings (
   id,

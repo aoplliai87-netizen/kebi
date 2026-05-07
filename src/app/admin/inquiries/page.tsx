@@ -1,16 +1,26 @@
+import { AdminNavTabs } from "@/components/admin/AdminNavTabs";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { listReservations } from "@/lib/reservation-store";
 import { listSupportInquiries } from "@/lib/support-inquiry-store";
 import { redirect } from "next/navigation";
 
 export default async function InquiriesAdminPage() {
   if (!isAdminAuthenticated()) redirect("/admin");
 
-  const rows = await listSupportInquiries();
+  const [rows, reservations] = await Promise.all([
+    listSupportInquiries(),
+    listReservations(),
+  ]);
 
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-10">
       <h1 className="text-3xl font-bold text-tone-strong md:text-4xl">문의 관리자 페이지</h1>
       <p className="mt-2 text-sm text-tone-body">홈 문의 폼으로 들어온 내역을 확인할 수 있습니다.</p>
+      <AdminNavTabs
+        currentPath="/admin/inquiries"
+        reservationsCount={reservations.length}
+        inquiriesCount={rows.length}
+      />
       {rows.length === 0 ? (
         <div className="mt-6 rounded-xl border border-white/12 bg-black/30 p-6 text-tone-body">
           접수된 문의가 없습니다.

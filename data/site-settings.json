@@ -1,5 +1,352 @@
 {
-  "aboutMeTitle": "ABOUT ME",
-  "aboutMeDescription": "원하시는 채널로 빠르게 연결해 예약 상담을 도와드립니다.",
-  "galleryImageUrls": []
+  "aboutMeTitle": "ABOUT KKEBI CALLVAN",
+  "aboutMeDescription": "깨비콜밴은 인천공항·김포공항 전문 픽업·샌딩, 서울·경기 전역 콜밴, VIP 의전까지 전담합니다. 다년간의 무사고 경력과 외국어 응대로 여행자·가족·비즈니스 고객 모두를 안전하게 모십니다.",
+  "galleryImageUrls": [],
+  "vehicleSectionTitle": "프리미엄 점보택시 & 대형 밴 라인업",
+  "vehicleSectionDescription": "스타리아·카니발 등 최신형 대형 밴으로 공항 이동, 골프 투어, 가족 여행, VIP 의전까지 쾌적하게 지원합니다.",
+  "pricingTiers": [
+    {
+      "label": "서울 및 경기 전역",
+      "price": "맞춤 견적",
+      "note": "목적지와 수하물에 따른 합리적인 맞춤 요금"
+    },
+    {
+      "label": "인천공항 픽업 및 샌딩",
+      "price": "맞춤 견적",
+      "note": "항공편 시간에 맞춘 정확하고 신속한 서비스"
+    },
+    {
+      "label": "골프장 및 VIP 투어 대절",
+      "price": "맞춤 견적",
+      "note": "장시간 편안한 이동 및 1일 VIP 투어 지원"
+    }
+  ],
+  "seoHomeTitle": "[깨비콜밴] 인천공항 프리미엄 대형택시 & 콜밴 24시간 예약",
+  "seoHomeDescription": "인천공항, 김포공항, 서울/경기 전역 24시간 운행! 외국어 응대 가능한 깨비콜밴과 함께 안전하고 편안한 프리미엄 이동 서비스를 경험하세요. 지금 바로 예약하세요.",
+  "phoneDisplay": "010-4135-7621",
+  "phoneTel": "tel:+821041357621",
+  "contactLinks": {
+    "kakao": "",
+    "instagram": "",
+    "whatsapp": "",
+    "line": "",
+    "messenger": ""
+  },
+  "heroTitle": "24시간 인천공항 전문 콜밴 서비스",
+  "heroSubtitle": "인천공항·김포공항에서 서울·경기 어디든, 안전하고 편안하게 모십니다. 지금 바로 예약하세요.",
+  "aboutMeTitleByLocale": {
+    "ko": "ABOUT KKEBI CALLVAN",
+    "en": "ABOUT KKEBI CALLVAN",
+    "ja": "ABOUT KKEBI CALLVAN",
+    "zh": "ABOUT KKEBI CALLVAN"
+  },
+  "aboutMeDescriptionByLocale": {
+    "ko": "깨비콜밴은 인천공항·김포공항 전문 픽업·샌딩, 서울·경기 전역 콜밴, VIP 의전까지 전담합니다. 다년간의 무사고 경력과 외국어 응대로 여행자·가족·비즈니스 고객 모두를 안전하게 모십니다.",
+    "en": "Kkebi Callvan specializes in airport transfers, private van services, and VIP transportation across Seoul and Gyeonggi. With years of safe driving experience and multilingual support, we provide reliable transportation for travelers, families, and business clients.",
+    "ja": "Kkebiは仁川空港・金浦空港の送迎、プライベートバン、VIP輸送を専門としています。長年の安全運転実績と日本語対応で、旅行者・ビジネスクライアントに確かな交通サービスをご提供します。",
+    "zh": "Kkebi专注于仁川机场接送、首尔包车及VIP商务用车服务。凭借多年安全驾驶经验与中文沟通能力，为旅行者、家庭及商务客户提供可靠出行方案。"
+  },
+  "heroTitleByLocale": {
+    "ko": "24시간 인천공항 전문 콜밴 서비스",
+    "en": "24/7 Incheon Airport Private Van Service",
+    "ja": "24時間 仁川空港送迎 ジャンボタクシーサービス",
+    "zh": "24小时仁川机场接送包车服务"
+  },
+  "heroSubtitleByLocale": {
+    "ko": "인천공항·김포공항에서 서울·경기 어디든, 안전하고 편안하게 모십니다. 지금 바로 예약하세요.",
+    "en": "Safe and comfortable airport transfer between Incheon Airport, Seoul, and Gyeonggi. Multilingual support available.",
+    "ja": "仁川空港・金浦空港からソウル・京畿道のどこへでも。日本語対応可能。今すぐご予約を。",
+    "zh": "仁川机场、首尔、京畿道全境运营。支持中文沟通，立即预订。"
+  },
+  "seoHomeTitleByLocale": {
+    "ko": "[깨비콜밴] 인천공항 프리미엄 대형택시 & 콜밴 24시간 예약",
+    "en": "Incheon Airport Private Van Service | Seoul Airport Transfer - Kkebi",
+    "ja": "仁川空港送迎 ジャンボタクシー｜ソウル貸切送迎 Kkebi",
+    "zh": "仁川机场接送｜首尔包车商务车服务 - Kkebi"
+  },
+  "seoHomeDescriptionByLocale": {
+    "ko": "인천공항, 김포공항, 서울/경기 전역 24시간 운행! 외국어 응대 가능한 깨비콜밴과 함께 안전하고 편안한 프리미엄 이동 서비스를 경험하세요. 지금 바로 예약하세요.",
+    "en": "Reliable 24/7 Incheon Airport transfer and private van service in Korea. Comfortable jumbo taxi rides from Seoul & Gyeonggi with multilingual support. Book now.",
+    "ja": "仁川空港・金浦空港からソウル市内まで24時間対応。日本語可能なジャンボタクシー・貸切送迎サービス。快適・安全な韓国空港送迎をご提供します。",
+    "zh": "提供仁川机场接机、送机及首尔包车服务。24小时运营，支持中文沟通，舒适安全的韩国商务车出行体验。"
+  },
+  "vehicleSectionTitleByLocale": {
+    "ko": "프리미엄 점보택시 & 대형 밴 라인업",
+    "en": "Premium Jumbo Taxi & Private Van Fleet",
+    "ja": "プレミアムジャンボタクシー・貸切バン車種紹介",
+    "zh": "优质商务包车车型介绍"
+  },
+  "vehicleSectionDescriptionByLocale": {
+    "ko": "스타리아·카니발 등 최신형 대형 밴으로 공항 이동, 골프 투어, 가족 여행, VIP 의전까지 쾌적하게 지원합니다.",
+    "en": "Spacious Hyundai Staria and luxury minivans for airport transfers, golf tours, family trips, and VIP transportation in Korea.",
+    "ja": "Hyundai Stariaなど最新大型バンで、空港送迎・ゴルフ場送迎・家族旅行・VIP輸送に対応します。",
+    "zh": "宽敞的Hyundai Staria等大型商务车，专为机场接送、高尔夫游览、家庭出行及VIP接待而设。"
+  },
+  "pricingTiersByLocale": {
+    "ko": [
+      {
+        "label": "서울 및 경기 전역",
+        "price": "맞춤 견적",
+        "note": "목적지와 수하물에 따른 합리적인 맞춤 요금"
+      },
+      {
+        "label": "인천공항 픽업 및 샌딩",
+        "price": "맞춤 견적",
+        "note": "항공편 시간에 맞춘 정확하고 신속한 서비스"
+      },
+      {
+        "label": "골프장 및 VIP 투어 대절",
+        "price": "맞춤 견적",
+        "note": "장시간 편안한 이동 및 1일 VIP 투어 지원"
+      }
+    ],
+    "en": [
+      {
+        "label": "Seoul & Gyeonggi Area",
+        "price": "Custom Quote",
+        "note": "Reasonable custom rates based on destination and luggage"
+      },
+      {
+        "label": "Incheon Airport Transfer",
+        "price": "Custom Quote",
+        "note": "Punctual and swift service tailored to your flight schedule"
+      },
+      {
+        "label": "Golf & VIP Tour Charter",
+        "price": "Custom Quote",
+        "note": "Comfortable transfers for golf trips and full-day VIP tours"
+      }
+    ],
+    "ja": [
+      {
+        "label": "ソウル・京畿道全域",
+        "price": "お見積り",
+        "note": "目的地や手荷物に応じたオーダーメイド料金"
+      },
+      {
+        "label": "仁川空港 お出迎え・お見送り",
+        "price": "お見積り",
+        "note": "フライト時間に合わせて正確かつ迅速なサービス"
+      },
+      {
+        "label": "ゴルフ・観光貸切",
+        "price": "お見積り",
+        "note": "長時間の快適なゴルフ場送迎や1日VIPツアーをサポート"
+      }
+    ],
+    "zh": [
+      {
+        "label": "首尔及京畿道全境",
+        "price": "定制报价",
+        "note": "根据目的地和行李提供合理定制价格"
+      },
+      {
+        "label": "仁川机场接送机",
+        "price": "定制报价",
+        "note": "根据航班时间提供准时、快捷的服务"
+      },
+      {
+        "label": "高尔夫及VIP旅游包车",
+        "price": "定制报价",
+        "note": "提供长时间舒适的高尔夫球场接送及一日VIP旅游服务"
+      }
+    ]
+  },
+  "home": {
+    "heroVisuals": [],
+    "intro": {
+      "eyebrow": {
+        "ko": "",
+        "en": "",
+        "ja": "",
+        "zh": ""
+      },
+      "title": {
+        "ko": "",
+        "en": "",
+        "ja": "",
+        "zh": ""
+      },
+      "desc": {
+        "ko": "",
+        "en": "",
+        "ja": "",
+        "zh": ""
+      }
+    },
+    "booking": {
+      "eyebrow": {
+        "ko": "",
+        "en": "",
+        "ja": "",
+        "zh": ""
+      },
+      "title": {
+        "ko": "",
+        "en": "",
+        "ja": "",
+        "zh": ""
+      },
+      "desc": {
+        "ko": "",
+        "en": "",
+        "ja": "",
+        "zh": ""
+      },
+      "ctaCall": {
+        "ko": "",
+        "en": "",
+        "ja": "",
+        "zh": ""
+      },
+      "ctaReview": {
+        "ko": "",
+        "en": "",
+        "ja": "",
+        "zh": ""
+      }
+    },
+    "reviews": {
+      "eyebrow": {
+        "ko": "",
+        "en": "",
+        "ja": "",
+        "zh": ""
+      },
+      "title": {
+        "ko": "",
+        "en": "",
+        "ja": "",
+        "zh": ""
+      },
+      "one": {
+        "content": {
+          "ko": "",
+          "en": "",
+          "ja": "",
+          "zh": ""
+        },
+        "author": {
+          "ko": "",
+          "en": "",
+          "ja": "",
+          "zh": ""
+        }
+      },
+      "two": {
+        "content": {
+          "ko": "",
+          "en": "",
+          "ja": "",
+          "zh": ""
+        },
+        "author": {
+          "ko": "",
+          "en": "",
+          "ja": "",
+          "zh": ""
+        }
+      },
+      "three": {
+        "content": {
+          "ko": "",
+          "en": "",
+          "ja": "",
+          "zh": ""
+        },
+        "author": {
+          "ko": "",
+          "en": "",
+          "ja": "",
+          "zh": ""
+        }
+      }
+    },
+    "faq": {
+      "eyebrow": {
+        "ko": "",
+        "en": "",
+        "ja": "",
+        "zh": ""
+      },
+      "title": {
+        "ko": "",
+        "en": "",
+        "ja": "",
+        "zh": ""
+      },
+      "items": [
+        {
+          "q": {
+            "ko": "",
+            "en": "",
+            "ja": "",
+            "zh": ""
+          },
+          "a": {
+            "ko": "",
+            "en": "",
+            "ja": "",
+            "zh": ""
+          }
+        },
+        {
+          "q": {
+            "ko": "",
+            "en": "",
+            "ja": "",
+            "zh": ""
+          },
+          "a": {
+            "ko": "",
+            "en": "",
+            "ja": "",
+            "zh": ""
+          }
+        },
+        {
+          "q": {
+            "ko": "",
+            "en": "",
+            "ja": "",
+            "zh": ""
+          },
+          "a": {
+            "ko": "",
+            "en": "",
+            "ja": "",
+            "zh": ""
+          }
+        },
+        {
+          "q": {
+            "ko": "",
+            "en": "",
+            "ja": "",
+            "zh": ""
+          },
+          "a": {
+            "ko": "",
+            "en": "",
+            "ja": "",
+            "zh": ""
+          }
+        },
+        {
+          "q": {
+            "ko": "",
+            "en": "",
+            "ja": "",
+            "zh": ""
+          },
+          "a": {
+            "ko": "",
+            "en": "",
+            "ja": "",
+            "zh": ""
+          }
+        }
+      ]
+    }
+  }
 }

@@ -113,7 +113,7 @@ export function BespokeIntroExperience({
               {headline}
             </span>
           </h1>
-          <div className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-tone-body md:text-lg">
+          <div className="mx-auto mt-6 max-w-3xl whitespace-pre-line text-base leading-relaxed text-tone-body md:text-lg">
             {description}
           </div>
         </motion.header>
@@ -174,7 +174,7 @@ export function BespokeIntroExperience({
               viewport={{ once: true, amount: 0.35 }}
               transition={LUX_TRANSITION}
             >
-              <p className="text-base leading-relaxed text-tone-body md:text-lg">{coreValueBody}</p>
+              <p className="whitespace-pre-line text-base leading-relaxed text-tone-body md:text-lg">{coreValueBody}</p>
             </motion.div>
           </div>
         </section>
@@ -209,7 +209,7 @@ export function BespokeIntroExperience({
                 <h3 className="mt-3 font-sans text-3xl font-bold leading-tight tracking-[-0.02em] text-tone-sky md:text-4xl">
                   {service.title}
                 </h3>
-                <p className="mt-5 text-base leading-relaxed text-tone-body md:text-lg">{service.body}</p>
+                <p className="mt-5 whitespace-pre-line text-base leading-relaxed text-tone-body md:text-lg">{service.body}</p>
               </div>
             </motion.article>
           ))}
@@ -228,13 +228,13 @@ export function BespokeIntroExperience({
               <p className="font-sans text-2xl italic tracking-[-0.02em] text-metal-bronze-strong md:text-3xl">
                 {representativeName}
               </p>
-              <p className="mt-3 text-base text-tone-soft">{representativeLine}</p>
+              <p className="mt-3 whitespace-pre-line text-base text-tone-soft">{representativeLine}</p>
             </div>
             <div className="md:text-right">
               <p className="font-numeric text-4xl font-bold tracking-[-0.02em] text-tone-strong tabular-nums md:text-5xl">
                 {phoneDisplay}
               </p>
-              <p className="mt-3 text-sm text-tone-soft">{phoneCaption}</p>
+              <p className="mt-3 whitespace-pre-line text-sm text-tone-soft">{phoneCaption}</p>
             </div>
           </div>
         </motion.section>

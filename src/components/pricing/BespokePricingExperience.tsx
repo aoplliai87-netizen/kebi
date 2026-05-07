@@ -6,12 +6,14 @@ import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState, type WheelEvent } from "react";
 import { Link } from "@/i18n/navigation";
 import {
-  isPricingRegionGroup,
   pricingRegions,
-  type PricingRegion,
-  type PricingRow,
-  type PricingTableEntry,
 } from "@/constants/pricingData";
+import {
+  isManagedPricingGroup,
+  type ManagedPricingEntry,
+  type ManagedPricingRegion,
+  type ManagedPricingRow,
+} from "@/lib/pricing-table-types";
 import { SITE_WEB_INQUIRY_PATH } from "@/lib/site";
 import { useSiteRuntime } from "@/components/providers/SiteRuntimeProvider";
 import { cn } from "@/lib/utils";
@@ -34,15 +36,15 @@ const ROW_VARIANTS = {
 const KRW = new Intl.NumberFormat("ko-KR");
 const normalize = (value: string) => value.toLowerCase().replace(/\s|-/g, "");
 
-function matchesRowQuery(row: PricingRow, q: string): boolean {
+function matchesRowQuery(row: ManagedPricingRow, q: string): boolean {
   return normalize(row.name).includes(q) || normalize(row.nameEn).includes(q);
 }
 
-function filterPricingEntries(entries: PricingTableEntry[], q: string): PricingTableEntry[] {
+function filterPricingEntries(entries: ManagedPricingEntry[], q: string): ManagedPricingEntry[] {
   if (!q) return entries;
-  const out: PricingTableEntry[] = [];
+  const out: ManagedPricingEntry[] = [];
   for (const entry of entries) {
-    if (isPricingRegionGroup(entry)) {
+    if (isManagedPricingGroup(entry)) {
       const parentHit = normalize(entry.name).includes(q) || normalize(entry.nameEn).includes(q);
       const childHits = entry.rows.filter((r) => matchesRowQuery(r, q));
       if (parentHit) {
@@ -57,18 +59,19 @@ function filterPricingEntries(entries: PricingTableEntry[], q: string): PricingT
   return out;
 }
 
-export function BespokePricingExperience() {
+export function BespokePricingExperience({ initialRegions }: { initialRegions?: ManagedPricingRegion[] }) {
   const t = useTranslations("PricingPage");
   const { phoneTel, links } = useSiteRuntime();
-  const displayRegions = useMemo<PricingRegion[]>(() => {
-    const seoul = pricingRegions.find((region) => region.id === "seoul");
-    const metro = pricingRegions.find((region) => region.id === "gyeonggi");
+  const sourceRegions = initialRegions && initialRegions.length > 0 ? initialRegions : (pricingRegions as ManagedPricingRegion[]);
+  const displayRegions = useMemo<ManagedPricingRegion[]>(() => {
+    const seoul = sourceRegions.find((region) => region.id === "seoul");
+    const metro = sourceRegions.find((region) => region.id === "gyeonggi");
     return [
       seoul ? { ...seoul, name: t("regionSeoul"), nameEn: "Seoul" } : null,
       metro ? { ...metro, name: t("regionGyeonggi"), nameEn: "Gyeonggi-do" } : null,
       { id: "others", name: t("regionOther"), nameEn: "Other areas (Contact us)", rows: [] },
-    ].filter(Boolean) as PricingRegion[];
-  }, [t]);
+    ].filter(Boolean) as ManagedPricingRegion[];
+  }, [sourceRegions, t]);
 
   const [activeRegion, setActiveRegion] = useState(displayRegions[0]?.id ?? "seoul");
   const [query, setQuery] = useState("");
@@ -96,7 +99,7 @@ export function BespokePricingExperience() {
     if (!queryNorm) return rows;
     return rows.filter(
       (entry) =>
-        !isPricingRegionGroup(entry) && matchesRowQuery(entry, queryNorm),
+        !isManagedPricingGroup(entry) && matchesRowQuery(entry, queryNorm),
     );
   }, [currentRegion, queryNorm]);
 
@@ -332,7 +335,7 @@ export function BespokePricingExperience() {
                   )
                 ) : (
                   filteredEntries.map((entry) =>
-                    isPricingRegionGroup(entry) ? (
+                    isManagedPricingGroup(entry) ? (
                       <div
                         key={`${currentRegion.id}-g-${entry.id}`}
                         className="border-b border-white/10 last:border-b-0"

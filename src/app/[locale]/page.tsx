@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { unstable_noStore as noStore } from "next/cache";
 import { BespokeHomeExperience } from "@/components/home/BespokeHomeExperience";
 import { HomeDestinationsLinks } from "@/components/home/HomeDestinationsLinks";
 import { HomeFaqSection } from "@/components/home/HomeFaqSection";
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
+import { buildHomePageViewModel } from "@/lib/home-page-view-model";
 import { getLocalizedPageMetadata } from "@/lib/page-metadata";
 import { getSiteSettings } from "@/lib/site-settings-store";
+import { getManagedVehicleMedia } from "@/lib/vehicle-media-store";
 import {
   SITE_FACEBOOK_MESSENGER_URL,
   SITE_INSTAGRAM_DM_URL,
@@ -19,9 +21,12 @@ type Props = {
   params: { locale: string };
 };
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
 }: Props): Promise<Metadata> {
+  noStore();
   const meta = await getLocalizedPageMetadata(params.locale, "home");
   const siteSettings = await getSiteSettings();
   const seoTitle = siteSettings.seoHomeTitleByLocale[params.locale as "ko" | "en" | "ja" | "zh"] || siteSettings.seoHomeTitle;
@@ -46,17 +51,11 @@ export async function generateMetadata({
 }
 
 export default async function HomePage({ params }: Props) {
+  noStore();
   const { locale } = params;
-  setRequestLocale(locale);
-  const t = await getTranslations("HomePage");
-  const tIntroHero = await getTranslations("IntroPage.hero");
-  const tFaq = await getTranslations("HomeFaq");
-  const siteSettings = await getSiteSettings();
-  const faqItems = ([1, 2, 3, 4, 5] as const).map((n) => ({
-    q: tFaq(`q${n}`),
-    a: tFaq(`a${n}`),
-  }));
-  const localeKey = locale as "ko" | "en" | "ja" | "zh";
+  const [siteSettings, vehicleMedia] = await Promise.all([getSiteSettings(), getManagedVehicleMedia()]);
+  const vm = await buildHomePageViewModel(locale, { siteSettings, vehicleMedia });
+
   const mergedLinks = {
     kakao: siteSettings.contactLinks.kakao || SITE_KAKAO_CHAT_URL,
     instagram: siteSettings.contactLinks.instagram || SITE_INSTAGRAM_DM_URL,
@@ -67,75 +66,41 @@ export default async function HomePage({ params }: Props) {
 
   return (
     <>
-    <FaqJsonLd items={faqItems} />
+    <FaqJsonLd items={vm.faqItems} />
     <BespokeHomeExperience
       locale={locale}
-      heroEyebrow={t("heroEyebrow")}
-      heroTitle={siteSettings.heroTitleByLocale[localeKey] || t("heroTitle")}
-      heroSubtitle={siteSettings.heroSubtitleByLocale[localeKey] || t.rich("heroSubtitle", {
-        brand: (chunks) => (
-          <span className="font-semibold text-brand-gold [font-size:1.28em] leading-snug tracking-tight drop-shadow-[0_0_24px_rgba(212,175,55,0.2)]">
-            {chunks}
-          </span>
-        ),
-      })}
-      introEyebrow={tIntroHero("eyebrow")}
-      introTitle={tIntroHero("title")}
-      introDesc={tIntroHero.rich("desc", {
-        brand: (chunks) => (
-          <span className="font-semibold text-brand-gold">{chunks}</span>
-        ),
-      })}
-      vehicleEyebrow={t("vehicle.eyebrow")}
-      vehicleTitle={siteSettings.vehicleSectionTitleByLocale[localeKey] || siteSettings.vehicleSectionTitle || t("vehicle.cardTitle")}
-      vehicleDesc={siteSettings.vehicleSectionDescriptionByLocale[localeKey] || siteSettings.vehicleSectionDescription || t("vehicle.desc")}
-      pricingEyebrow={t("pricing.eyebrow")}
-      pricingTitle={t("pricing.title")}
-      pricingTiers={
-        siteSettings.pricingTiersByLocale[localeKey]?.length > 0
-          ? siteSettings.pricingTiersByLocale[localeKey]
-          : siteSettings.pricingTiers.length > 0
-            ? siteSettings.pricingTiers
-          : [
-              {
-                label: t("pricing.airport.label"),
-                price: t("pricing.airport.price"),
-                note: t("pricing.airport.note"),
-              },
-              {
-                label: t("pricing.city.label"),
-                price: t("pricing.city.price"),
-                note: t("pricing.city.note"),
-              },
-              {
-                label: t("pricing.charter.label"),
-                price: t("pricing.charter.price"),
-                note: t("pricing.charter.note"),
-              },
-            ]
-      }
-      bookingEyebrow={t("booking.eyebrow")}
-      bookingTitle={t("booking.title")}
-      bookingDesc={t("booking.desc")}
-      bookingCall={t("booking.ctaCall")}
-      bookingReview={t("booking.ctaReview")}
-      reviewEyebrow={t("review.eyebrow")}
-      reviewTitle={t("review.title")}
-      reviews={[
-        { content: t("review.one.content"), author: t("review.one.author") },
-        { content: t("review.two.content"), author: t("review.two.author") },
-        { content: t("review.three.content"), author: t("review.three.author") },
-      ]}
-      aboutMeTitle={siteSettings.aboutMeTitleByLocale[localeKey] || siteSettings.aboutMeTitle}
-      aboutMeDescription={siteSettings.aboutMeDescriptionByLocale[localeKey] || siteSettings.aboutMeDescription}
-      galleryImageUrls={siteSettings.galleryImageUrls}
+      heroEyebrow={vm.heroEyebrow}
+      heroTitle={vm.heroTitle}
+      heroSlides={vm.heroSlides}
+      heroSubtitle={vm.heroSubtitle}
+      introEyebrow={vm.introEyebrow}
+      introTitle={vm.introTitle}
+      introDesc={vm.introDesc}
+      vehicleEyebrow={vm.vehicleEyebrow}
+      vehicleTitle={vm.vehicleTitle}
+      vehicleDesc={vm.vehicleDesc}
+      pricingEyebrow={vm.pricingEyebrow}
+      pricingTitle={vm.pricingTitle}
+      pricingTiers={vm.pricingTiers}
+      bookingEyebrow={vm.bookingEyebrow}
+      bookingTitle={vm.bookingTitle}
+      bookingDesc={vm.bookingDesc}
+      bookingCall={vm.bookingCall}
+      bookingReview={vm.bookingReview}
+      reviewEyebrow={vm.reviewEyebrow}
+      reviewTitle={vm.reviewTitle}
+      reviews={vm.reviews}
+      aboutMeTitle={vm.aboutMeTitle}
+      aboutMeDescription={vm.aboutMeDescription}
+      galleryImageUrls={vm.galleryImageUrls}
       phoneTel={siteSettings.phoneTel || SITE_PHONE_TEL}
       contactLinks={mergedLinks}
-      heroTitleOverride={siteSettings.heroTitleByLocale[localeKey] || siteSettings.heroTitle}
-      heroSubtitleOverride={siteSettings.heroSubtitleByLocale[localeKey] || siteSettings.heroSubtitle}
+      heroTitleOverride={vm.heroTitleOverride}
+      heroSubtitleOverride={vm.heroSubtitleOverride}
+      vehicleMainImages={vm.vehicleMainImages}
     />
     <HomeDestinationsLinks locale={locale} />
-    <HomeFaqSection />
+    <HomeFaqSection eyebrow={vm.faqEyebrow} title={vm.faqTitle} items={vm.faqItems} />
     </>
   );
 }

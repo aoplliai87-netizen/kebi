@@ -10,6 +10,12 @@ import { Button } from "@/components/ui/Button";
 import { BRAND_LOGO_SRC } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { VEHICLE_FLEET_MAIN, type FleetVehicleKey } from "@/constants/vehicleFleetImages";
+import {
+  pickVehicleLocalized,
+  type VehicleLocale,
+  type VehiclePageContent,
+} from "@/lib/vehicle-page-content";
+import type { ManagedVehicleMedia } from "@/lib/vehicle-media-types";
 
 export type { FleetVehicleKey };
 
@@ -21,6 +27,49 @@ const FLEET_IMAGES = VEHICLE_FLEET_MAIN;
 const ROW_KEYS: readonly FleetVehicleKey[] = ["staria", "solati", "county"];
 
 const GALLERY_SLOT_COUNT = 6;
+
+function globalText(
+  content: VehiclePageContent | undefined,
+  locale: VehicleLocale,
+  key:
+    | "detailBtn"
+    | "bookBtn"
+    | "phoneBtn"
+    | "galleryHeading"
+    | "galleryNote"
+    | "tourAvailable"
+    | "gallerySlotLabel"
+    | "modalClose"
+    | "sectionEyebrow"
+    | "sectionTitle"
+    | "sectionDesc",
+  fallback: string,
+): string {
+  if (!content) return fallback;
+  return pickVehicleLocalized(content[key], locale) || fallback;
+}
+
+function cardText(
+  content: VehiclePageContent | undefined,
+  locale: VehicleLocale,
+  key: FleetVehicleKey,
+  field:
+    | "badge"
+    | "name"
+    | "seat45"
+    | "seat67"
+    | "capacity"
+    | "luggage"
+    | "imageAlt"
+    | "f1"
+    | "f2"
+    | "f3"
+    | "f4",
+  fallback: string,
+): string {
+  if (!content) return fallback;
+  return pickVehicleLocalized(content[key][field], locale) || fallback;
+}
 
 /** 상세 슬롯별 이미지 URL — null 이면 플레이스홀더. 추후 URL만 채우면 됩니다. */
 const DETAIL_GALLERY_SRC: Record<FleetVehicleKey, (string | null)[]> = {
@@ -39,12 +88,15 @@ const DETAIL_GALLERY_SRC: Record<FleetVehicleKey, (string | null)[]> = {
 type FleetRowProps = {
   vkey: FleetVehicleKey;
   onOpenDetail: (key: FleetVehicleKey) => void;
+  fleetImages: Record<FleetVehicleKey, string>;
+  content?: VehiclePageContent;
+  locale?: VehicleLocale;
 };
 
-function FleetRow({ vkey, onOpenDetail }: FleetRowProps) {
+function FleetRow({ vkey, onOpenDetail, fleetImages, content, locale = "ko" }: FleetRowProps) {
   const t = useTranslations("VehicleFleet");
   const { phoneTel } = useSiteRuntime();
-  const img = FLEET_IMAGES[vkey];
+  const img = fleetImages[vkey];
 
   return (
     <article className="overflow-hidden rounded-[28px] border border-white/10 bg-[linear-gradient(135deg,rgba(12,16,24,0.92),rgba(8,12,20,0.98))] shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
@@ -59,7 +111,7 @@ function FleetRow({ vkey, onOpenDetail }: FleetRowProps) {
         >
           <Image
             src={img}
-            alt={t(`${vkey}.imageAlt`)}
+            alt={cardText(content, locale, vkey, "imageAlt", t(`${vkey}.imageAlt`))}
             fill
             className={cn(
               vkey === "staria"
@@ -85,13 +137,13 @@ function FleetRow({ vkey, onOpenDetail }: FleetRowProps) {
           <div className="min-w-0 flex-1 space-y-5">
             <div>
               <p className={`text-[11px] font-semibold uppercase tracking-[0.22em] ${accentSoft}`}>
-                {t(`${vkey}.badge`)}
+                {cardText(content, locale, vkey, "badge", t(`${vkey}.badge`))}
               </p>
               <h3 className="mt-2 font-sans text-2xl font-bold tracking-[-0.02em] text-tone-strong md:text-3xl">
-                {t(`${vkey}.name`)}
+                {cardText(content, locale, vkey, "name", t(`${vkey}.name`))}
               </h3>
               <p className="mt-2 inline-flex rounded-full border border-tone-sky/35 bg-tone-sky/10 px-3 py-1 text-xs font-semibold text-tone-sky">
-                {t("tourAvailable")}
+                {globalText(content, locale, "tourAvailable", t("tourAvailable"))}
               </p>
             </div>
 
@@ -100,26 +152,26 @@ function FleetRow({ vkey, onOpenDetail }: FleetRowProps) {
                 <>
                   <span className="inline-flex items-center gap-2">
                     <Users className={`h-4 w-4 shrink-0 ${accent}`} aria-hidden />
-                    <span className="font-medium text-tone-strong">{t("staria.seat45")}</span>
+                    <span className="font-medium text-tone-strong">{cardText(content, locale, "staria", "seat45", t("staria.seat45"))}</span>
                   </span>
                   <span className="inline-flex items-center gap-2">
                     <Users className={`h-4 w-4 shrink-0 ${accent}`} aria-hidden />
-                    <span className="font-medium text-tone-strong">{t("staria.seat67")}</span>
+                    <span className="font-medium text-tone-strong">{cardText(content, locale, "staria", "seat67", t("staria.seat67"))}</span>
                   </span>
                   <span className="inline-flex w-full items-center gap-2 sm:w-auto">
                     <Luggage className={`h-4 w-4 shrink-0 ${accent}`} aria-hidden />
-                    <span>{t("staria.luggage")}</span>
+                    <span>{cardText(content, locale, "staria", "luggage", t("staria.luggage"))}</span>
                   </span>
                 </>
               ) : (
                 <>
                   <span className="inline-flex items-center gap-2">
                     <Users className={`h-4 w-4 shrink-0 ${accent}`} aria-hidden />
-                    <span className="font-medium text-tone-strong">{t(`${vkey}.capacity`)}</span>
+                    <span className="font-medium text-tone-strong">{cardText(content, locale, vkey, "capacity", t(`${vkey}.capacity`))}</span>
                   </span>
                   <span className="inline-flex items-center gap-2">
                     <Luggage className={`h-4 w-4 shrink-0 ${accent}`} aria-hidden />
-                    <span>{t(`${vkey}.luggage`)}</span>
+                    <span>{cardText(content, locale, vkey, "luggage", t(`${vkey}.luggage`))}</span>
                   </span>
                 </>
               )}
@@ -136,7 +188,7 @@ function FleetRow({ vkey, onOpenDetail }: FleetRowProps) {
                     strokeWidth={2.5}
                     aria-hidden
                   />
-                  <span>{t(`${vkey}.f${n}`)}</span>
+                  <span>{cardText(content, locale, vkey, `f${n}` as "f1" | "f2" | "f3" | "f4", t(`${vkey}.f${n}`))}</span>
                 </li>
               ))}
             </ul>
@@ -152,7 +204,7 @@ function FleetRow({ vkey, onOpenDetail }: FleetRowProps) {
               )}
               onClick={() => onOpenDetail(vkey)}
             >
-              {t("detailBtn")}
+              {globalText(content, locale, "detailBtn", t("detailBtn"))}
             </Button>
             <Link
               href="/booking"
@@ -162,7 +214,7 @@ function FleetRow({ vkey, onOpenDetail }: FleetRowProps) {
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5fb7ff]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
               )}
             >
-              {t("bookBtn")}
+              {globalText(content, locale, "bookBtn", t("bookBtn"))}
             </Link>
             <a
               href={phoneTel}
@@ -173,7 +225,7 @@ function FleetRow({ vkey, onOpenDetail }: FleetRowProps) {
               )}
             >
               <Image src="/icons/phone.svg" alt="" width={20} height={20} className="h-5 w-5" aria-hidden />
-              {t("phoneBtn")}
+              {globalText(content, locale, "phoneBtn", t("phoneBtn"))}
             </a>
           </div>
         </div>
@@ -186,10 +238,16 @@ function VehicleDetailModal({
   open,
   vehicleKey,
   onClose,
+  detailGallery,
+  content,
+  locale = "ko",
 }: {
   open: boolean;
   vehicleKey: FleetVehicleKey | null;
   onClose: () => void;
+  detailGallery: Record<FleetVehicleKey, (string | null)[]>;
+  content?: VehiclePageContent;
+  locale?: VehicleLocale;
 }) {
   const t = useTranslations("VehicleFleet");
   const { phoneTel } = useSiteRuntime();
@@ -225,7 +283,7 @@ function VehicleDetailModal({
 
   if (!open || !vehicleKey) return null;
 
-  const slots = DETAIL_GALLERY_SRC[vehicleKey];
+  const slots = detailGallery[vehicleKey];
   const previewSrc = previewSlot !== null ? slots[previewSlot] ?? null : null;
 
   return (
@@ -236,7 +294,7 @@ function VehicleDetailModal({
       <button
         type="button"
         className="absolute inset-0 bg-black/75 backdrop-blur-sm"
-        aria-label={t("modalClose")}
+        aria-label={globalText(content, locale, "modalClose", t("modalClose"))}
         onClick={onClose}
       />
       <div
@@ -250,20 +308,20 @@ function VehicleDetailModal({
         <header className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 px-6 py-5 md:px-8 md:py-6">
           <div className="min-w-0">
             <p className={`text-[11px] font-semibold uppercase tracking-[0.22em] ${accentSoft}`}>
-              {t(`${vehicleKey}.badge`)}
+              {cardText(content, locale, vehicleKey, "badge", t(`${vehicleKey}.badge`))}
             </p>
             <h2 id={titleId} className="mt-2 font-sans text-2xl font-bold text-tone-strong md:text-3xl">
-              {t(`${vehicleKey}.name`)}
+              {cardText(content, locale, vehicleKey, "name", t(`${vehicleKey}.name`))}
             </h2>
             <p id={descId} className="mt-3 text-sm leading-relaxed text-tone-body md:text-base">
-              {t("galleryNote")}
+              {globalText(content, locale, "galleryNote", t("galleryNote"))}
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
             className="shrink-0 rounded-xl p-2.5 text-tone-soft transition-colors hover:bg-white/10 hover:text-tone-strong"
-            aria-label={t("modalClose")}
+            aria-label={globalText(content, locale, "modalClose", t("modalClose"))}
           >
             <X className="h-6 w-6" />
           </button>
@@ -271,12 +329,12 @@ function VehicleDetailModal({
 
         <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6 md:px-8">
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-tone-sky/90">
-            {t("galleryHeading")}
+            {globalText(content, locale, "galleryHeading", t("galleryHeading"))}
           </p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4">
             {Array.from({ length: GALLERY_SLOT_COUNT }).map((_, i) => {
               const src = slots[i] ?? null;
-              const slotAlt = `${t(`${vehicleKey}.name`)} · ${t("gallerySlotLabel")} ${i + 1}`;
+              const slotAlt = `${cardText(content, locale, vehicleKey, "name", t(`${vehicleKey}.name`))} · ${globalText(content, locale, "gallerySlotLabel", t("gallerySlotLabel"))} ${i + 1}`;
               return (
                 <button
                   key={i}
@@ -298,7 +356,7 @@ function VehicleDetailModal({
                   ) : (
                     <span className="flex h-full flex-col items-center justify-center px-3">
                       <span className="text-[11px] font-medium uppercase tracking-wide text-tone-soft">
-                        {t("gallerySlotLabel")}
+                        {globalText(content, locale, "gallerySlotLabel", t("gallerySlotLabel"))}
                       </span>
                       <span className="mt-1 font-numeric text-lg font-semibold tabular-nums text-tone-sky/90">
                         {i + 1}
@@ -321,7 +379,7 @@ function VehicleDetailModal({
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
             )}
           >
-            {t("bookBtn")}
+            {globalText(content, locale, "bookBtn", t("bookBtn"))}
           </Link>
           <a
             href={phoneTel}
@@ -333,7 +391,7 @@ function VehicleDetailModal({
             )}
           >
             <Image src="/icons/phone.svg" alt="" width={20} height={20} className="h-5 w-5" aria-hidden />
-            {t("phoneBtn")}
+            {globalText(content, locale, "phoneBtn", t("phoneBtn"))}
           </a>
         </footer>
       </div>
@@ -346,20 +404,20 @@ function VehicleDetailModal({
           <button
             type="button"
             className="absolute inset-0 bg-black/85 backdrop-blur-md"
-            aria-label={t("modalClose")}
+            aria-label={globalText(content, locale, "modalClose", t("modalClose"))}
             onClick={() => setPreviewSlot(null)}
           />
           <div
             className="relative z-10 flex max-h-[min(90vh,920px)] w-full max-w-5xl flex-col gap-3"
             role="dialog"
             aria-modal="true"
-            aria-label={t("galleryHeading")}
+            aria-label={globalText(content, locale, "galleryHeading", t("galleryHeading"))}
           >
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/15 bg-black/40 shadow-2xl sm:aspect-video">
               {previewSrc ? (
                 <Image
                   src={previewSrc}
-                  alt={`${t(`${vehicleKey}.name`)} · ${t("galleryHeading")}`}
+                  alt={`${cardText(content, locale, vehicleKey, "name", t(`${vehicleKey}.name`))} · ${globalText(content, locale, "galleryHeading", t("galleryHeading"))}`}
                   fill
                   className="object-contain bg-black/30"
                   sizes="100vw"
@@ -368,9 +426,9 @@ function VehicleDetailModal({
               ) : (
                 <div className="flex h-full min-h-[200px] flex-col items-center justify-center px-6">
                   <span className="text-sm font-medium uppercase tracking-wide text-tone-soft">
-                    {t("gallerySlotLabel")} · {previewSlot + 1}
+                    {globalText(content, locale, "gallerySlotLabel", t("gallerySlotLabel"))} · {previewSlot + 1}
                   </span>
-                  <span className="mt-2 text-center text-sm text-tone-body">{t("galleryNote")}</span>
+                  <span className="mt-2 text-center text-sm text-tone-body">{globalText(content, locale, "galleryNote", t("galleryNote"))}</span>
                 </div>
               )}
             </div>
@@ -379,7 +437,7 @@ function VehicleDetailModal({
               onClick={() => setPreviewSlot(null)}
               className="self-end rounded-xl border border-white/15 bg-white/[0.08] px-4 py-2 text-sm font-semibold text-tone-strong hover:bg-white/12"
             >
-              {t("modalClose")}
+              {globalText(content, locale, "modalClose", t("modalClose"))}
             </button>
           </div>
         </div>
@@ -388,9 +446,19 @@ function VehicleDetailModal({
   );
 }
 
-export function BespokeVehicleFleet() {
+export function BespokeVehicleFleet({
+  media,
+  content,
+  locale = "ko",
+}: {
+  media?: ManagedVehicleMedia;
+  content?: VehiclePageContent;
+  locale?: VehicleLocale;
+}) {
   const t = useTranslations("VehicleFleet");
   const [detailKey, setDetailKey] = useState<FleetVehicleKey | null>(null);
+  const fleetImages = media?.main ?? FLEET_IMAGES;
+  const detailGallery = media?.interior ?? DETAIL_GALLERY_SRC;
 
   return (
     <>
@@ -402,26 +470,35 @@ export function BespokeVehicleFleet() {
         <div className="mx-auto max-w-content px-4 md:px-6">
           <header className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
             <p className={`text-[11px] font-semibold uppercase tracking-[0.26em] ${accentSoft}`}>
-              {t("sectionEyebrow")}
+              {globalText(content, locale, "sectionEyebrow", t("sectionEyebrow"))}
             </p>
             <h2
               id="fleet-heading"
               className="mt-3 font-sans text-3xl font-bold tracking-[-0.02em] text-brand-gold md:text-4xl"
             >
-              {t("sectionTitle")}
+              {globalText(content, locale, "sectionTitle", t("sectionTitle"))}
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-tone-body md:text-lg">{t("sectionDesc")}</p>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-tone-body md:text-lg">
+              {globalText(content, locale, "sectionDesc", t("sectionDesc"))}
+            </p>
           </header>
 
           <div className="flex flex-col gap-10 md:gap-12">
             {ROW_KEYS.map((key) => (
-              <FleetRow key={key} vkey={key} onOpenDetail={setDetailKey} />
+              <FleetRow key={key} vkey={key} onOpenDetail={setDetailKey} fleetImages={fleetImages} content={content} locale={locale} />
             ))}
           </div>
         </div>
       </section>
 
-      <VehicleDetailModal open={detailKey !== null} vehicleKey={detailKey} onClose={() => setDetailKey(null)} />
+      <VehicleDetailModal
+        open={detailKey !== null}
+        vehicleKey={detailKey}
+        onClose={() => setDetailKey(null)}
+        detailGallery={detailGallery}
+        content={content}
+        locale={locale}
+      />
     </>
   );
 }

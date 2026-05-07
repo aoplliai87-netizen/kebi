@@ -22,6 +22,27 @@ const CHANNEL_ORDER: Exclude<QuickChannel, "">[] = [
   "facebook",
 ];
 
+type ContentOverrides = Partial<{
+  heroEyebrow: string;
+  heroTitle: string;
+  heroDesc: string;
+  faqTitle: string;
+  faqQ1: string;
+  faqA1: string;
+  faqQ2: string;
+  faqA2: string;
+  faqQ3: string;
+  faqA3: string;
+  faqQ4: string;
+  faqA4: string;
+  faqQ5: string;
+  faqA5: string;
+  formTitle: string;
+  formDesc: string;
+  contactSectionTitle: string;
+  contactSectionDesc: string;
+}>;
+
 const CHANNEL_MSG_KEY: Record<
   Exclude<QuickChannel, "">,
   | "contactPhone"
@@ -70,10 +91,12 @@ function openChannel(id: Exclude<QuickChannel, "">, runtime: ReturnType<typeof u
   window.open(url, "_blank", "noopener,noreferrer");
 }
 
-export function BespokeSupportExperience() {
+export function BespokeSupportExperience({ contentOverrides }: { contentOverrides?: ContentOverrides }) {
   const runtime = useSiteRuntime();
   const t = useTranslations("Support");
   const locale = useLocale();
+  const txt = (key: keyof ContentOverrides, fallbackKey: string) =>
+    contentOverrides?.[key]?.trim() || t(fallbackKey);
   const [openFaq, setOpenFaq] = useState<number | null>(1);
 
   const [name, setName] = useState("");
@@ -174,13 +197,13 @@ export function BespokeSupportExperience() {
             transition={{ duration: 0.45, ease: LUX_EASE }}
           >
             <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-brand-gold/90 md:text-xs">
-              {t("heroEyebrow")}
+              {txt("heroEyebrow", "heroEyebrow")}
             </p>
             <h1 className="mt-3 max-w-4xl font-sans text-3xl font-bold leading-[1.12] tracking-[-0.02em] text-brand-gold md:text-4xl lg:text-5xl">
-              {t("heroTitle")}
+              {txt("heroTitle", "heroTitle")}
             </h1>
-            <p className="mt-4 max-w-3xl text-base leading-relaxed text-tone-body md:mt-5 md:text-lg">
-              {t("heroDesc")}
+            <p className="mt-4 max-w-3xl whitespace-pre-line text-base leading-relaxed text-tone-body md:mt-5 md:text-lg">
+              {txt("heroDesc", "heroDesc")}
             </p>
           </motion.div>
 
@@ -191,7 +214,7 @@ export function BespokeSupportExperience() {
             className="mt-10 rounded-3xl border border-white/10 bg-[#0a1324]/85 p-6 backdrop-blur-md md:p-8"
           >
             <h2 className="font-sans text-2xl font-bold tracking-[-0.02em] text-brand-gold md:text-3xl">
-              {t("faqTitle")}
+              {txt("faqTitle", "faqTitle")}
             </h2>
             <div className="mt-6 space-y-2">
               {FAQ_IDS.map((id) => {
@@ -215,13 +238,13 @@ export function BespokeSupportExperience() {
                         aria-hidden
                       />
                       <span className="font-semibold text-tone-strong md:text-lg">
-                        {t(`faq${id}Q`)}
+                        {contentOverrides?.[`faqQ${id}` as keyof ContentOverrides]?.trim() || t(`faq${id}Q`)}
                       </span>
                     </button>
                     {open && (
                       <div className="border-t border-white/10 px-4 pb-4 pl-12 pr-4 pt-3 md:px-5 md:pb-5 md:pl-14 md:pt-3.5">
-                        <p className="text-sm leading-relaxed text-tone-body md:text-base">
-                          {t(`faq${id}A`)}
+                        <p className="whitespace-pre-line text-sm leading-relaxed text-tone-body md:text-base">
+                          {contentOverrides?.[`faqA${id}` as keyof ContentOverrides]?.trim() || t(`faq${id}A`)}
                         </p>
                       </div>
                     )}
@@ -236,9 +259,9 @@ export function BespokeSupportExperience() {
       <section className="border-b border-border/45 py-12 md:py-16">
         <div className="mx-auto max-w-content px-4 md:px-6">
           <h2 className="font-sans text-2xl font-bold tracking-[-0.02em] text-brand-gold md:text-3xl">
-            {t("formTitle")}
+            {txt("formTitle", "formTitle")}
           </h2>
-          <p className="mt-3 max-w-2xl text-tone-body md:text-lg">{t("formDesc")}</p>
+          <p className="mt-3 max-w-2xl whitespace-pre-line text-tone-body md:text-lg">{txt("formDesc", "formDesc")}</p>
 
           <form
             onSubmit={handleSubmit}
@@ -415,9 +438,9 @@ export function BespokeSupportExperience() {
               {t("contactSectionEyebrow")}
             </p>
             <h3 className="mt-2 font-sans text-xl font-bold tracking-[-0.02em] text-brand-gold md:text-2xl">
-              {t("contactSectionTitle")}
+              {txt("contactSectionTitle", "contactSectionTitle")}
             </h3>
-            <p className="mt-2 max-w-2xl text-sm text-tone-body md:text-base">{t("contactSectionDesc")}</p>
+            <p className="mt-2 max-w-2xl whitespace-pre-line text-sm text-tone-body md:text-base">{txt("contactSectionDesc", "contactSectionDesc")}</p>
             <label htmlFor="quick-channel" className="sr-only">
               {t("contactSectionTitle")}
             </label>

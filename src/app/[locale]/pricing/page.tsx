@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from "next";
 import { BespokePricingExperience } from "@/components/pricing/BespokePricingExperience";
+import { getManagedPricingRegions } from "@/lib/pricing-table-store";
 import { getLocalizedPageMetadata } from "@/lib/page-metadata";
 import { setRequestLocale } from "next-intl/server";
 
@@ -15,6 +16,7 @@ export async function generateMetadata({
 
 export default async function PricingPage({ params }: Props) {
   setRequestLocale(params.locale);
+  const pricingRegions = await getManagedPricingRegions();
 
-  return <BespokePricingExperience />;
+  return <BespokePricingExperience initialRegions={pricingRegions} />;
 }

@@ -100,10 +100,32 @@ export function buildPageMetadata(opts: {
   title: string;
   description: string;
   siteName: string;
+  canonicalOverride?: string;
+  ogTitleOverride?: string;
+  ogDescriptionOverride?: string;
+  ogImageOverride?: string;
+  keywordsOverride?: string[];
 }): Metadata {
-  const { locale, page, title, description, siteName } = opts;
-  const canonical = absoluteUrl(localizedPath(locale, page));
-  const ogImage = absoluteUrl(SITE_OG_IMAGE_PATH);
+  const {
+    locale,
+    page,
+    title,
+    description,
+    siteName,
+    canonicalOverride,
+    ogTitleOverride,
+    ogDescriptionOverride,
+    ogImageOverride,
+    keywordsOverride,
+  } = opts;
+  const canonical = canonicalOverride?.trim() || absoluteUrl(localizedPath(locale, page));
+  const ogImage = ogImageOverride?.trim()
+    ? ogImageOverride.startsWith("http")
+      ? ogImageOverride
+      : absoluteUrl(ogImageOverride)
+    : absoluteUrl(SITE_OG_IMAGE_PATH);
+  const ogTitle = ogTitleOverride?.trim() || title;
+  const ogDescription = ogDescriptionOverride?.trim() || description;
   const ogLocaleMap: Record<string, string> = {
     ko: "ko_KR",
     en: "en_US",
@@ -130,7 +152,7 @@ export function buildPageMetadata(opts: {
   return {
     title,
     description,
-    keywords: buildKeywords(locale, page),
+    keywords: keywordsOverride && keywordsOverride.length > 0 ? keywordsOverride : buildKeywords(locale, page),
     alternates: {
       canonical,
       languages: {
@@ -141,8 +163,8 @@ export function buildPageMetadata(opts: {
     openGraph: {
       type: "website",
       url: canonical,
-      title,
-      description,
+      title: ogTitle,
+      description: ogDescription,
       siteName,
       locale: ogLocale,
       alternateLocale: alternateOgLocale,
@@ -151,14 +173,14 @@ export function buildPageMetadata(opts: {
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: title,
+          alt: ogTitle,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
+      title: ogTitle,
+      description: ogDescription,
       images: [ogImage],
     },
     robots: {
@@ -195,11 +217,34 @@ export function buildDestinationMetadata(opts: {
   description: string;
   keywords: string[];
   siteName: string;
+  canonicalOverride?: string;
+  ogTitleOverride?: string;
+  ogDescriptionOverride?: string;
+  ogImageOverride?: string;
+  keywordsOverride?: string[];
 }): Metadata {
-  const { locale, slug, title, description, keywords, siteName } = opts;
+  const {
+    locale,
+    slug,
+    title,
+    description,
+    keywords,
+    siteName,
+    canonicalOverride,
+    ogTitleOverride,
+    ogDescriptionOverride,
+    ogImageOverride,
+    keywordsOverride,
+  } = opts;
   const pathFor = (loc: string) => `/${loc}/destinations/${slug}`;
-  const canonical = absoluteUrl(pathFor(locale));
-  const ogImage = absoluteUrl(SITE_OG_IMAGE_PATH);
+  const canonical = canonicalOverride?.trim() || absoluteUrl(pathFor(locale));
+  const ogImage = ogImageOverride?.trim()
+    ? ogImageOverride.startsWith("http")
+      ? ogImageOverride
+      : absoluteUrl(ogImageOverride)
+    : absoluteUrl(SITE_OG_IMAGE_PATH);
+  const ogTitle = ogTitleOverride?.trim() || title;
+  const ogDescription = ogDescriptionOverride?.trim() || description;
   const ogLocale = OG_LOCALE_MAP[locale] ?? "en_US";
   const alternateOgLocale = Object.values(OG_LOCALE_MAP).filter((v) => v !== ogLocale);
   const languages = Object.fromEntries(
@@ -219,7 +264,7 @@ export function buildDestinationMetadata(opts: {
   return {
     title,
     description,
-    keywords,
+    keywords: keywordsOverride && keywordsOverride.length > 0 ? keywordsOverride : keywords,
     alternates: {
       canonical,
       languages: {
@@ -230,8 +275,8 @@ export function buildDestinationMetadata(opts: {
     openGraph: {
       type: "website",
       url: canonical,
-      title,
-      description,
+      title: ogTitle,
+      description: ogDescription,
       siteName,
       locale: ogLocale,
       alternateLocale: alternateOgLocale,
@@ -240,14 +285,14 @@ export function buildDestinationMetadata(opts: {
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: title,
+          alt: ogTitle,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
+      title: ogTitle,
+      description: ogDescription,
       images: [ogImage],
     },
     robots: {

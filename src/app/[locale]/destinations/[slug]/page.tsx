@@ -8,6 +8,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { routing } from "@/i18n/routing";
 import { absoluteUrl, buildDestinationMetadata } from "@/lib/seo";
+import { parseKeywordsInput, pickLocaleText } from "@/lib/seo-settings";
 import { getSiteSettings } from "@/lib/site-settings-store";
 import {
   SITE_KAKAO_CHAT_URL,
@@ -36,16 +37,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
   const copy = getCopyForLocale(landing, params.locale);
   const t = await getTranslations({ locale: params.locale, namespace: "Metadata" });
+  const settings = await getSiteSettings();
+  const localeKey = params.locale as "ko" | "en" | "ja" | "zh";
+  const destinationSeo = settings.seo.destinations;
   const siteName = t("siteName");
-  const title = `${copy.metaTitle} | ${siteName}`;
+  const fallbackTitle = `${copy.metaTitle} | ${siteName}`;
+  const fallbackDescription = copy.metaDescription;
+  const title = pickLocaleText(destinationSeo.metaTitle, localeKey) || fallbackTitle;
+  const description = pickLocaleText(destinationSeo.metaDescription, localeKey) || fallbackDescription;
 
   return buildDestinationMetadata({
     locale: params.locale,
     slug: params.slug,
     title,
-    description: copy.metaDescription,
+    description,
     keywords: copy.keywords,
     siteName,
+    canonicalOverride: pickLocaleText(destinationSeo.canonicalUrl, localeKey),
+    ogTitleOverride: pickLocaleText(destinationSeo.ogTitle, localeKey),
+    ogDescriptionOverride: pickLocaleText(destinationSeo.ogDescription, localeKey),
+    ogImageOverride: destinationSeo.ogImage,
+    keywordsOverride: parseKeywordsInput(pickLocaleText(destinationSeo.focusKeywords, localeKey)),
   });
 }
 

@@ -17,7 +17,7 @@ export function SubpageHero({ eyebrow, title, description }: SubpageHeroProps) {
         <h1 className="mx-auto mt-3 max-w-4xl text-balance font-sans text-3xl font-bold leading-[1.12] tracking-[-0.02em] text-brand-gold md:text-4xl lg:text-5xl">
           {title}
         </h1>
-        <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-tone-body md:mt-5 md:text-lg">
+        <p className="mx-auto mt-4 max-w-3xl whitespace-pre-line text-base leading-relaxed text-tone-body md:mt-5 md:text-lg">
           {description}
         </p>
       </div>

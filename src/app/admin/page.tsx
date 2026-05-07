@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AdminLoginForm } from "@/components/admin/AdminLoginForm";
+import { AdminNavTabs } from "@/components/admin/AdminNavTabs";
 import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { listReservations } from "@/lib/reservation-store";
@@ -37,6 +38,11 @@ export default async function AdminPage() {
         </div>
         <AdminLogoutButton />
       </div>
+      <AdminNavTabs
+        currentPath="/admin"
+        reservationsCount={reservations.length}
+        inquiriesCount={inquiries.length}
+      />
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-xl border border-white/12 bg-black/30 p-4">
           <p className="text-xs text-tone-soft">총 예약</p>

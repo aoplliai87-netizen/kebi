@@ -145,6 +145,9 @@ export async function POST(request: Request) {
         pricing_tiers_en: settings.pricingTiersByLocale.en,
         pricing_tiers_ja: settings.pricingTiersByLocale.ja,
         pricing_tiers_zh: settings.pricingTiersByLocale.zh,
+        home_sections: settings.home,
+        subpages_content: settings.subpages,
+        seo_pages: settings.seo,
       },
       { onConflict: "id" }
     );

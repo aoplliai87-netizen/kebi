@@ -2,6 +2,9 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { ReservationRecord } from "@/lib/reservation-store";
 import type { StoredReview } from "@/lib/review-store";
+import { emptyHomeSections } from "@/lib/home-sections";
+import { emptySeoPagesSettings } from "@/lib/seo-settings";
+import { emptySubpagesContent } from "@/lib/subpages-content";
 import type { SiteSettings } from "@/lib/site-settings-store";
 import type { SupportInquiryRecord } from "@/lib/support-inquiry-store";
 
@@ -58,5 +61,8 @@ export async function readLocalSiteSettings() {
     vehicleSectionTitleByLocale: { ko: "", en: "", ja: "", zh: "" },
     vehicleSectionDescriptionByLocale: { ko: "", en: "", ja: "", zh: "" },
     pricingTiersByLocale: { ko: [], en: [], ja: [], zh: [] },
+    home: emptyHomeSections(),
+    subpages: emptySubpagesContent(),
+    seo: emptySeoPagesSettings(),
   });
 }

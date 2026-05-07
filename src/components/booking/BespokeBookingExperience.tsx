@@ -531,7 +531,7 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
               {t("onlineTitle")}
             </h1>
             <p className="mt-4 text-lg font-semibold text-tone-body">{title}</p>
-            <p className="mt-4 text-base leading-relaxed text-tone-body md:text-lg">{description}</p>
+            <p className="mt-4 whitespace-pre-line text-base leading-relaxed text-tone-body md:text-lg">{description}</p>
 
             <div className="mt-8 space-y-3">
               {[t("steps.s1"), t("steps.s2"), t("steps.s3"), t("steps.s4")].map((item) => (

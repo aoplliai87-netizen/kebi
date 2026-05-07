@@ -1,5 +1,20 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import {
+  emptyHomeSections,
+  parseHomeSections,
+  type HomeSections,
+} from "@/lib/home-sections";
+import {
+  emptySubpagesContent,
+  parseSubpagesContent,
+  type SubpagesContent,
+} from "@/lib/subpages-content";
+import {
+  emptySeoPagesSettings,
+  parseSeoPagesSettings,
+  type SeoPagesSettings,
+} from "@/lib/seo-settings";
 import { asStringArray, getSupabaseServerClient } from "@/lib/supabase-server";
 
 export type ManagedPricingTier = {
@@ -42,6 +57,12 @@ export type SiteSettings = {
   vehicleSectionTitleByLocale: LocalizedText;
   vehicleSectionDescriptionByLocale: LocalizedText;
   pricingTiersByLocale: LocalizedPricingTiers;
+  /** Intro / Booking / Reviews / FAQ — 비어 있으면 messages 번역 fallback */
+  home: HomeSections;
+  /** booking/inquiry/intro/review 본문 CMS */
+  subpages: SubpagesContent;
+  /** 페이지별/언어별 SEO 설정 */
+  seo: SeoPagesSettings;
 };
 
 const EMPTY_LOCALIZED_TEXT: LocalizedText = { ko: "", en: "", ja: "", zh: "" };
@@ -76,6 +97,9 @@ const DEFAULT_SETTINGS: SiteSettings = {
   vehicleSectionTitleByLocale: EMPTY_LOCALIZED_TEXT,
   vehicleSectionDescriptionByLocale: EMPTY_LOCALIZED_TEXT,
   pricingTiersByLocale: EMPTY_LOCALIZED_PRICING,
+  home: emptyHomeSections(),
+  subpages: emptySubpagesContent(),
+  seo: emptySeoPagesSettings(),
 };
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -125,6 +149,52 @@ function parseLocalizedPricingTiers(value: unknown): LocalizedPricingTiers {
   };
 }
 
+function isSeoPagesEffectivelyEmpty(value: SeoPagesSettings): boolean {
+  return Object.values(value).every((page) => {
+    const localizedEmpty = (v: LocalizedText) =>
+      !v.ko.trim() && !v.en.trim() && !v.ja.trim() && !v.zh.trim();
+    return (
+      localizedEmpty(page.metaTitle) &&
+      localizedEmpty(page.metaDescription) &&
+      localizedEmpty(page.ogTitle) &&
+      localizedEmpty(page.ogDescription) &&
+      !page.ogImage.trim() &&
+      localizedEmpty(page.canonicalUrl) &&
+      localizedEmpty(page.focusKeywords) &&
+      localizedEmpty(page.searchAssistNotes)
+    );
+  });
+}
+
+function hydrateSeoFromLegacy(
+  seo: SeoPagesSettings,
+  legacyTitleByLocale: LocalizedText,
+  legacyDescByLocale: LocalizedText,
+  legacyTitle: string,
+  legacyDesc: string,
+): SeoPagesSettings {
+  const next = {
+    ...seo,
+    home: {
+      ...seo.home,
+      metaTitle: { ...seo.home.metaTitle },
+      metaDescription: { ...seo.home.metaDescription },
+      ogTitle: { ...seo.home.ogTitle },
+      ogDescription: { ...seo.home.ogDescription },
+    },
+  };
+  const locales: LocaleKey[] = ["ko", "en", "ja", "zh"];
+  for (const locale of locales) {
+    const t = legacyTitleByLocale[locale].trim() || (locale === "ko" ? legacyTitle.trim() : "");
+    const d = legacyDescByLocale[locale].trim() || (locale === "ko" ? legacyDesc.trim() : "");
+    if (!next.home.metaTitle[locale].trim()) next.home.metaTitle[locale] = t;
+    if (!next.home.metaDescription[locale].trim()) next.home.metaDescription[locale] = d;
+    if (!next.home.ogTitle[locale].trim()) next.home.ogTitle[locale] = t;
+    if (!next.home.ogDescription[locale].trim()) next.home.ogDescription[locale] = d;
+  }
+  return next;
+}
+
 function toPhoneTel(display: string) {
   const digits = display.replace(/\D/g, "");
   if (!digits) return DEFAULT_SETTINGS.phoneTel;
@@ -142,6 +212,29 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       .eq("id", "default")
       .maybeSingle();
     if (!error && data) {
+      const legacySeoHomeTitleByLocale: LocalizedText = {
+        ko: data.seo_home_title_ko?.trim() || data.seo_home_title?.trim() || "",
+        en: data.seo_home_title_en?.trim() || "",
+        ja: data.seo_home_title_ja?.trim() || "",
+        zh: data.seo_home_title_zh?.trim() || "",
+      };
+      const legacySeoHomeDescriptionByLocale: LocalizedText = {
+        ko: data.seo_home_description_ko?.trim() || data.seo_home_description?.trim() || "",
+        en: data.seo_home_description_en?.trim() || "",
+        ja: data.seo_home_description_ja?.trim() || "",
+        zh: data.seo_home_description_zh?.trim() || "",
+      };
+      const parsedSeo = parseSeoPagesSettings((data as { seo_pages?: unknown }).seo_pages ?? undefined);
+      const seo = isSeoPagesEffectivelyEmpty(parsedSeo)
+        ? hydrateSeoFromLegacy(
+            parsedSeo,
+            legacySeoHomeTitleByLocale,
+            legacySeoHomeDescriptionByLocale,
+            data.seo_home_title?.trim() || "",
+            data.seo_home_description?.trim() || "",
+          )
+        : parsedSeo;
+
       return {
         aboutMeTitle: data.about_me_title?.trim() || DEFAULT_SETTINGS.aboutMeTitle,
         aboutMeDescription:
@@ -189,18 +282,8 @@ export async function getSiteSettings(): Promise<SiteSettings> {
           ja: data.hero_subtitle_ja?.trim() || "",
           zh: data.hero_subtitle_zh?.trim() || "",
         },
-        seoHomeTitleByLocale: {
-          ko: data.seo_home_title_ko?.trim() || data.seo_home_title?.trim() || "",
-          en: data.seo_home_title_en?.trim() || "",
-          ja: data.seo_home_title_ja?.trim() || "",
-          zh: data.seo_home_title_zh?.trim() || "",
-        },
-        seoHomeDescriptionByLocale: {
-          ko: data.seo_home_description_ko?.trim() || data.seo_home_description?.trim() || "",
-          en: data.seo_home_description_en?.trim() || "",
-          ja: data.seo_home_description_ja?.trim() || "",
-          zh: data.seo_home_description_zh?.trim() || "",
-        },
+        seoHomeTitleByLocale: legacySeoHomeTitleByLocale,
+        seoHomeDescriptionByLocale: legacySeoHomeDescriptionByLocale,
         vehicleSectionTitleByLocale: {
           ko: data.vehicle_section_title_ko?.trim() || data.vehicle_section_title?.trim() || "",
           en: data.vehicle_section_title_en?.trim() || "",
@@ -222,6 +305,13 @@ export async function getSiteSettings(): Promise<SiteSettings> {
           ja: parsePricingTiers(data.pricing_tiers_ja),
           zh: parsePricingTiers(data.pricing_tiers_zh),
         },
+        home: parseHomeSections(
+          (data as { home_sections?: unknown }).home_sections ?? undefined,
+        ),
+        subpages: parseSubpagesContent(
+          (data as { subpages_content?: unknown }).subpages_content ?? undefined,
+        ),
+        seo,
       };
     }
   }
@@ -230,6 +320,19 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   try {
     const raw = await readFile(FILE, "utf-8");
     const parsed = JSON.parse(raw) as Partial<SiteSettings>;
+    const legacySeoHomeTitleByLocale = parseLocalizedText(parsed.seoHomeTitleByLocale);
+    const legacySeoHomeDescriptionByLocale = parseLocalizedText(parsed.seoHomeDescriptionByLocale);
+    const parsedSeo = parseSeoPagesSettings(parsed.seo);
+    const seo = isSeoPagesEffectivelyEmpty(parsedSeo)
+      ? hydrateSeoFromLegacy(
+          parsedSeo,
+          legacySeoHomeTitleByLocale,
+          legacySeoHomeDescriptionByLocale,
+          typeof parsed.seoHomeTitle === "string" ? parsed.seoHomeTitle.trim() : "",
+          typeof parsed.seoHomeDescription === "string" ? parsed.seoHomeDescription.trim() : "",
+        )
+      : parsedSeo;
+
     return {
       aboutMeTitle: parsed.aboutMeTitle?.trim() || DEFAULT_SETTINGS.aboutMeTitle,
       aboutMeDescription: parsed.aboutMeDescription?.trim() || DEFAULT_SETTINGS.aboutMeDescription,
@@ -294,11 +397,14 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       aboutMeDescriptionByLocale: parseLocalizedText(parsed.aboutMeDescriptionByLocale),
       heroTitleByLocale: parseLocalizedText(parsed.heroTitleByLocale),
       heroSubtitleByLocale: parseLocalizedText(parsed.heroSubtitleByLocale),
-      seoHomeTitleByLocale: parseLocalizedText(parsed.seoHomeTitleByLocale),
-      seoHomeDescriptionByLocale: parseLocalizedText(parsed.seoHomeDescriptionByLocale),
+      seoHomeTitleByLocale: legacySeoHomeTitleByLocale,
+      seoHomeDescriptionByLocale: legacySeoHomeDescriptionByLocale,
       vehicleSectionTitleByLocale: parseLocalizedText(parsed.vehicleSectionTitleByLocale),
       vehicleSectionDescriptionByLocale: parseLocalizedText(parsed.vehicleSectionDescriptionByLocale),
       pricingTiersByLocale: parseLocalizedPricingTiers(parsed.pricingTiersByLocale),
+      home: parseHomeSections(parsed.home),
+      subpages: parseSubpagesContent(parsed.subpages),
+      seo,
     };
   } catch {
     return DEFAULT_SETTINGS;
@@ -308,66 +414,93 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 export async function saveSiteSettings(nextSettings: SiteSettings) {
   const supabase = getSupabaseServerClient();
   if (supabase) {
-    const { error } = await supabase.from("site_settings").upsert(
-      {
-        id: "default",
-        about_me_title: nextSettings.aboutMeTitle,
-        about_me_description: nextSettings.aboutMeDescription,
-        gallery_image_urls: nextSettings.galleryImageUrls,
-        vehicle_section_title: nextSettings.vehicleSectionTitle,
-        vehicle_section_description: nextSettings.vehicleSectionDescription,
-        pricing_tiers: nextSettings.pricingTiers,
-        seo_home_title: nextSettings.seoHomeTitle,
-        seo_home_description: nextSettings.seoHomeDescription,
-        phone_display: nextSettings.phoneDisplay,
-        phone_tel: nextSettings.phoneTel,
-        kakao_url: nextSettings.contactLinks.kakao,
-        instagram_url: nextSettings.contactLinks.instagram,
-        whatsapp_url: nextSettings.contactLinks.whatsapp,
-        line_url: nextSettings.contactLinks.line,
-        messenger_url: nextSettings.contactLinks.messenger,
-        hero_title: nextSettings.heroTitle,
-        hero_subtitle: nextSettings.heroSubtitle,
-        about_me_title_ko: nextSettings.aboutMeTitleByLocale.ko,
-        about_me_title_en: nextSettings.aboutMeTitleByLocale.en,
-        about_me_title_ja: nextSettings.aboutMeTitleByLocale.ja,
-        about_me_title_zh: nextSettings.aboutMeTitleByLocale.zh,
-        about_me_description_ko: nextSettings.aboutMeDescriptionByLocale.ko,
-        about_me_description_en: nextSettings.aboutMeDescriptionByLocale.en,
-        about_me_description_ja: nextSettings.aboutMeDescriptionByLocale.ja,
-        about_me_description_zh: nextSettings.aboutMeDescriptionByLocale.zh,
-        hero_title_ko: nextSettings.heroTitleByLocale.ko,
-        hero_title_en: nextSettings.heroTitleByLocale.en,
-        hero_title_ja: nextSettings.heroTitleByLocale.ja,
-        hero_title_zh: nextSettings.heroTitleByLocale.zh,
-        hero_subtitle_ko: nextSettings.heroSubtitleByLocale.ko,
-        hero_subtitle_en: nextSettings.heroSubtitleByLocale.en,
-        hero_subtitle_ja: nextSettings.heroSubtitleByLocale.ja,
-        hero_subtitle_zh: nextSettings.heroSubtitleByLocale.zh,
-        seo_home_title_ko: nextSettings.seoHomeTitleByLocale.ko,
-        seo_home_title_en: nextSettings.seoHomeTitleByLocale.en,
-        seo_home_title_ja: nextSettings.seoHomeTitleByLocale.ja,
-        seo_home_title_zh: nextSettings.seoHomeTitleByLocale.zh,
-        seo_home_description_ko: nextSettings.seoHomeDescriptionByLocale.ko,
-        seo_home_description_en: nextSettings.seoHomeDescriptionByLocale.en,
-        seo_home_description_ja: nextSettings.seoHomeDescriptionByLocale.ja,
-        seo_home_description_zh: nextSettings.seoHomeDescriptionByLocale.zh,
-        vehicle_section_title_ko: nextSettings.vehicleSectionTitleByLocale.ko,
-        vehicle_section_title_en: nextSettings.vehicleSectionTitleByLocale.en,
-        vehicle_section_title_ja: nextSettings.vehicleSectionTitleByLocale.ja,
-        vehicle_section_title_zh: nextSettings.vehicleSectionTitleByLocale.zh,
-        vehicle_section_description_ko: nextSettings.vehicleSectionDescriptionByLocale.ko,
-        vehicle_section_description_en: nextSettings.vehicleSectionDescriptionByLocale.en,
-        vehicle_section_description_ja: nextSettings.vehicleSectionDescriptionByLocale.ja,
-        vehicle_section_description_zh: nextSettings.vehicleSectionDescriptionByLocale.zh,
-        pricing_tiers_ko: nextSettings.pricingTiersByLocale.ko,
-        pricing_tiers_en: nextSettings.pricingTiersByLocale.en,
-        pricing_tiers_ja: nextSettings.pricingTiersByLocale.ja,
-        pricing_tiers_zh: nextSettings.pricingTiersByLocale.zh,
-      },
-      { onConflict: "id" }
-    );
-    if (!error) return;
+    const payload = {
+      id: "default",
+      about_me_title: nextSettings.aboutMeTitle,
+      about_me_description: nextSettings.aboutMeDescription,
+      gallery_image_urls: nextSettings.galleryImageUrls,
+      vehicle_section_title: nextSettings.vehicleSectionTitle,
+      vehicle_section_description: nextSettings.vehicleSectionDescription,
+      pricing_tiers: nextSettings.pricingTiers,
+      seo_home_title: nextSettings.seoHomeTitle,
+      seo_home_description: nextSettings.seoHomeDescription,
+      phone_display: nextSettings.phoneDisplay,
+      phone_tel: nextSettings.phoneTel,
+      kakao_url: nextSettings.contactLinks.kakao,
+      instagram_url: nextSettings.contactLinks.instagram,
+      whatsapp_url: nextSettings.contactLinks.whatsapp,
+      line_url: nextSettings.contactLinks.line,
+      messenger_url: nextSettings.contactLinks.messenger,
+      hero_title: nextSettings.heroTitle,
+      hero_subtitle: nextSettings.heroSubtitle,
+      about_me_title_ko: nextSettings.aboutMeTitleByLocale.ko,
+      about_me_title_en: nextSettings.aboutMeTitleByLocale.en,
+      about_me_title_ja: nextSettings.aboutMeTitleByLocale.ja,
+      about_me_title_zh: nextSettings.aboutMeTitleByLocale.zh,
+      about_me_description_ko: nextSettings.aboutMeDescriptionByLocale.ko,
+      about_me_description_en: nextSettings.aboutMeDescriptionByLocale.en,
+      about_me_description_ja: nextSettings.aboutMeDescriptionByLocale.ja,
+      about_me_description_zh: nextSettings.aboutMeDescriptionByLocale.zh,
+      hero_title_ko: nextSettings.heroTitleByLocale.ko,
+      hero_title_en: nextSettings.heroTitleByLocale.en,
+      hero_title_ja: nextSettings.heroTitleByLocale.ja,
+      hero_title_zh: nextSettings.heroTitleByLocale.zh,
+      hero_subtitle_ko: nextSettings.heroSubtitleByLocale.ko,
+      hero_subtitle_en: nextSettings.heroSubtitleByLocale.en,
+      hero_subtitle_ja: nextSettings.heroSubtitleByLocale.ja,
+      hero_subtitle_zh: nextSettings.heroSubtitleByLocale.zh,
+      seo_home_title_ko: nextSettings.seoHomeTitleByLocale.ko,
+      seo_home_title_en: nextSettings.seoHomeTitleByLocale.en,
+      seo_home_title_ja: nextSettings.seoHomeTitleByLocale.ja,
+      seo_home_title_zh: nextSettings.seoHomeTitleByLocale.zh,
+      seo_home_description_ko: nextSettings.seoHomeDescriptionByLocale.ko,
+      seo_home_description_en: nextSettings.seoHomeDescriptionByLocale.en,
+      seo_home_description_ja: nextSettings.seoHomeDescriptionByLocale.ja,
+      seo_home_description_zh: nextSettings.seoHomeDescriptionByLocale.zh,
+      vehicle_section_title_ko: nextSettings.vehicleSectionTitleByLocale.ko,
+      vehicle_section_title_en: nextSettings.vehicleSectionTitleByLocale.en,
+      vehicle_section_title_ja: nextSettings.vehicleSectionTitleByLocale.ja,
+      vehicle_section_title_zh: nextSettings.vehicleSectionTitleByLocale.zh,
+      vehicle_section_description_ko: nextSettings.vehicleSectionDescriptionByLocale.ko,
+      vehicle_section_description_en: nextSettings.vehicleSectionDescriptionByLocale.en,
+      vehicle_section_description_ja: nextSettings.vehicleSectionDescriptionByLocale.ja,
+      vehicle_section_description_zh: nextSettings.vehicleSectionDescriptionByLocale.zh,
+      pricing_tiers_ko: nextSettings.pricingTiersByLocale.ko,
+      pricing_tiers_en: nextSettings.pricingTiersByLocale.en,
+      pricing_tiers_ja: nextSettings.pricingTiersByLocale.ja,
+      pricing_tiers_zh: nextSettings.pricingTiersByLocale.zh,
+      home_sections: nextSettings.home,
+      subpages_content: nextSettings.subpages,
+      seo_pages: nextSettings.seo,
+    } as const;
+
+    const payloadForUpsert: Record<string, unknown> = { ...payload };
+    for (let i = 0; i < 20; i += 1) {
+      const { error } = await supabase.from("site_settings").upsert(payloadForUpsert, { onConflict: "id" });
+      if (!error) return;
+
+      const message = error.message ?? "";
+      const missingColumnMatch = message.match(/Could not find the '([^']+)' column/i);
+      const missingColumn = missingColumnMatch?.[1];
+      if ((error as { code?: string }).code === "PGRST204" && missingColumn && missingColumn in payloadForUpsert) {
+        delete payloadForUpsert[missingColumn];
+        console.warn("[site-settings] Missing column on remote DB; retrying without column", {
+          missingColumn,
+        });
+        continue;
+      }
+
+      console.error("[site-settings] Supabase upsert failed", {
+        message: error.message,
+        details: (error as { details?: string }).details,
+        hint: (error as { hint?: string }).hint,
+        code: (error as { code?: string }).code,
+      });
+      throw new Error(
+        `Supabase site_settings upsert failed: ${error.message} [code=${(error as { code?: string }).code ?? "-"}]`,
+      );
+    }
+    throw new Error("Supabase site_settings upsert failed after retrying unknown columns.");
   }
 
   await ensureStore();

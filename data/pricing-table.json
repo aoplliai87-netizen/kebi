@@ -1,0 +1,644 @@
+[
+  {
+    "id": "seoul",
+    "name": "서울",
+    "nameEn": "Seoul",
+    "rows": [
+      {
+        "name": "김포공항",
+        "nameEn": "Gimpo Airport",
+        "gimpo": 0,
+        "incheon": 70000
+      },
+      {
+        "name": "강남구",
+        "nameEn": "Gangnam-gu",
+        "gimpo": 55000,
+        "incheon": 90000
+      },
+      {
+        "name": "개포동",
+        "nameEn": "Gaepo-dong",
+        "gimpo": 60000,
+        "incheon": 90000
+      },
+      {
+        "name": "일원, 세곡, 자곡",
+        "nameEn": "Irwon, Segok, Jagok",
+        "gimpo": 65000,
+        "incheon": 95000
+      },
+      {
+        "name": "강동구",
+        "nameEn": "Gangdong-gu",
+        "gimpo": 60000,
+        "incheon": 90000
+      },
+      {
+        "name": "상일, 명일동",
+        "nameEn": "Sangil, Myeongil-dong",
+        "gimpo": 60000,
+        "incheon": 95000
+      },
+      {
+        "name": "강북구",
+        "nameEn": "Gangbuk-gu",
+        "gimpo": 60000,
+        "incheon": 90000
+      },
+      {
+        "name": "강서구",
+        "nameEn": "Gangseo-gu",
+        "gimpo": 40000,
+        "incheon": 75000
+      },
+      {
+        "name": "관악구",
+        "nameEn": "Gwanak-gu",
+        "gimpo": 50000,
+        "incheon": 80000
+      },
+      {
+        "name": "광진구",
+        "nameEn": "Gwangjin-gu",
+        "gimpo": 60000,
+        "incheon": 90000
+      },
+      {
+        "name": "구로구",
+        "nameEn": "Guro-gu",
+        "gimpo": 50000,
+        "incheon": 75000
+      },
+      {
+        "name": "금천구",
+        "nameEn": "Geumcheon-gu",
+        "gimpo": 50000,
+        "incheon": 75000
+      },
+      {
+        "name": "노원구",
+        "nameEn": "Nowon-gu",
+        "gimpo": 65000,
+        "incheon": 100000
+      },
+      {
+        "name": "도봉구",
+        "nameEn": "Dobong-gu",
+        "gimpo": 65000,
+        "incheon": 100000
+      },
+      {
+        "name": "동대문구",
+        "nameEn": "Dongdaemun-gu",
+        "gimpo": 55000,
+        "incheon": 90000
+      },
+      {
+        "name": "동작구",
+        "nameEn": "Dongjak-gu",
+        "gimpo": 50000,
+        "incheon": 80000
+      },
+      {
+        "name": "마포구",
+        "nameEn": "Mapo-gu",
+        "gimpo": 50000,
+        "incheon": 75000
+      },
+      {
+        "name": "서대문구",
+        "nameEn": "Seodaemun-gu",
+        "gimpo": 50000,
+        "incheon": 80000
+      },
+      {
+        "name": "서초구",
+        "nameEn": "Seocho-gu",
+        "gimpo": 55000,
+        "incheon": 90000
+      },
+      {
+        "name": "성동구",
+        "nameEn": "Seongdong-gu",
+        "gimpo": 55000,
+        "incheon": 85000
+      },
+      {
+        "name": "성북구",
+        "nameEn": "Seongbuk-gu",
+        "gimpo": 55000,
+        "incheon": 85000
+      },
+      {
+        "name": "송파구",
+        "nameEn": "Songpa-gu",
+        "gimpo": 60000,
+        "incheon": 90000
+      },
+      {
+        "name": "양천구",
+        "nameEn": "Yangcheon-gu",
+        "gimpo": 40000,
+        "incheon": 75000
+      },
+      {
+        "name": "영등포구",
+        "nameEn": "Yeongdeungpo-gu",
+        "gimpo": 50000,
+        "incheon": 75000
+      },
+      {
+        "name": "용산구",
+        "nameEn": "Yongsan-gu",
+        "gimpo": 55000,
+        "incheon": 85000
+      },
+      {
+        "name": "은평구",
+        "nameEn": "Eunpyeong-gu",
+        "gimpo": 50000,
+        "incheon": 80000
+      },
+      {
+        "name": "종로구",
+        "nameEn": "Jongno-gu",
+        "gimpo": 55000,
+        "incheon": 85000
+      },
+      {
+        "name": "중구",
+        "nameEn": "Jung-gu",
+        "gimpo": 55000,
+        "incheon": 85000
+      },
+      {
+        "name": "중랑구",
+        "nameEn": "Jungnang-gu",
+        "gimpo": 65000,
+        "incheon": 90000
+      }
+    ]
+  },
+  {
+    "id": "gyeonggi",
+    "name": "경기도",
+    "nameEn": "Gyeonggi-do",
+    "rows": [
+      {
+        "name": "가평역",
+        "nameEn": "Gapyeong Station area",
+        "gimpo": 130000,
+        "incheon": 160000
+      },
+      {
+        "name": "고양시 (일산, 덕양 포함)",
+        "nameEn": "Goyang-si (Ilsan, Deogyang)",
+        "gimpo": 45000,
+        "incheon": 75000
+      },
+      {
+        "name": "고양 벽제",
+        "nameEn": "Goyang Byeokje",
+        "gimpo": 60000,
+        "incheon": 85000
+      },
+      {
+        "name": "과천시",
+        "nameEn": "Gwacheon-si",
+        "gimpo": 70000,
+        "incheon": 90000
+      },
+      {
+        "name": "광명[역]",
+        "nameEn": "Gwangmyeong (station)",
+        "gimpo": 55000,
+        "incheon": 80000
+      },
+      {
+        "name": "광주시",
+        "nameEn": "Gwangju-si",
+        "gimpo": 95000,
+        "incheon": 120000
+      },
+      {
+        "name": "곤지암",
+        "nameEn": "Gonjiam",
+        "gimpo": 110000,
+        "incheon": 130000
+      },
+      {
+        "name": "구리시",
+        "nameEn": "Guri-si",
+        "gimpo": 70000,
+        "incheon": 100000
+      },
+      {
+        "name": "군포시",
+        "nameEn": "Gunpo-si",
+        "gimpo": 65000,
+        "incheon": 85000
+      },
+      {
+        "name": "김포시 (신도시)",
+        "nameEn": "Gimpo-si (new town)",
+        "gimpo": 55000,
+        "incheon": 75000
+      },
+      {
+        "group": true,
+        "id": "namyangju",
+        "name": "남양주시",
+        "nameEn": "Namyangju-si",
+        "rows": [
+          {
+            "name": "덕소",
+            "nameEn": "Deokso",
+            "gimpo": 80000,
+            "incheon": 110000
+          },
+          {
+            "name": "별내, 다산",
+            "nameEn": "Byeollae, Dasan",
+            "gimpo": 70000,
+            "incheon": 100000
+          },
+          {
+            "name": "수동, 조안",
+            "nameEn": "Sudong, Joan",
+            "gimpo": 100000,
+            "incheon": 130000
+          },
+          {
+            "name": "진접, 화도",
+            "nameEn": "Jinjeop, Hwado",
+            "gimpo": 90000,
+            "incheon": 120000
+          }
+        ]
+      },
+      {
+        "name": "동두천시",
+        "nameEn": "Dongducheon-si",
+        "gimpo": 90000,
+        "incheon": 130000
+      },
+      {
+        "name": "부천시",
+        "nameEn": "Bucheon-si",
+        "gimpo": 40000,
+        "incheon": 70000
+      },
+      {
+        "name": "성남시 (분당 포함)",
+        "nameEn": "Seongnam-si (incl. Bundang)",
+        "gimpo": 85000,
+        "incheon": 100000
+      },
+      {
+        "name": "수원시",
+        "nameEn": "Suwon-si",
+        "gimpo": 80000,
+        "incheon": 90000
+      },
+      {
+        "name": "수원 광교",
+        "nameEn": "Suwon Gwanggyo",
+        "gimpo": 85000,
+        "incheon": 90000
+      },
+      {
+        "name": "수원 영통",
+        "nameEn": "Suwon Yeongtong",
+        "gimpo": 85000,
+        "incheon": 100000
+      },
+      {
+        "name": "시흥시 (목감 포함)",
+        "nameEn": "Siheung-si (incl. Mokgam)",
+        "gimpo": 60000,
+        "incheon": 70000
+      },
+      {
+        "name": "시흥 정왕동",
+        "nameEn": "Siheung Jeongwang-dong",
+        "gimpo": 60000,
+        "incheon": 70000
+      },
+      {
+        "name": "안산시",
+        "nameEn": "Ansan-si",
+        "gimpo": 65000,
+        "incheon": 75000
+      },
+      {
+        "name": "안산 건건동",
+        "nameEn": "Ansan Geongeon-dong",
+        "gimpo": 70000,
+        "incheon": 80000
+      },
+      {
+        "name": "안산 대부도",
+        "nameEn": "Ansan Daebudo",
+        "gimpo": 80000,
+        "incheon": 100000
+      },
+      {
+        "name": "안산 팔곡동",
+        "nameEn": "Ansan Palgok-dong",
+        "gimpo": 70000,
+        "incheon": 80000
+      },
+      {
+        "name": "안성시",
+        "nameEn": "Anseong-si",
+        "gimpo": 120000,
+        "incheon": 140000
+      },
+      {
+        "name": "안성 공도",
+        "nameEn": "Anseong Gongdo",
+        "gimpo": 110000,
+        "incheon": 130000
+      },
+      {
+        "name": "안양시",
+        "nameEn": "Anyang-si",
+        "gimpo": 65000,
+        "incheon": 85000
+      },
+      {
+        "name": "양주시",
+        "nameEn": "Yangju-si",
+        "gimpo": 80000,
+        "incheon": 110000
+      },
+      {
+        "name": "양평군",
+        "nameEn": "Yangpyeong-gun",
+        "gimpo": 120000,
+        "incheon": 150000
+      },
+      {
+        "name": "여주시",
+        "nameEn": "Yeoju-si",
+        "gimpo": 120000,
+        "incheon": 150000
+      },
+      {
+        "name": "연천군",
+        "nameEn": "Yeoncheon-gun",
+        "gimpo": 110000,
+        "incheon": 160000
+      },
+      {
+        "name": "오산시",
+        "nameEn": "Osan-si",
+        "gimpo": 90000,
+        "incheon": 110000
+      },
+      {
+        "group": true,
+        "id": "yongin",
+        "name": "용인시",
+        "nameEn": "Yongin-si",
+        "rows": [
+          {
+            "name": "용인 기흥, 죽전, 동백, 수지",
+            "nameEn": "Yongin Giheung, Jukjeon, Dongbaek, Suji",
+            "gimpo": 85000,
+            "incheon": 100000
+          },
+          {
+            "name": "용인 남사",
+            "nameEn": "Yongin Namsa",
+            "gimpo": 110000,
+            "incheon": 130000
+          },
+          {
+            "name": "용인 양지, 모현",
+            "nameEn": "Yongin Yangji, Mohyeon",
+            "gimpo": 100000,
+            "incheon": 120000
+          },
+          {
+            "name": "용인 이동",
+            "nameEn": "Yongin Idong",
+            "gimpo": 100000,
+            "incheon": 130000
+          },
+          {
+            "name": "용인 처인구",
+            "nameEn": "Yongin Cheoin-gu",
+            "gimpo": 90000,
+            "incheon": 120000
+          }
+        ]
+      },
+      {
+        "name": "위례",
+        "nameEn": "Wirye",
+        "gimpo": 85000,
+        "incheon": 100000
+      },
+      {
+        "name": "의왕, 평촌",
+        "nameEn": "Uiwang, Pyeongchon",
+        "gimpo": 65000,
+        "incheon": 85000
+      },
+      {
+        "name": "의정부시",
+        "nameEn": "Uijeongbu-si",
+        "gimpo": 70000,
+        "incheon": 100000
+      },
+      {
+        "name": "이천시",
+        "nameEn": "Icheon-si",
+        "gimpo": 110000,
+        "incheon": 130000
+      },
+      {
+        "group": true,
+        "id": "incheon_metro",
+        "name": "인천광역시",
+        "nameEn": "Incheon",
+        "rows": [
+          {
+            "name": "강화",
+            "nameEn": "Ganghwa",
+            "gimpo": 70000,
+            "incheon": 100000
+          },
+          {
+            "name": "검단, 계양",
+            "nameEn": "Geomdan, Gyeyang",
+            "gimpo": 45000,
+            "incheon": 70000
+          },
+          {
+            "name": "인천 서구, 부평",
+            "nameEn": "Incheon Seo-gu, Bupyeong",
+            "gimpo": 50000,
+            "incheon": 70000
+          },
+          {
+            "name": "연수동, 송도, 간석, 남동",
+            "nameEn": "Yeonsu, Songdo, Ganseok, Namdong",
+            "gimpo": 60000,
+            "incheon": 60000
+          },
+          {
+            "name": "청라",
+            "nameEn": "Cheongna",
+            "gimpo": 50000,
+            "incheon": 60000
+          }
+        ]
+      },
+      {
+        "name": "일산",
+        "nameEn": "Ilsan",
+        "gimpo": 45000,
+        "incheon": 75000
+      },
+      {
+        "name": "일산 탄현",
+        "nameEn": "Ilsan Tanhyeon",
+        "gimpo": 50000,
+        "incheon": 80000
+      },
+      {
+        "name": "일산 화정, 행신",
+        "nameEn": "Ilsan Hwajeong, Haengsin",
+        "gimpo": 40000,
+        "incheon": 75000
+      },
+      {
+        "name": "장호원",
+        "nameEn": "Janghowon",
+        "gimpo": 120000,
+        "incheon": 160000
+      },
+      {
+        "name": "청평",
+        "nameEn": "Cheongpyeong",
+        "gimpo": 110000,
+        "incheon": 150000
+      },
+      {
+        "group": true,
+        "id": "paju",
+        "name": "파주시",
+        "nameEn": "Paju-si",
+        "rows": [
+          {
+            "name": "파주 LCD",
+            "nameEn": "Paju LCD",
+            "gimpo": 70000,
+            "incheon": 95000
+          },
+          {
+            "name": "파주 광탄",
+            "nameEn": "Paju Gwangtan",
+            "gimpo": 80000,
+            "incheon": 100000
+          },
+          {
+            "name": "파주 금촌",
+            "nameEn": "Paju Geumchon",
+            "gimpo": 65000,
+            "incheon": 90000
+          },
+          {
+            "name": "파주 문산",
+            "nameEn": "Paju Munsan",
+            "gimpo": 75000,
+            "incheon": 110000
+          },
+          {
+            "name": "파주 봉일천",
+            "nameEn": "Paju Bongilcheon",
+            "gimpo": 70000,
+            "incheon": 100000
+          },
+          {
+            "name": "파주 운정",
+            "nameEn": "Paju Unjeong",
+            "gimpo": 60000,
+            "incheon": 85000
+          }
+        ]
+      },
+      {
+        "name": "평택시",
+        "nameEn": "Pyeongtaek-si",
+        "gimpo": 120000,
+        "incheon": 130000
+      },
+      {
+        "name": "포천시",
+        "nameEn": "Pocheon-si",
+        "gimpo": 100000,
+        "incheon": 130000
+      },
+      {
+        "name": "하남시",
+        "nameEn": "Hanam-si",
+        "gimpo": 75000,
+        "incheon": 100000
+      },
+      {
+        "group": true,
+        "id": "hwaseong",
+        "name": "화성시",
+        "nameEn": "Hwaseong-si",
+        "rows": [
+          {
+            "name": "화성 동탄 1, 발안, 향남",
+            "nameEn": "Hwaseong Dongtan 1, Balan, Hyangnam",
+            "gimpo": 90000,
+            "incheon": 100000
+          },
+          {
+            "name": "화성 동탄 2",
+            "nameEn": "Hwaseong Dongtan 2",
+            "gimpo": 95000,
+            "incheon": 110000
+          },
+          {
+            "name": "화성 병점",
+            "nameEn": "Hwaseong Byeongjeom",
+            "gimpo": 85000,
+            "incheon": 100000
+          },
+          {
+            "name": "화성 봉담",
+            "nameEn": "Hwaseong Bongdam",
+            "gimpo": 80000,
+            "incheon": 95000
+          },
+          {
+            "name": "화성 새솔동, 송산",
+            "nameEn": "Hwaseong Saesol, Songsan",
+            "gimpo": 75000,
+            "incheon": 85000
+          },
+          {
+            "name": "화성 제부도",
+            "nameEn": "Hwaseong Jebudo",
+            "gimpo": 90000,
+            "incheon": 110000
+          },
+          {
+            "name": "화성시청",
+            "nameEn": "Hwaseong City Hall",
+            "gimpo": 85000,
+            "incheon": 90000
+          }
+        ]
+      }
+    ]
+  }
+]

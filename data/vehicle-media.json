@@ -1,0 +1,33 @@
+{
+  "main": {
+    "staria": "/images/vehicles/staria-hero.png",
+    "solati": "/images/vehicles/solati-hero.png",
+    "county": "/images/vehicles/county-hero.png"
+  },
+  "interior": {
+    "staria": [
+      "/images/vehicles/staria-hero.png",
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solati": [
+      "/images/vehicles/solati-hero.png",
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "county": [
+      "/images/vehicles/county-hero.png",
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  }
+}

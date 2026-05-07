@@ -9,7 +9,7 @@ import type { StoredReview } from "@/lib/review-store";
 
 const LUX_EASE = [0.22, 1, 0.36, 1] as const;
 
-const SAMPLE_KEYS = ["one", "two", "three"] as const;
+type SampleReview = { content: string; author: string };
 
 function formatPostedDate(iso: string, locale: string) {
   const d = new Date(`${iso}T12:00:00`);
@@ -31,9 +31,8 @@ function formatDateTimePosted(iso: string, locale: string) {
   }).format(d);
 }
 
-export function BespokeReviewExperience() {
+export function BespokeReviewExperience({ sampleReviews = [] }: { sampleReviews?: SampleReview[] }) {
   const t = useTranslations("ReviewBoard");
-  const tr = useTranslations("HomePage.review");
   const locale = useLocale();
   const [userReviews, setUserReviews] = useState<StoredReview[]>([]);
   const [loadError, setLoadError] = useState(false);
@@ -123,21 +122,31 @@ export function BespokeReviewExperience() {
     <section className="scroll-mt-24 border-b border-border/45 py-12 md:py-16">
       <div className="mx-auto max-w-content px-4 md:px-6">
         <div className="grid gap-4 md:grid-cols-3">
-          {SAMPLE_KEYS.map((key, idx) => (
+          {sampleReviews.length > 0 ? sampleReviews.map((item, idx) => (
             <article
-              key={key}
+              key={`${item.author}-${idx}`}
               className="relative overflow-hidden rounded-2xl border border-border/70 bg-surface/85 p-5 shadow-[0_12px_40px_rgba(0,0,0,0.25)]"
             >
               <span className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-brand-gold/25 text-sm font-bold text-brand-gold">
                 {idx + 1}
               </span>
               <p className="pr-12 text-xs font-medium text-tone-soft">
-                {formatPostedDate(tr(`${key}.postedAt`), locale)}
+                {formatPostedDate(new Date().toISOString().slice(0, 10), locale)}
               </p>
-              <p className="mt-3 text-sm leading-relaxed text-tone-body">{tr(`${key}.content`)}</p>
-              <footer className="mt-4 border-t border-white/10 pt-3 text-xs font-semibold text-tone-strong">{tr(`${key}.author`)}</footer>
+              <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-tone-body">{item.content}</p>
+              <footer className="mt-4 border-t border-white/10 pt-3 text-xs font-semibold text-tone-strong">{item.author}</footer>
             </article>
-          ))}
+          )) : (
+            <div className="md:col-span-3 rounded-2xl border border-white/12 bg-black/20 p-5 text-sm text-tone-soft">
+              {locale === "en"
+                ? "No published reviews yet."
+                : locale === "ja"
+                  ? "登録されたレビューはまだありません。"
+                  : locale === "zh"
+                    ? "暂无已登记的评价。"
+                    : "등록된 후기가 없습니다."}
+            </div>
+          )}
         </div>
 
         <div className="mt-14">

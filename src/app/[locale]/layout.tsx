@@ -1,5 +1,6 @@
 import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { unstable_noStore as noStore } from "next/cache";
+import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { LocalBusinessJsonLd } from "@/components/seo/LocalBusinessJsonLd";
@@ -23,19 +24,17 @@ type Props = {
   params: { locale: string };
 };
 
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function LocaleLayout({ children, params }: Props) {
+  noStore();
   const { locale } = params;
 
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
 
-  setRequestLocale(locale);
-  const messages = await getMessages();
+  const messages = await getMessages({ locale });
   const siteSettings = await getSiteSettings();
   const runtimeConfig = {
     phoneDisplay: siteSettings.phoneDisplay || SITE_PHONE_DISPLAY,
