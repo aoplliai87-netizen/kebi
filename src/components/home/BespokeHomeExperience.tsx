@@ -24,6 +24,16 @@ type ReviewItem = {
   author: string;
 };
 
+export type HomeAdminSectionId =
+  | "hero"
+  | "intro"
+  | "about"
+  | "gallery"
+  | "vehicle"
+  | "pricing"
+  | "booking"
+  | "reviews";
+
 type BespokeHomeExperienceProps = {
   locale?: string;
   heroEyebrow: string;
@@ -61,6 +71,8 @@ type BespokeHomeExperienceProps = {
   heroTitleOverride?: string;
   heroSubtitleOverride?: string;
   vehicleMainImages?: Record<FleetVehicleKey, string>;
+  /** 관리자 미리보기 전용 — 공개 페이지에서는 전달하지 않음 */
+  renderAdminChrome?: (id: HomeAdminSectionId) => ReactNode;
 };
 
 const LUX_EASE = [0.22, 1, 0.36, 1] as const;
@@ -164,7 +176,15 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
         className="pointer-events-none absolute inset-0 opacity-25 [background:repeating-linear-gradient(122deg,rgba(255,255,255,0.04),rgba(255,255,255,0.04)_1px,transparent_1px,transparent_8px)]"
       />
 
-      <section className="relative overflow-hidden border-b border-border/50 pb-20 pt-24 md:pb-28 md:pt-32">
+      <section
+        data-home-section="hero"
+        className="relative overflow-hidden border-b border-border/50 pb-20 pt-24 md:pb-28 md:pt-32"
+      >
+        {props.renderAdminChrome ? (
+          <div className="pointer-events-auto absolute right-3 top-3 z-20 md:right-6 md:top-6">
+            {props.renderAdminChrome("hero")}
+          </div>
+        ) : null}
         <div className="pointer-events-none absolute inset-0">
           {heroSlides.map((src, index) => (
             <Image
@@ -230,7 +250,12 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
         </motion.div>
       </section>
 
-      <section className="relative mx-auto max-w-content px-4 py-16 md:px-6 md:py-20">
+      <section data-home-section="intro" className="relative mx-auto max-w-content px-4 py-16 md:px-6 md:py-20">
+        {props.renderAdminChrome ? (
+          <div className="pointer-events-auto absolute right-3 top-3 z-20 md:right-8">
+            {props.renderAdminChrome("intro")}
+          </div>
+        ) : null}
         <motion.div
           className="mx-auto max-w-4xl text-center"
           initial={{ opacity: 0, y: 28 }}
@@ -238,6 +263,11 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
           viewport={{ once: true, amount: 0.35 }}
           transition={LUX_TRANSITION}
         >
+          {props.introEyebrow?.trim() ? (
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.2em] text-metal-bronze-strong md:text-sm md:tracking-[0.24em]">
+              {props.introEyebrow}
+            </p>
+          ) : null}
           <h2 className='font-sans text-4xl font-bold leading-tight tracking-[-0.02em] text-tone-sky md:text-5xl'>
             {props.introTitle}
           </h2>
@@ -247,7 +277,12 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
         </motion.div>
       </section>
 
-      <section className="mx-auto max-w-content px-4 pb-16 md:px-6 md:pb-20">
+      <section data-home-section="about" className="relative mx-auto max-w-content px-4 pb-16 md:px-6 md:pb-20">
+        {props.renderAdminChrome ? (
+          <div className="pointer-events-auto absolute right-4 top-6 z-20 md:right-10">
+            {props.renderAdminChrome("about")}
+          </div>
+        ) : null}
         <div className="rounded-[30px] border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))] p-6 text-center shadow-[0_18px_54px_rgba(0,0,0,0.32)] md:p-10">
           <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-metal-bronze-strong">
             {props.aboutMeTitle ?? "ABOUT ME"}
@@ -285,7 +320,12 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
       </section>
 
       {galleryImageUrls.length > 0 ? (
-        <section className="mx-auto max-w-content px-4 pb-16 md:px-6 md:pb-20">
+        <section data-home-section="gallery" className="relative mx-auto max-w-content px-4 pb-16 md:px-6 md:pb-20">
+          {props.renderAdminChrome ? (
+            <div className="pointer-events-auto absolute right-3 top-0 z-20 md:right-8">
+              {props.renderAdminChrome("gallery")}
+            </div>
+          ) : null}
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {galleryImageUrls.map((src, index) => (
               <figure
@@ -303,16 +343,31 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
             ))}
           </div>
         </section>
+      ) : props.renderAdminChrome ? (
+        <section data-home-section="gallery" className="relative mx-auto max-w-content px-4 pb-16 md:px-6 md:pb-20">
+          <div className="pointer-events-auto absolute right-3 top-0 z-20 md:right-8">
+            {props.renderAdminChrome("gallery")}
+          </div>
+          <p className="rounded-xl border border-dashed border-white/20 bg-black/20 py-8 text-center text-sm text-tone-soft">
+            등록된 갤러리 이미지가 없습니다. 수정에서 URL을 추가하세요.
+          </p>
+        </section>
       ) : null}
 
-      <section className="mx-auto grid max-w-content gap-10 border-y border-border/45 px-4 py-20 md:px-6 md:py-24">
+      <section className="relative mx-auto grid max-w-content gap-10 border-y border-border/45 px-4 py-20 md:px-6 md:py-24">
         <motion.div
-          className="text-center"
+          data-home-section="vehicle"
+          className="relative text-center"
           initial={{ opacity: 0, y: 36 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.45 }}
           transition={LUX_TRANSITION}
         >
+          {props.renderAdminChrome ? (
+            <div className="pointer-events-auto absolute right-0 top-0 z-20">
+              {props.renderAdminChrome("vehicle")}
+            </div>
+          ) : null}
           <p className={homeSectionEyebrow}>{props.vehicleEyebrow}</p>
           <h2 className='mt-3 font-sans text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
             {props.vehicleTitle}
@@ -340,12 +395,18 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
         </motion.div>
 
         <motion.div
-          className="mx-auto w-full max-w-3xl rounded-[30px] border border-metal-bronze/30 bg-gradient-to-br from-white/[0.03] to-brand-deep/25 p-8 text-center"
+          data-home-section="pricing"
+          className="relative mx-auto w-full max-w-3xl rounded-[30px] border border-metal-bronze/30 bg-gradient-to-br from-white/[0.03] to-brand-deep/25 p-8 text-center"
           initial={{ opacity: 0, y: 36 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.45 }}
           transition={LUX_TRANSITION}
         >
+          {props.renderAdminChrome ? (
+            <div className="pointer-events-auto absolute right-4 top-4 z-20">
+              {props.renderAdminChrome("pricing")}
+            </div>
+          ) : null}
           <p className={homeSectionEyebrow}>{props.pricingEyebrow}</p>
           <h2 className='mt-3 font-sans text-3xl font-bold tracking-[-0.02em] text-tone-strong md:text-4xl'>
             {props.pricingTitle}
@@ -365,7 +426,12 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
         </motion.div>
       </section>
 
-      <section className="mx-auto max-w-content px-4 py-20 md:px-6 md:py-24">
+      <section data-home-section="booking" className="relative mx-auto max-w-content px-4 py-20 md:px-6 md:py-24">
+        {props.renderAdminChrome ? (
+          <div className="pointer-events-auto absolute right-4 top-6 z-20 md:right-10">
+            {props.renderAdminChrome("booking")}
+          </div>
+        ) : null}
         <motion.div
           className="rounded-[30px] border border-metal-bronze/32 bg-gradient-to-r from-brand-deep/55 to-surface p-8 text-center md:p-10"
           initial={{ opacity: 0, y: 35 }}
@@ -398,7 +464,12 @@ export function BespokeHomeExperience(props: BespokeHomeExperienceProps) {
         </motion.div>
       </section>
 
-      <section className="mx-auto max-w-content px-4 pb-24 text-center md:px-6 md:pb-32">
+      <section data-home-section="reviews" className="relative mx-auto max-w-content px-4 pb-24 text-center md:px-6 md:pb-32">
+        {props.renderAdminChrome ? (
+          <div className="pointer-events-auto absolute right-3 top-0 z-20 md:right-10">
+            {props.renderAdminChrome("reviews")}
+          </div>
+        ) : null}
         <p className={homeSectionEyebrow}>{props.reviewEyebrow}</p>
         <h2 className='mt-3 font-sans text-4xl font-bold tracking-[-0.02em] text-tone-sky md:text-5xl'>
           {props.reviewTitle}

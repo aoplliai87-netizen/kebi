@@ -64,5 +64,7 @@ export async function readLocalSiteSettings() {
     home: emptyHomeSections(),
     subpages: emptySubpagesContent(),
     seo: emptySeoPagesSettings(),
+    destinationContentOverrides: {},
+    seoDestinationBySlug: {},
   });
 }

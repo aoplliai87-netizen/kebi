@@ -1,12 +1,12 @@
 {
   "Metadata": {
     "siteName": "Kkebi",
-    "title": "Kkebi · 首尔仁川机场包车接送",
-    "description": "专注仁川机场、金浦机场包车接送，明码标价，宽敞商务车/包车门到门服务。",
+    "title": "仁川机场包车接送｜江南·明洞·弘大｜深夜凌晨｜Kkebi",
+    "description": "仁川·金浦门到门包车；江南、明洞、弘大、COEX、蚕室（乐天世界）等可按地址接送。高速费等计费口径预约时说明。",
     "pages": {
       "home": {
-        "title": "仁川机场 Private Van Service · Airport Transfer | Kkebi",
-        "description": "Kkebi 提供 Private Van Service、Airport Shuttle、Minivan Taxi 与 Private Airport Pickup，覆盖 Incheon Airport Transfer、Incheon to Seoul Private Van、Korea Golf Tour 及 VIP Airport Transfer Korea。"
+        "title": "仁川机场接送｜包车·深夜凌晨｜江南·COEX·明洞·弘大｜Kkebi",
+        "description": "仁川、金浦至首尔市区主要板块包车；江南·三成（COEX）、明洞购物区、弘大、蚕室等常用搜索地名均可按酒店或场馆门口接送。支持外籍旅客咨询。"
       },
       "intro": {
         "title": "关于 Kkebi | 仁川机场包车接送",
@@ -21,8 +21,8 @@
         "description": "含高速费等透明定报价。按区域查询仁川机场包车费用。"
       },
       "booking": {
-        "title": "在线预约 | 仁川机场包车 | Kkebi",
-        "description": "先沟通再确认。提交行程、人数与行李信息，我们将尽快为您确认用车。"
+        "title": "预约与报价｜仁川机场包车｜Kkebi",
+        "description": "请填写航班号、接送时间、详细地址（酒店名称或地图定位）、人数与行李。凌晨或深夜、行李较多等情况请一并提前说明，便于确认车型。"
       },
       "review": {
         "title": "用户评价 | 仁川机场包车 | Kkebi",
@@ -35,6 +35,10 @@
       "support": {
         "title": "客服支持 · FAQ | Kkebi",
         "description": "首都圈及外围区域、预订与支付等常见问题与在线表单。亦可电话或 Kakao 联系。"
+      },
+      "destinationsHub": {
+        "title": "机场接送路线｜仁川·金浦｜江南·明洞·弘大·COEX｜Kkebi",
+        "description": "按区域整理接送说明、拥堵与时段提示、常见问题。商务会展、购物、亲子乐天世界等不同出行目的可快速找到对应路线。"
       }
     }
   },
@@ -165,17 +169,17 @@
   },
   "HomePage": {
     "heroEyebrow": "仁川机场 · 高端接送",
-    "heroTitle": "仁川机场 Private Van Service · Airport Transfer",
-    "heroSubtitle": "<brand>Kkebi</brand> 提供从仁川机场到首尔及周边的 Airport Shuttle、Minivan Taxi 与 Private Airport Pickup 接送体验。",
+    "heroTitle": "仁川·金浦机场包车接送",
+    "heroSubtitle": "<brand>Kkebi</brand> 提供仁川、金浦至首尔与首都圈的门到门包车；红眼航班与多人行李可预约时说明。",
     "vehicle": {
       "eyebrow": "AIRPORT VAN FLEET",
       "title": "车队一览",
       "cardTitle": "宽敞车厢与实用行李空间",
-      "desc": "根据人数与行程匹配高端商务车与中巴，适用于 Airport Transfer 与 Korea Chauffeur Service 场景。",
+      "desc": "按人数、行李与行程匹配商务车至大型客车等级，避免“车型与装载不符”。",
       "imageAlt": "车辆示意",
       "staria": "斯塔利亚",
       "solati": "索拉蒂",
-      "county": "县"
+      "county": "康恩迪（大型车）"
     },
     "pricing": {
       "eyebrow": "价格",
@@ -199,14 +203,14 @@
     "booking": {
       "eyebrow": "预约",
       "title": "沟通后快速确认",
-      "desc": "通过电话、Kakao 或短信告知路线、人数与行李，我们会尽快确认 Incheon to Seoul Private Van、Korea Golf Tour、VIP Airport Transfer Korea 订单。",
+      "desc": "通过电话、Kakao 或短信告知路线、人数与行李，我们会在确认需求后尽快回复可预约时段与报价要点。",
       "ctaCall": "电话咨询",
       "ctaReview": "在线预约"
     },
     "ctaBookNow": "立即预订",
     "ctaCallConsult": "电话咨询",
     "ctaCallDirect": "立即致电",
-    "galleryAlt": "Kkebi Private Van Service 与 Airport Transfer 画廊图片 {index}",
+    "galleryAlt": "Kkebi 车队展示图片 {index}",
     "channelPhone": "电话",
     "channelKakao": "KakaoTalk",
     "review": {
@@ -483,13 +487,31 @@
   },
   "HomeDestinations": {
     "eyebrow": "DESTINATIONS",
-    "title": "热门路线与专题落地页",
-    "description": "仁川机场、首尔、江南、高尔夫旅游等常用路线一站式入口。各页提供价格说明、常见问题与联系方式。",
+    "title": "热门机场接送路线",
+    "description": "涵盖仁川·金浦衔接，以及外国人观光/VIP动线与议政府、芦原、江北、南杨州、九里等首都圈北部与东北部住户常用的机场路线；清晨出发、儿童座椅、高尔夫球包与团体出行也可在预约时一并沟通。",
+    "footerMoreCourses": "查看更多机场接送路线",
     "toBooking": "前往在线预约",
     "pricingSection": "价格说明",
     "faqSection": "常见问题",
     "ctaSection": "预约与咨询",
-    "relatedSection": "相关热门路线"
+    "relatedSection": "相关接送路线",
+    "popularSection": "常被一起搜索的路线",
+    "recommendedSection": "推荐机场接送",
+    "northGyeonggiSection": "京畿北部热门机场路线",
+    "hubCategoryPopular": "热门机场接送",
+    "hubCategoryForeignVip": "外国人观光·VIP",
+    "hubCategoryGyeonggiNorth": "京畿北部·江北接送",
+    "hubCategoryFamilyTheme": "家庭·高尔夫·清晨",
+    "hubCategoryOther": "更多路线",
+    "operationalTipsSection": "实务要点",
+    "scenarioExamplesSection": "常见情况 · 咨询示例",
+    "destinationsQuickBooking": "快速预约咨询",
+    "poiSectionEyebrow": "目的地语境",
+    "poiSectionTitle": "酒店·地标·上下车说明",
+    "poiTagsTitle": "预约时常一起确认的行程类型",
+    "poiHotelsTitle": "常被检索的酒店示例",
+    "poiLandmarksTitle": "地标与场馆",
+    "poiDropoffTitle": "接送汇合与停靠协调"
   },
   "HomeFaq": {
     "eyebrow": "FAQ",

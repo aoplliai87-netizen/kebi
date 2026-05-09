@@ -1,16 +1,16 @@
 {
   "Metadata": {
     "siteName": "Kkebi",
-    "title": "Kkebi · 仁川空港プライベートバン",
-    "description": "仁川空港・金浦空港の送迎に特化。定額制・広々車内のジャンボタクシー級プライベートバンで快適にご移動ください。",
+    "title": "仁川空港送迎・貸切ワゴン｜江南・明洞・弘大｜深夜対応｜Kkebi",
+    "description": "仁川・金浦のドアツードア貸切。カンナム・ミョンドン・ホンデ、COEX・蚕室（ロッテワールド）方面も住所指定でピックアップ。見積もりで通行料の扱いを明示します。",
     "pages": {
       "home": {
-        "title": "仁川空港送迎 Private Van Service・Airport Transfer | Kkebi",
-        "description": "Kkebiは仁川空港送迎を中心に、Airport Shuttle、Minivan Taxi、Private Airport Pickupを含む空港移動を提供。Incheon to Seoul Private VanやVIP Airport Transfer Koreaにも対応します。"
+        "title": "仁川空港送迎｜貸切ワゴン・深夜早朝｜江南・COEX・明洞・弘大｜Kkebi",
+        "description": "仁川・金浦からソウル主要エリアまで貸切ワゴン。カンナム・三成（COEX）・ミョンドン・ホンデ・蚕室など、検索でよく使われる地名でも住所指定でお迎え。外国語のお問い合わせ可。"
       },
       "intro": {
-        "title": "Kkebiについて | 仁川空港送迎プライベートバン",
-        "description": "Kkebiは仁川空港送迎に特化したプライベートバン。快適さと安心にこだわる空港コンシェルジュパートナーです。"
+        "title": "Kkebiについて | 仁川・金浦 貸切空港送迎",
+        "description": "Kkebiは仁川・金浦の空港送迎に特化した貸切ワゴンです。お迎え動線と料金条件を予約時にそろえてご案内します。"
       },
       "vehicle": {
         "title": "車両紹介 | 空港送迎向け快適プライベートバン",
@@ -21,8 +21,8 @@
         "description": "高速道路料金込みの明朗な定額制。エリア別の仁川空港プライベートバン料金をご確認ください。"
       },
       "booking": {
-        "title": "オンライン予約 | 仁川空港プライベートバン | Kkebi",
-        "description": "ご相談のうえ確定。ルート・人数・荷物をお知らせいただければ、スムーズに予約を承ります。"
+        "title": "ご予約・お見積もり｜仁川空港貸切ワゴン｜Kkebi",
+        "description": "便名・お迎え時刻・住所（ホテル名・地図ピン）・人数・荷物をご記入ください。早朝・深夜やお荷物が多い場合も事前にお知らせください。"
       },
       "review": {
         "title": "お客様の声 | 仁川空港プライベートバン | Kkebi",
@@ -35,6 +35,10 @@
       "support": {
         "title": "サポート・FAQ | Kkebi",
         "description": "首都圏内外のご利用、予約・お支払いに関するFAQとオンラインお問い合わせ。お電話・カカオでも承ります。"
+      },
+      "destinationsHub": {
+        "title": "空港送迎ルート一覧｜仁川・金浦｜江南・明洞・弘大・COEX｜Kkebi",
+        "description": "主要エリア別にピックアップ・ドロップの考え方、混雑時の余裕、FAQを整理。出張・展示会・家族旅行など検索意図に沿ってルートを選べます。"
       }
     }
   },
@@ -165,13 +169,13 @@
   },
   "HomePage": {
     "heroEyebrow": "仁川空港・プレミアム送迎",
-    "heroTitle": "仁川空港 Private Van Service・Airport Transfer",
-    "heroSubtitle": "<brand>Kkebi</brand> が仁川空港からご目的地まで、Airport Shuttle・Minivan Taxi・Private Airport Pickupを含む快適な送迎を提供します。",
+    "heroTitle": "仁川・金浦空港の貸切送迎",
+    "heroSubtitle": "<brand>Kkebi</brand> は仁川・金浦からソウル・首都圏まで、住所指定のドアツードア送迎を行います。早朝・深夜もご相談ください。",
     "vehicle": {
       "eyebrow": "AIRPORT VAN FLEET",
       "title": "車両ラインナップ",
       "cardTitle": "広々車内と実用的な荷室",
-      "desc": "人数・行程に合わせ、Airport TransferとKorea Chauffeur Serviceの用途に適したプレミアムバン・バスをご用意しています。",
+      "desc": "人数・荷物・行程に合わせ、ジャンボタクシー級のワゴンから大型バンまでご提案します。",
       "imageAlt": "車両イメージ",
       "staria": "スタリア",
       "solati": "ソラティ",
@@ -199,14 +203,14 @@
     "booking": {
       "eyebrow": "予約",
       "title": "ご相談のうえスピード確定",
-      "desc": "電話・カカオ・SMSでルート・人数・荷物をお知らせください。Incheon to Seoul Private Van、Korea Golf Tour、VIP Airport Transfer Koreaの予約も迅速に確定します。",
+      "desc": "電話・カカオ・SMSでルート・人数・荷物をお知らせください。内容を確認のうえ、空き状況に応じて速やかにご返答します。",
       "ctaCall": "電話で相談",
       "ctaReview": "オンライン予約"
     },
     "ctaBookNow": "今すぐ予約",
     "ctaCallConsult": "電話相談",
     "ctaCallDirect": "電話をかける",
-    "galleryAlt": "Kkebi Private Van Service・Airport Transfer ギャラリー画像 {index}",
+    "galleryAlt": "Kkebi 車両ギャラリー画像 {index}",
     "channelPhone": "電話",
     "channelKakao": "カカオトーク",
     "review": {
@@ -483,13 +487,31 @@
   },
   "HomeDestinations": {
     "eyebrow": "DESTINATIONS",
-    "title": "人気ルート・ランディングページ",
-    "description": "仁川空港、ソウル、江南、ゴルフツアーなどよく検索される区間へのリンクです。各ページで料金目安・FAQ・お問い合わせをご確認いただけます。",
+    "title": "よく使われる空港送迎ルート",
+    "description": "仁川・金浦はもちろん、外国人観光・VIP動線と、議政府・蘆原・江北・南楊州・九里など首都圏北部・東北部の実居住エリア向けも網羅。早朝出国・チャイルドシート・ゴルフバッグ・団体移動もご予約時にご相談ください。",
+    "footerMoreCourses": "さらに空港送迎ルートを見る",
     "toBooking": "オンライン予約へ",
     "pricingSection": "料金のご案内",
     "faqSection": "よくある質問",
     "ctaSection": "ご予約・お問い合わせ",
-    "relatedSection": "関連する人気ルート"
+    "relatedSection": "関連送迎ルート",
+    "popularSection": "よく一緒に検索される区間",
+    "recommendedSection": "おすすめ空港送迎",
+    "northGyeonggiSection": "京畿北部の人気空港ルート",
+    "hubCategoryPopular": "人気の空港送迎",
+    "hubCategoryForeignVip": "外国人観光・VIP",
+    "hubCategoryGyeonggiNorth": "京畿北部・江北の空港送迎",
+    "hubCategoryFamilyTheme": "家族・ゴルフ・早朝",
+    "hubCategoryOther": "その他のルート",
+    "operationalTipsSection": "運営上のポイント",
+    "scenarioExamplesSection": "よくあるご利用シーン（例）",
+    "destinationsQuickBooking": "予約・問い合わせ",
+    "poiSectionEyebrow": "エリアの文脈",
+    "poiSectionTitle": "ホテル・ランドマーク・乗降のすり合わせ",
+    "poiTagsTitle": "ご予約時に一緒に決めやすい動線",
+    "poiHotelsTitle": "検索されやすいホテル例",
+    "poiLandmarksTitle": "ランドマーク・施設",
+    "poiDropoffTitle": "ピックアップ・ドロップオフの調整"
   },
   "HomeFaq": {
     "eyebrow": "FAQ",

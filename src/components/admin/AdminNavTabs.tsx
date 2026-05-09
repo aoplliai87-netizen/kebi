@@ -14,15 +14,17 @@ type Props = {
 };
 
 export function AdminNavTabs({ currentPath, reservationsCount, inquiriesCount }: Props) {
+  /** 공개 홈 스크롤 순(히어로·소개… 리뷰 → 목적지 → FAQ)과 맞추고, 운영 메뉴(SEO·예약·문의)는 맨 뒤 유지 */
   const tabs: AdminTab[] = [
     { href: "/admin", label: "대시보드", desc: "요약" },
     { href: "/admin/content", label: "홈페이지 관리", desc: "문구/갤러리/연락처" },
-    { href: "/admin/vehicles", label: "차량 비주얼", desc: "실제 페이지 편집" },
-    { href: "/admin/review", label: "리뷰 비주얼", desc: "실제 페이지 편집" },
-    { href: "/admin/booking", label: "예약 비주얼", desc: "실제 페이지 편집" },
-    { href: "/admin/inquiry", label: "문의 비주얼", desc: "실제 페이지 편집" },
     { href: "/admin/intro", label: "소개 비주얼", desc: "실제 페이지 편집" },
+    { href: "/admin/vehicles", label: "차량 비주얼", desc: "실제 페이지 편집" },
     { href: "/admin/pricing", label: "요금표 관리", desc: "/pricing 상세표" },
+    { href: "/admin/booking", label: "예약 비주얼", desc: "실제 페이지 편집" },
+    { href: "/admin/review", label: "리뷰 비주얼", desc: "실제 페이지 편집" },
+    { href: "/admin/destinations", label: "목적지 랜딩", desc: "공항 코스 본문 편집" },
+    { href: "/admin/inquiry", label: "문의 비주얼", desc: "실제 페이지 편집" },
     { href: "/admin/seo", label: "SEO 관리", desc: "개발자용 메타" },
     { href: "/admin/reservations", label: "예약 관리", desc: "예약 접수", count: reservationsCount },
     { href: "/admin/inquiries", label: "문의 관리", desc: "문의 내역", count: inquiriesCount },

@@ -1,6 +1,5 @@
 import { AdminNavTabs } from "@/components/admin/AdminNavTabs";
 import { AdminReviewVisualEditor } from "@/components/admin/AdminReviewVisualEditor";
-import { AdminSiteSettingsForm } from "@/components/admin/AdminSiteSettingsForm";
 import { buildAdminContentFallbacks } from "@/lib/admin-content-fallbacks";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { listReservations } from "@/lib/reservation-store";
@@ -37,17 +36,6 @@ export default async function AdminReviewPage() {
           messagesByLocale={{ ko, en, ja, zh }}
         />
       </div>
-      <details className="mt-6 rounded-xl border border-white/10 bg-black/20 p-4">
-        <summary className="cursor-pointer text-sm font-semibold text-tone-strong">고급 편집 (기존 폼)</summary>
-        <div className="mt-4">
-          <AdminSiteSettingsForm
-            initial={settings}
-            fallbackHints={fallbackHints}
-            initialTab="subpages"
-            allowedTabs={["subpages", "reviews"]}
-          />
-        </div>
-      </details>
     </div>
   );
 }

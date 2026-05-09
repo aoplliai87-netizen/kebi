@@ -6,8 +6,10 @@ import { renderIntroBrandMarkup } from "@/lib/render-brand-markup";
 import { type LocaleKey, type SiteSettings, getSiteSettings } from "@/lib/site-settings-store";
 import type { ManagedVehicleMedia } from "@/lib/vehicle-media-types";
 import { getManagedVehicleMedia } from "@/lib/vehicle-media-store";
+import { HOME_DESTINATIONS_FOOTER_PATH } from "@/constants/destinations";
+import { getFeaturedDestinationButtonDefaults } from "../../data/landing-pages";
 
-type HomeViewModel = {
+export type HomeViewModel = {
   locale: string;
   heroEyebrow: string;
   heroTitle: string;
@@ -39,6 +41,12 @@ type HomeViewModel = {
   faqTitle: string;
   faqItems: { q: string; a: string }[];
   vehicleMainImages: ManagedVehicleMedia["main"];
+  destinationsEyebrow: string;
+  destinationsTitle: string;
+  destinationsDescription: string;
+  destinationButtons: { label: string; href: string }[];
+  destinationsFooterLabel: string;
+  destinationsFooterHref: string;
 };
 
 export async function buildHomePageViewModel(
@@ -49,10 +57,11 @@ export async function buildHomePageViewModel(
   },
 ): Promise<HomeViewModel> {
   const localeKey = locale as LocaleKey;
-  const [t, tIntroHero, tFaq, siteSettings, vehicleMedia] = await Promise.all([
+  const [t, tIntroHero, tFaq, tDest, siteSettings, vehicleMedia] = await Promise.all([
     getTranslations({ locale, namespace: "HomePage" }),
     getTranslations({ locale, namespace: "IntroPage.hero" }),
     getTranslations({ locale, namespace: "HomeFaq" }),
+    getTranslations({ locale, namespace: "HomeDestinations" }),
     options?.siteSettings ? Promise.resolve(options.siteSettings) : getSiteSettings(),
     options?.vehicleMedia ? Promise.resolve(options.vehicleMedia) : getManagedVehicleMedia(),
   ]);
@@ -114,6 +123,16 @@ export async function buildHomePageViewModel(
   const faqItems = ([1, 2, 3, 4, 5] as const).map((n, idx) => ({
     q: pickLocalized(home.faq.items[idx].q, localeKey) || tFaq(`q${n}`),
     a: pickLocalized(home.faq.items[idx].a, localeKey) || tFaq(`a${n}`),
+  }));
+
+  const dest = home.destinations;
+  const defaultDestBtns = getFeaturedDestinationButtonDefaults(locale, dest.featuredSlugs);
+  const destinationButtons = [0, 1, 2].map((i) => ({
+    label:
+      pickLocalized(dest.buttons[i].label, localeKey).trim() ||
+      defaultDestBtns[i]?.label ||
+      "",
+    href: dest.buttons[i].href.trim() || defaultDestBtns[i]?.href || "/",
   }));
 
   return {
@@ -183,5 +202,11 @@ export async function buildHomePageViewModel(
     faqTitle,
     faqItems,
     vehicleMainImages: vehicleMedia.main,
+    destinationsEyebrow: pickLocalized(dest.eyebrow, localeKey) || tDest("eyebrow"),
+    destinationsTitle: pickLocalized(dest.title, localeKey) || tDest("title"),
+    destinationsDescription: pickLocalized(dest.description, localeKey) || tDest("description"),
+    destinationButtons,
+    destinationsFooterLabel: pickLocalized(dest.footerLabel, localeKey) || tDest("footerMoreCourses"),
+    destinationsFooterHref: dest.footerHref.trim() || HOME_DESTINATIONS_FOOTER_PATH,
   };
 }

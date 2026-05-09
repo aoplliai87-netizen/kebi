@@ -1,13 +1,22 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AdminImageUploader } from "@/components/admin/AdminImageUploader";
-import { SEO_PAGE_KEYS, type ManagedSeoPageKey, type SeoPagesSettings } from "@/lib/seo-settings";
+import {
+  SEO_PAGE_KEYS,
+  emptySeoPageSettings,
+  type ManagedSeoPageKey,
+  type SeoPageSettings,
+  type SeoPagesSettings,
+} from "@/lib/seo-settings";
 import type { LocaleKey, SiteSettings } from "@/lib/site-settings-store";
 
 type Props = {
   initial: SiteSettings;
   fallback: SeoPagesSettings;
+  destinationSlugs: string[];
+  destinationSlugFallbacks: Record<string, SeoPageSettings>;
 };
 
 const LOCALES: LocaleKey[] = ["ko", "en", "ja", "zh"];
@@ -19,10 +28,16 @@ const PAGE_LABEL: Record<ManagedSeoPageKey, string> = {
   booking: "온라인예약",
   review: "리뷰",
   inquiry: "문의/FAQ",
-  destinations: "목적지 랜딩페이지",
+  destinations: "목적지 코스 목록 (/destinations)",
 };
 
-export function AdminSeoSettingsForm({ initial, fallback }: Props) {
+export function AdminSeoSettingsForm({
+  initial,
+  fallback,
+  destinationSlugs,
+  destinationSlugFallbacks,
+}: Props) {
+  const router = useRouter();
   const bootstrapped = useMemo<SiteSettings>(() => {
     const locales: LocaleKey[] = ["ko", "en", "ja", "zh"];
     const nextSeo = { ...initial.seo };
@@ -56,14 +71,46 @@ export function AdminSeoSettingsForm({ initial, fallback }: Props) {
       }
       nextSeo[key] = page;
     }
-    return { ...initial, seo: nextSeo };
-  }, [initial, fallback]);
+    const nextDest: Record<string, SeoPageSettings> = { ...initial.seoDestinationBySlug };
+    for (const slug of destinationSlugs) {
+      const fb = destinationSlugFallbacks[slug] ?? emptySeoPageSettings();
+      const merged = { ...(nextDest[slug] ?? emptySeoPageSettings()) };
+      merged.metaTitle = { ...merged.metaTitle };
+      merged.metaDescription = { ...merged.metaDescription };
+      merged.ogTitle = { ...merged.ogTitle };
+      merged.ogDescription = { ...merged.ogDescription };
+      merged.canonicalUrl = { ...merged.canonicalUrl };
+      merged.focusKeywords = { ...merged.focusKeywords };
+      merged.searchAssistNotes = { ...merged.searchAssistNotes };
+      for (const loc of locales) {
+        merged.metaTitle[loc] = merged.metaTitle[loc].trim() || fb.metaTitle[loc];
+        merged.metaDescription[loc] = merged.metaDescription[loc].trim() || fb.metaDescription[loc];
+        merged.ogTitle[loc] = merged.ogTitle[loc].trim() || merged.metaTitle[loc];
+        merged.ogDescription[loc] = merged.ogDescription[loc].trim() || merged.metaDescription[loc];
+        merged.canonicalUrl[loc] = merged.canonicalUrl[loc].trim() || fb.canonicalUrl[loc];
+        merged.focusKeywords[loc] = merged.focusKeywords[loc].trim() || fb.focusKeywords[loc];
+      }
+      nextDest[slug] = merged;
+    }
+    return { ...initial, seo: nextSeo, seoDestinationBySlug: nextDest };
+  }, [initial, fallback, destinationSlugs, destinationSlugFallbacks]);
 
   const [settings, setSettings] = useState<SiteSettings>(bootstrapped);
   const [locale, setLocale] = useState<LocaleKey>("ko");
   const [page, setPage] = useState<ManagedSeoPageKey>("home");
+  const [destSlug, setDestSlug] = useState(() => destinationSlugs[0] ?? "");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    setSettings(bootstrapped);
+  }, [bootstrapped]);
+
+  useEffect(() => {
+    if (destSlug && !destinationSlugs.includes(destSlug)) {
+      setDestSlug(destinationSlugs[0] ?? "");
+    }
+  }, [destSlug, destinationSlugs]);
 
   const current = settings.seo[page];
   const fb = fallback[page];
@@ -97,6 +144,41 @@ export function AdminSeoSettingsForm({ initial, fallback }: Props) {
     }));
   };
 
+  const destCur = settings.seoDestinationBySlug[destSlug] ?? emptySeoPageSettings();
+  const destFb = destinationSlugFallbacks[destSlug] ?? emptySeoPageSettings();
+
+  const destKeywordCount = useMemo(
+    () =>
+      destCur.focusKeywords[locale].split(/\r?\n|,/g).map((v) => v.trim()).filter(Boolean).length,
+    [destCur.focusKeywords, locale],
+  );
+
+  const patchDestinationSlug = (
+    field:
+      | "metaTitle"
+      | "metaDescription"
+      | "ogTitle"
+      | "ogDescription"
+      | "canonicalUrl"
+      | "focusKeywords"
+      | "searchAssistNotes",
+    value: string,
+  ) => {
+    setSettings((prev) => {
+      const prevSlugSeo = prev.seoDestinationBySlug[destSlug] ?? emptySeoPageSettings();
+      return {
+        ...prev,
+        seoDestinationBySlug: {
+          ...prev.seoDestinationBySlug,
+          [destSlug]: {
+            ...prevSlugSeo,
+            [field]: { ...prevSlugSeo[field], [locale]: value },
+          },
+        },
+      };
+    });
+  };
+
   const save = async () => {
     setSaving(true);
     setMessage("");
@@ -107,7 +189,12 @@ export function AdminSeoSettingsForm({ initial, fallback }: Props) {
         body: JSON.stringify(settings),
       });
       const result = (await res.json()) as { ok?: boolean; message?: string };
-      setMessage(result.ok ? "저장 완료" : result.message ?? "저장 실패");
+      if (result.ok) {
+        setMessage("저장 완료");
+        router.refresh();
+      } else {
+        setMessage(result.message ?? "저장 실패");
+      }
     } catch {
       setMessage("저장 실패");
     } finally {
@@ -225,6 +312,110 @@ export function AdminSeoSettingsForm({ initial, fallback }: Props) {
           value={current.searchAssistNotes[locale]}
           onChange={(e) => patchLocalized("searchAssistNotes", e.target.value)}
           placeholder="네이버/일본 검색용 보조 키워드 메모"
+          className="w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm"
+        />
+      </div>
+
+      <div className="space-y-3 rounded-xl border border-white/10 bg-black/20 p-4">
+        <p className="text-sm font-semibold text-tone-strong">
+          개별 목적지 랜딩 SEO (`/destinations/[slug]`)
+        </p>
+        <p className="text-xs text-tone-soft">
+          슬러그별로 메타·OG·캐노니컬·키워드를 설정합니다. 비우면 해당 언어는 아래 기본값(데이터 파일)이 적용됩니다.
+        </p>
+        <label className="block text-xs text-tone-soft">랜딩 slug</label>
+        <select
+          value={destSlug}
+          onChange={(e) => setDestSlug(e.target.value)}
+          className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 font-mono text-xs text-tone-strong"
+        >
+          {destinationSlugs.map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
+
+        <p className="text-sm font-semibold text-tone-strong">
+          {destSlug} ({locale.toUpperCase()})
+        </p>
+
+        <input
+          value={destCur.metaTitle[locale]}
+          onChange={(e) => patchDestinationSlug("metaTitle", e.target.value)}
+          placeholder={destFb.metaTitle[locale]}
+          className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm"
+        />
+        {showHint(destCur.metaTitle[locale], destFb.metaTitle[locale]) ? (
+          <p className="text-xs text-tone-soft">기본값: {destFb.metaTitle[locale]}</p>
+        ) : null}
+
+        <textarea
+          rows={3}
+          value={destCur.metaDescription[locale]}
+          onChange={(e) => patchDestinationSlug("metaDescription", e.target.value)}
+          placeholder={destFb.metaDescription[locale]}
+          className="w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm"
+        />
+        {showHint(destCur.metaDescription[locale], destFb.metaDescription[locale]) ? (
+          <p className="text-xs text-tone-soft">기본값: {destFb.metaDescription[locale]}</p>
+        ) : null}
+
+        <input
+          value={destCur.ogTitle[locale]}
+          onChange={(e) => patchDestinationSlug("ogTitle", e.target.value)}
+          placeholder={destFb.ogTitle[locale]}
+          className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm"
+        />
+
+        <textarea
+          rows={3}
+          value={destCur.ogDescription[locale]}
+          onChange={(e) => patchDestinationSlug("ogDescription", e.target.value)}
+          placeholder={destFb.ogDescription[locale]}
+          className="w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm"
+        />
+
+        <AdminImageUploader
+          section="seo"
+          purpose={`dest-${destSlug}`}
+          label="OG 이미지"
+          value={destCur.ogImage}
+          onChange={(next) =>
+            setSettings((prev) => ({
+              ...prev,
+              seoDestinationBySlug: {
+                ...prev.seoDestinationBySlug,
+                [destSlug]: {
+                  ...(prev.seoDestinationBySlug[destSlug] ?? emptySeoPageSettings()),
+                  ogImage: next,
+                },
+              },
+            }))
+          }
+        />
+
+        <input
+          value={destCur.canonicalUrl[locale]}
+          onChange={(e) => patchDestinationSlug("canonicalUrl", e.target.value)}
+          placeholder={destFb.canonicalUrl[locale]}
+          className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm"
+        />
+
+        <textarea
+          rows={3}
+          value={destCur.focusKeywords[locale]}
+          onChange={(e) => patchDestinationSlug("focusKeywords", e.target.value)}
+          placeholder={destFb.focusKeywords[locale]}
+          className="w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm"
+        />
+        <p className="text-xs text-tone-soft">포커스 키워드 {destKeywordCount}개</p>
+
+        <textarea
+          rows={3}
+          value={destCur.searchAssistNotes[locale]}
+          onChange={(e) => patchDestinationSlug("searchAssistNotes", e.target.value)}
+          placeholder="검색 보조 메모"
           className="w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm"
         />
       </div>

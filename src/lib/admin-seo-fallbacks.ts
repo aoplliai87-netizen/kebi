@@ -1,5 +1,13 @@
+import { getAllDestinationSlugs, getCopyForLocale, getLandingPageBySlug } from "../../data/landing-pages";
 import { absoluteUrl } from "@/lib/seo";
-import { SEO_PAGE_KEYS, type ManagedSeoPageKey, type SeoPagesSettings, emptySeoPagesSettings } from "@/lib/seo-settings";
+import {
+  SEO_PAGE_KEYS,
+  type ManagedSeoPageKey,
+  type SeoPagesSettings,
+  type SeoPageSettings,
+  emptySeoPageSettings,
+  emptySeoPagesSettings,
+} from "@/lib/seo-settings";
 import type { LocaleKey } from "@/lib/site-settings-store";
 
 const PAGE_TO_METADATA_KEY: Record<ManagedSeoPageKey, string> = {
@@ -10,7 +18,7 @@ const PAGE_TO_METADATA_KEY: Record<ManagedSeoPageKey, string> = {
   booking: "booking",
   review: "review",
   inquiry: "inquiry",
-  destinations: "home",
+  destinations: "destinationsHub",
 };
 
 const PAGE_TO_PATH: Record<ManagedSeoPageKey, string> = {
@@ -62,5 +70,31 @@ export async function buildAdminSeoFallbacks(): Promise<SeoPagesSettings> {
     }
   }
 
+  return out;
+}
+
+/** `/[locale]/destinations/[slug]` SEO 폼 placeholder — 랜딩 데이터 파일 메타 기준 */
+export function buildSeoFallbackForDestinationSlug(slug: string): SeoPageSettings {
+  const page = getLandingPageBySlug(slug);
+  const out = emptySeoPageSettings();
+  if (!page) return out;
+  const locales: LocaleKey[] = ["ko", "en", "ja", "zh"];
+  for (const loc of locales) {
+    const copy = getCopyForLocale(page, loc);
+    out.metaTitle[loc] = copy.metaTitle;
+    out.metaDescription[loc] = copy.metaDescription;
+    out.ogTitle[loc] = copy.metaTitle;
+    out.ogDescription[loc] = copy.metaDescription;
+    out.canonicalUrl[loc] = absoluteUrl(`/${loc}/destinations/${slug}`);
+    out.focusKeywords[loc] = copy.keywords.join(", ");
+  }
+  return out;
+}
+
+export function buildAllDestinationSlugSeoFallbacks(): Record<string, SeoPageSettings> {
+  const out: Record<string, SeoPageSettings> = {};
+  for (const slug of getAllDestinationSlugs()) {
+    out[slug] = buildSeoFallbackForDestinationSlug(slug);
+  }
   return out;
 }

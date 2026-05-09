@@ -1,8 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { AdminVisualModal } from "@/components/admin/admin-visual-editor-primitives";
 import { AdminImageUploader } from "@/components/admin/AdminImageUploader";
+import { effectiveText } from "@/lib/admin-visual-effective";
 import type { FleetVehicleKey } from "@/constants/vehicleFleetImages";
 import type { ManagedVehicleMedia } from "@/lib/vehicle-media-types";
 import type { VehicleCardContent, VehicleLocale, VehiclePageContent } from "@/lib/vehicle-page-content";
@@ -44,14 +47,25 @@ function fieldOrDefault(v: Record<VehicleLocale, string>, locale: VehicleLocale,
 }
 
 export function AdminVehicleVisualEditor({ initialMedia, initialContent, defaultsByLocale }: Props) {
+  const router = useRouter();
   const [media, setMedia] = useState(initialMedia);
   const [content, setContent] = useState(initialContent);
   const [locale, setLocale] = useState<VehicleLocale>("ko");
+  const [modalLocale, setModalLocale] = useState<VehicleLocale>("ko");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [editSection, setEditSection] = useState<null | "hero" | "buttons" | FleetVehicleKey>(null);
-  const [showAdvanced, setShowAdvanced] = useState(false);
+
+  useEffect(() => {
+    setMedia(initialMedia);
+    setContent(initialContent);
+  }, [initialMedia, initialContent]);
+
+  useEffect(() => {
+    if (editSection) setModalLocale(locale);
+  }, [editSection, locale]);
   const defaults = defaultsByLocale[locale];
+  const dm = defaultsByLocale[modalLocale];
 
   const cards = useMemo(
     () => ({
@@ -93,6 +107,49 @@ export function AdminVehicleVisualEditor({ initialMedia, initialContent, default
   const patchCard = (key: FleetVehicleKey, next: Partial<VehicleCardContent>) =>
     setContent((prev) => ({ ...prev, [key]: { ...prev[key], ...next } }));
 
+  const resetPanel = () => {
+    if (!editSection) return;
+    const L = modalLocale;
+    setContent((prev) => {
+      const clr = (lv: Record<VehicleLocale, string>) => ({ ...lv, [L]: "" });
+      if (editSection === "hero") {
+        return {
+          ...prev,
+          sectionEyebrow: clr(prev.sectionEyebrow),
+          sectionTitle: clr(prev.sectionTitle),
+          sectionDesc: clr(prev.sectionDesc),
+        };
+      }
+      if (editSection === "buttons") {
+        return {
+          ...prev,
+          detailBtn: clr(prev.detailBtn),
+          bookBtn: clr(prev.bookBtn),
+          phoneBtn: clr(prev.phoneBtn),
+        };
+      }
+      const k = editSection;
+      const c = prev[k];
+      return {
+        ...prev,
+        [k]: {
+          ...c,
+          badge: clr(c.badge),
+          name: clr(c.name),
+          seat45: clr(c.seat45),
+          seat67: clr(c.seat67),
+          capacity: clr(c.capacity),
+          luggage: clr(c.luggage),
+          imageAlt: clr(c.imageAlt),
+          f1: clr(c.f1),
+          f2: clr(c.f2),
+          f3: clr(c.f3),
+          f4: clr(c.f4),
+        },
+      };
+    });
+  };
+
   const saveAll = async () => {
     setSaving(true);
     setMessage("");
@@ -103,31 +160,20 @@ export function AdminVehicleVisualEditor({ initialMedia, initialContent, default
     });
     const result = (await res.json()) as { ok: boolean; message?: string };
     setSaving(false);
-    setMessage(result.ok ? "저장 완료: /vehicle 페이지에 반영됩니다." : result.message ?? "저장 실패");
+    if (result.ok) {
+      setMessage("저장 완료: /vehicle 페이지에 반영됩니다.");
+      router.refresh();
+    } else {
+      setMessage(result.message ?? "저장 실패");
+    }
   };
 
   return (
     <section className="space-y-6">
-      <div className="rounded-2xl border border-white/10 bg-[#07101d] p-4 md:p-6">
-        <p className="text-xs text-tone-soft">공개 홈페이지 헤더 미러 (차량안내 활성)</p>
-        <div className="mt-3 flex flex-wrap gap-2 rounded-xl border border-white/10 bg-black/35 p-2 text-sm">
-          {["홈", "소개", "차량안내", "요금안내", "온라인예약", "이용후기", "문의"].map((n) => (
-            <span
-              key={n}
-              className={`rounded-lg px-3 py-1.5 ${n === "차량안내" ? "bg-brand-gold/20 text-brand-gold" : "text-tone-strong"}`}
-            >
-              {n}
-            </span>
-          ))}
-        </div>
-      </div>
-
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[#081121]/40 p-4 md:p-5">
         <div>
           <p className="text-xs text-tone-soft">편집 언어</p>
-          <p className="text-sm font-semibold text-tone-strong">
-            {LOCALE_LABELS[locale]} (빈 값이면 해당 언어 messages 번역이 표시됩니다)
-          </p>
+          <p className="text-sm font-semibold text-tone-strong">{LOCALE_LABELS[locale]}</p>
         </div>
         <div className="inline-flex gap-1 rounded-xl border border-white/15 bg-black/25 p-1">
           {(Object.keys(LOCALE_LABELS) as VehicleLocale[]).map((l) => (
@@ -148,8 +194,7 @@ export function AdminVehicleVisualEditor({ initialMedia, initialContent, default
       <div className="rounded-2xl border border-white/10 bg-[#081121]/70 p-5 md:p-6">
         <div className="flex items-center justify-between gap-2">
           <div>
-            <p className="text-xs text-tone-soft">SubpageHero 미러</p>
-            <h2 className="text-lg font-bold text-tone-strong">차량 페이지 비주얼 편집기</h2>
+            <h2 className="text-lg font-bold text-tone-strong">상단 안내 문구</h2>
           </div>
           <button onClick={() => setEditSection("hero")} className="rounded-lg border border-brand-gold/35 px-3 py-1.5 text-xs font-semibold text-brand-gold">
             섹션 문구 수정
@@ -217,99 +262,197 @@ export function AdminVehicleVisualEditor({ initialMedia, initialContent, default
         ))}
       </div>
 
-      {editSection === "hero" && (
-        <div className="rounded-xl border border-white/10 bg-black/25 p-4 space-y-3">
-          <p className="text-sm font-semibold text-tone-strong">섹션 문구 수정 ({locale.toUpperCase()})</p>
-          <input
-            className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm"
-            value={content.sectionEyebrow[locale]}
-            onChange={(e) => setContent((p) => ({ ...p, sectionEyebrow: { ...p.sectionEyebrow, [locale]: e.target.value } }))}
-            placeholder={defaults.sectionEyebrow}
-          />
-          <input
-            className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm"
-            value={content.sectionTitle[locale]}
-            onChange={(e) => setContent((p) => ({ ...p, sectionTitle: { ...p.sectionTitle, [locale]: e.target.value } }))}
-            placeholder={defaults.sectionTitle}
-          />
-          <textarea
-            className="w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm"
-            rows={3}
-            value={content.sectionDesc[locale]}
-            onChange={(e) => setContent((p) => ({ ...p, sectionDesc: { ...p.sectionDesc, [locale]: e.target.value } }))}
-            placeholder={defaults.sectionDesc}
-          />
-        </div>
-      )}
+      <AdminVisualModal
+        open={editSection !== null}
+        title={
+          editSection === "hero"
+            ? "차량 · 섹션 문구"
+            : editSection === "buttons"
+              ? "차량 · 버튼 문구"
+              : editSection
+                ? `차량 · ${editSection.toUpperCase()} 카드`
+                : ""
+        }
+        onClose={() => setEditSection(null)}
+        editLocale={modalLocale}
+        onEditLocale={(l) => setModalLocale(l as VehicleLocale)}
+        onSave={() => void saveAll()}
+        saving={saving}
+        onReset={resetPanel}
+      >
+        {editSection === "hero" ? (
+          <>
+            <input
+              className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+              value={effectiveText(content.sectionEyebrow[modalLocale], dm.sectionEyebrow)}
+              onChange={(e) =>
+                setContent((p) => ({
+                  ...p,
+                  sectionEyebrow: { ...p.sectionEyebrow, [modalLocale]: e.target.value },
+                }))
+              }
+            />
+            <input
+              className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+              value={effectiveText(content.sectionTitle[modalLocale], dm.sectionTitle)}
+              onChange={(e) =>
+                setContent((p) => ({
+                  ...p,
+                  sectionTitle: { ...p.sectionTitle, [modalLocale]: e.target.value },
+                }))
+              }
+            />
+            <textarea
+              className="w-full rounded-lg border border-white/20 bg-black/40 px-3 py-2 text-sm"
+              rows={3}
+              value={effectiveText(content.sectionDesc[modalLocale], dm.sectionDesc)}
+              onChange={(e) =>
+                setContent((p) => ({
+                  ...p,
+                  sectionDesc: { ...p.sectionDesc, [modalLocale]: e.target.value },
+                }))
+              }
+            />
+          </>
+        ) : null}
 
-      {editSection === "buttons" && (
-        <div className="rounded-xl border border-white/10 bg-black/25 p-4 space-y-3">
-          <p className="text-sm font-semibold text-tone-strong">버튼 문구 수정 ({locale.toUpperCase()})</p>
-          <input
-            className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm"
-            value={content.detailBtn[locale]}
-            onChange={(e) => setContent((p) => ({ ...p, detailBtn: { ...p.detailBtn, [locale]: e.target.value } }))}
-            placeholder={defaults.detailBtn}
-          />
-          <input
-            className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm"
-            value={content.bookBtn[locale]}
-            onChange={(e) => setContent((p) => ({ ...p, bookBtn: { ...p.bookBtn, [locale]: e.target.value } }))}
-            placeholder={defaults.bookBtn}
-          />
-          <input
-            className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm"
-            value={content.phoneBtn[locale]}
-            onChange={(e) => setContent((p) => ({ ...p, phoneBtn: { ...p.phoneBtn, [locale]: e.target.value } }))}
-            placeholder={defaults.phoneBtn}
-          />
-        </div>
-      )}
+        {editSection === "buttons" ? (
+          <>
+            <input
+              className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+              value={effectiveText(content.detailBtn[modalLocale], dm.detailBtn)}
+              onChange={(e) =>
+                setContent((p) => ({
+                  ...p,
+                  detailBtn: { ...p.detailBtn, [modalLocale]: e.target.value },
+                }))
+              }
+            />
+            <input
+              className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+              value={effectiveText(content.bookBtn[modalLocale], dm.bookBtn)}
+              onChange={(e) =>
+                setContent((p) => ({
+                  ...p,
+                  bookBtn: { ...p.bookBtn, [modalLocale]: e.target.value },
+                }))
+              }
+            />
+            <input
+              className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+              value={effectiveText(content.phoneBtn[modalLocale], dm.phoneBtn)}
+              onChange={(e) =>
+                setContent((p) => ({
+                  ...p,
+                  phoneBtn: { ...p.phoneBtn, [modalLocale]: e.target.value },
+                }))
+              }
+            />
+          </>
+        ) : null}
 
-      {editSection && editSection !== "hero" && editSection !== "buttons" && (
-        <div className="rounded-xl border border-white/10 bg-black/25 p-4 space-y-3">
-          <p className="text-sm font-semibold text-tone-strong">{editSection.toUpperCase()} 카드 수정 ({locale.toUpperCase()})</p>
-          <AdminImageUploader
-            section="vehicles"
-            purpose={`${editSection}-main`}
-            label="메인 외관 이미지"
-            value={media.main[editSection]}
-            onChange={(nextUrl) => setMedia((p) => ({ ...p, main: { ...p.main, [editSection]: nextUrl } }))}
-          />
-          <input className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm" value={content[editSection].badge[locale]} onChange={(e) => patchCard(editSection, { badge: { ...content[editSection].badge, [locale]: e.target.value } })} placeholder="badge" />
-          <input className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm" value={content[editSection].name[locale]} onChange={(e) => patchCard(editSection, { name: { ...content[editSection].name, [locale]: e.target.value } })} placeholder="name" />
-          <input className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm" value={content[editSection].luggage[locale]} onChange={(e) => patchCard(editSection, { luggage: { ...content[editSection].luggage, [locale]: e.target.value } })} placeholder="luggage" />
-          {editSection === "staria" ? (
-            <>
-              <input className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm" value={content.staria.seat45[locale]} onChange={(e) => patchCard("staria", { seat45: { ...content.staria.seat45, [locale]: e.target.value } })} placeholder="seat45" />
-              <input className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm" value={content.staria.seat67[locale]} onChange={(e) => patchCard("staria", { seat67: { ...content.staria.seat67, [locale]: e.target.value } })} placeholder="seat67" />
-            </>
-          ) : (
-            <input className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm" value={content[editSection].capacity[locale]} onChange={(e) => patchCard(editSection, { capacity: { ...content[editSection].capacity, [locale]: e.target.value } })} placeholder="capacity" />
-          )}
-          {(["f1", "f2", "f3", "f4"] as const).map((f) => (
-            <input key={f} className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm" value={content[editSection][f][locale]} onChange={(e) => patchCard(editSection, { [f]: { ...content[editSection][f], [locale]: e.target.value } } as Partial<VehicleCardContent>)} placeholder={f} />
-          ))}
-          <div className="grid gap-3 sm:grid-cols-2">
-            {Array.from({ length: 6 }).map((_, idx) => (
-              <AdminImageUploader
-                key={idx}
-                section="vehicles"
-                purpose={`${editSection}-interior-${idx + 1}`}
-                label={`실내 이미지 ${idx + 1}`}
-                value={media.interior[editSection][idx] ?? ""}
-                onChange={(nextUrl) =>
-                  setMedia((p) => {
-                    const next = [...p.interior[editSection]];
-                    next[idx] = nextUrl.trim() ? nextUrl : null;
-                    return { ...p, interior: { ...p.interior, [editSection]: next } };
+        {editSection && editSection !== "hero" && editSection !== "buttons" ? (
+          <>
+            <AdminImageUploader
+              section="vehicles"
+              purpose={`${editSection}-main`}
+              label="메인 외관 이미지"
+              value={media.main[editSection]}
+              onChange={(nextUrl) => setMedia((p) => ({ ...p, main: { ...p.main, [editSection]: nextUrl } }))}
+            />
+            <input
+              className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+              value={effectiveText(content[editSection].badge[modalLocale], dm[editSection].badge)}
+              onChange={(e) =>
+                patchCard(editSection, {
+                  badge: { ...content[editSection].badge, [modalLocale]: e.target.value },
+                })
+              }
+            />
+            <input
+              className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+              value={effectiveText(content[editSection].name[modalLocale], dm[editSection].name)}
+              onChange={(e) =>
+                patchCard(editSection, {
+                  name: { ...content[editSection].name, [modalLocale]: e.target.value },
+                })
+              }
+            />
+            <input
+              className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+              value={effectiveText(content[editSection].luggage[modalLocale], dm[editSection].luggage)}
+              onChange={(e) =>
+                patchCard(editSection, {
+                  luggage: { ...content[editSection].luggage, [modalLocale]: e.target.value },
+                })
+              }
+            />
+            {editSection === "staria" ? (
+              <>
+                <input
+                  className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+                  value={effectiveText(content.staria.seat45[modalLocale], dm.staria.seat45)}
+                  onChange={(e) =>
+                    patchCard("staria", {
+                      seat45: { ...content.staria.seat45, [modalLocale]: e.target.value },
+                    })
+                  }
+                />
+                <input
+                  className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+                  value={effectiveText(content.staria.seat67[modalLocale], dm.staria.seat67)}
+                  onChange={(e) =>
+                    patchCard("staria", {
+                      seat67: { ...content.staria.seat67, [modalLocale]: e.target.value },
+                    })
+                  }
+                />
+              </>
+            ) : (
+              <input
+                className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+                value={effectiveText(content[editSection].capacity[modalLocale], dm[editSection].capacity)}
+                onChange={(e) =>
+                  patchCard(editSection, {
+                    capacity: { ...content[editSection].capacity, [modalLocale]: e.target.value },
                   })
                 }
               />
+            )}
+            {(["f1", "f2", "f3", "f4"] as const).map((f) => (
+              <input
+                key={f}
+                className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+                value={effectiveText(content[editSection][f][modalLocale], dm[editSection][f])}
+                onChange={(e) =>
+                  patchCard(editSection, {
+                    [f]: { ...content[editSection][f], [modalLocale]: e.target.value },
+                  } as Partial<VehicleCardContent>)
+                }
+              />
             ))}
-          </div>
-        </div>
-      )}
+            <div className="grid gap-3 sm:grid-cols-2">
+              {Array.from({ length: 6 }).map((_, idx) => (
+                <div key={idx}>
+                  <AdminImageUploader
+                    section="vehicles"
+                    purpose={`${editSection}-interior-${idx + 1}`}
+                    label={`실내 이미지 ${idx + 1}`}
+                    value={media.interior[editSection][idx] ?? ""}
+                    onChange={(nextUrl) =>
+                      setMedia((p) => {
+                        const next = [...p.interior[editSection]];
+                        next[idx] = nextUrl.trim() ? nextUrl : null;
+                        return { ...p, interior: { ...p.interior, [editSection]: next } };
+                      })
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+          </>
+        ) : null}
+      </AdminVisualModal>
 
       <div className="flex flex-wrap items-center gap-3 rounded-xl border border-metal-bronze/25 bg-[#0a1522] px-4 py-3">
         <button
@@ -318,22 +461,10 @@ export function AdminVehicleVisualEditor({ initialMedia, initialContent, default
           disabled={saving}
           className="inline-flex h-10 items-center justify-center rounded-lg bg-gradient-to-r from-brand-gold to-[#b8892a] px-5 text-sm font-bold text-black disabled:opacity-60"
         >
-          {saving ? "저장 중..." : "비주얼 편집 저장"}
-        </button>
-        <button type="button" onClick={() => setShowAdvanced((v) => !v)} className="rounded-lg border border-white/20 px-4 py-2 text-sm text-tone-strong">
-          {showAdvanced ? "고급 편집 접기" : "고급 편집 열기"}
+          {saving ? "저장 중..." : "저장"}
         </button>
         {message ? <p className="text-sm text-tone-sky">{message}</p> : null}
       </div>
-
-      {showAdvanced ? (
-        <details open className="rounded-xl border border-white/12 bg-black/20 p-4">
-          <summary className="cursor-pointer text-sm font-semibold text-tone-strong">고급 편집 (원시 JSON 확인)</summary>
-          <pre className="mt-3 overflow-auto rounded-lg bg-black/35 p-3 text-xs text-tone-soft">
-            {JSON.stringify({ media, content }, null, 2)}
-          </pre>
-        </details>
-      ) : null}
     </section>
   );
 }

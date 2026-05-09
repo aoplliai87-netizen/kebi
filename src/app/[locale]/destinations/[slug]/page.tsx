@@ -5,10 +5,12 @@ import { notFound } from "next/navigation";
 import { DestinationLocalBusinessJsonLd } from "@/components/destinations/DestinationLocalBusinessJsonLd";
 import { DestinationPageView } from "@/components/destinations/DestinationPageView";
 import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
+import { DestinationServiceJsonLd } from "@/components/seo/DestinationServiceJsonLd";
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { routing } from "@/i18n/routing";
+import { resolveDestinationLandingCopy } from "@/lib/destination-copy-resolve";
 import { absoluteUrl, buildDestinationMetadata } from "@/lib/seo";
-import { parseKeywordsInput, pickLocaleText } from "@/lib/seo-settings";
+import { emptySeoPageSettings, parseKeywordsInput, pickLocaleText } from "@/lib/seo-settings";
 import { getSiteSettings } from "@/lib/site-settings-store";
 import {
   SITE_KAKAO_CHAT_URL,
@@ -16,9 +18,8 @@ import {
   SITE_WHATSAPP_URL,
 } from "@/lib/site";
 import {
-  LANDING_PAGES,
+  buildDestinationNavLinksForPage,
   getAllDestinationSlugs,
-  getCopyForLocale,
   getLandingPageBySlug,
 } from "../../../../../data/landing-pages";
 
@@ -35,16 +36,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!landing) {
     return {};
   }
-  const copy = getCopyForLocale(landing, params.locale);
-  const t = await getTranslations({ locale: params.locale, namespace: "Metadata" });
   const settings = await getSiteSettings();
+  const copy = resolveDestinationLandingCopy(params.slug, params.locale, settings);
+  if (!copy) {
+    return {};
+  }
+  const t = await getTranslations({ locale: params.locale, namespace: "Metadata" });
   const localeKey = params.locale as "ko" | "en" | "ja" | "zh";
-  const destinationSeo = settings.seo.destinations;
+  const slugSeo = settings.seoDestinationBySlug[params.slug] ?? emptySeoPageSettings();
   const siteName = t("siteName");
   const fallbackTitle = `${copy.metaTitle} | ${siteName}`;
   const fallbackDescription = copy.metaDescription;
-  const title = pickLocaleText(destinationSeo.metaTitle, localeKey) || fallbackTitle;
-  const description = pickLocaleText(destinationSeo.metaDescription, localeKey) || fallbackDescription;
+  const title = pickLocaleText(slugSeo.metaTitle, localeKey).trim() || fallbackTitle;
+  const description = pickLocaleText(slugSeo.metaDescription, localeKey).trim() || fallbackDescription;
 
   return buildDestinationMetadata({
     locale: params.locale,
@@ -53,11 +57,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     keywords: copy.keywords,
     siteName,
-    canonicalOverride: pickLocaleText(destinationSeo.canonicalUrl, localeKey),
-    ogTitleOverride: pickLocaleText(destinationSeo.ogTitle, localeKey),
-    ogDescriptionOverride: pickLocaleText(destinationSeo.ogDescription, localeKey),
-    ogImageOverride: destinationSeo.ogImage,
-    keywordsOverride: parseKeywordsInput(pickLocaleText(destinationSeo.focusKeywords, localeKey)),
+    canonicalOverride: pickLocaleText(slugSeo.canonicalUrl, localeKey),
+    ogTitleOverride: pickLocaleText(slugSeo.ogTitle, localeKey),
+    ogDescriptionOverride: pickLocaleText(slugSeo.ogDescription, localeKey),
+    ogImageOverride: slugSeo.ogImage,
+    keywordsOverride: parseKeywordsInput(pickLocaleText(slugSeo.focusKeywords, localeKey)),
   });
 }
 
@@ -73,22 +77,18 @@ export default async function DestinationLandingPage({ params }: Props) {
   }
 
   setRequestLocale(locale);
-  const copy = getCopyForLocale(landing, locale);
   const siteSettings = await getSiteSettings();
+  const copy = resolveDestinationLandingCopy(slug, locale, siteSettings);
+  if (!copy) {
+    notFound();
+  }
   const whatsappHref = siteSettings.contactLinks.whatsapp || SITE_WHATSAPP_URL;
   const kakaoHref = siteSettings.contactLinks.kakao || SITE_KAKAO_CHAT_URL;
   const phoneTel = siteSettings.phoneTel || SITE_PHONE_TEL;
   const canonical = absoluteUrl(`/${locale}/destinations/${slug}`);
   const homeUrl = absoluteUrl(`/${locale}`);
-  const relatedLinks = LANDING_PAGES.filter((entry) => entry.slug !== slug)
-    .slice(0, 2)
-    .map((entry) => {
-      const relatedCopy = getCopyForLocale(entry, locale);
-      return {
-        href: `/destinations/${entry.slug}`,
-        label: relatedCopy.linkTitle,
-      };
-    });
+  const { relatedLinks, popularLinks, recommendedLinks, northGyeonggiLinks } =
+    buildDestinationNavLinksForPage(landing, locale);
   const tMeta = await getTranslations({ locale, namespace: "Metadata" });
   const tDest = await getTranslations({ locale, namespace: "HomeDestinations" });
   const siteName = tMeta("siteName");
@@ -109,10 +109,20 @@ export default async function DestinationLandingPage({ params }: Props) {
         ]}
       />
       <FaqJsonLd items={copy.faq} />
+      <DestinationServiceJsonLd
+        name={copy.h1}
+        description={copy.localBusinessDescription}
+        pageUrl={canonical}
+        areaServedNames={copy.areaServedNames}
+        providerName={siteName}
+      />
       <DestinationPageView
         locale={locale}
         copy={copy}
         relatedLinks={relatedLinks}
+        popularLinks={popularLinks}
+        recommendedLinks={recommendedLinks}
+        northGyeonggiLinks={northGyeonggiLinks}
         whatsappHref={whatsappHref}
         kakaoHref={kakaoHref}
         phoneTel={phoneTel}
@@ -120,6 +130,17 @@ export default async function DestinationLandingPage({ params }: Props) {
         faqSectionTitle={tDest("faqSection")}
         ctaSectionTitle={tDest("ctaSection")}
         relatedSectionTitle={tDest("relatedSection")}
+        popularSectionTitle={tDest("popularSection")}
+        recommendedSectionTitle={tDest("recommendedSection")}
+        northGyeonggiSectionTitle={tDest("northGyeonggiSection")}
+        operationalTipsSectionTitle={tDest("operationalTipsSection")}
+        scenarioExamplesSectionTitle={tDest("scenarioExamplesSection")}
+        poiSectionEyebrow={tDest("poiSectionEyebrow")}
+        poiSectionTitle={tDest("poiSectionTitle")}
+        poiTagsTitle={tDest("poiTagsTitle")}
+        poiHotelsTitle={tDest("poiHotelsTitle")}
+        poiLandmarksTitle={tDest("poiLandmarksTitle")}
+        poiDropoffTitle={tDest("poiDropoffTitle")}
       />
     </>
   );

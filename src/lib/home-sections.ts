@@ -1,3 +1,4 @@
+import { DEFAULT_HOME_FEATURED_DESTINATION_SLUGS } from "@/constants/destinations";
 import type { LocaleKey, LocalizedText } from "@/lib/site-settings-store";
 
 /** 홈 Intro 블록 — IntroPage.hero 와 동일 역할, `<brand>...</brand>` 지원 */
@@ -39,6 +40,24 @@ export type HomeFaqSectionContent = {
   items: [HomeFaqPair, HomeFaqPair, HomeFaqPair, HomeFaqPair, HomeFaqPair];
 };
 
+/** 목적지 섹션 — 홈 하단 3개 버튼 + 예약 링크 문구 */
+export type HomeDestinationButtonSlot = {
+  label: LocalizedText;
+  /** locale-less path e.g. `/destinations/foo` or `/booking` */
+  href: string;
+};
+
+export type HomeDestinationsSection = {
+  eyebrow: LocalizedText;
+  title: LocalizedText;
+  description: LocalizedText;
+  /** 홈에 노출할 대표 3개 — slug */
+  featuredSlugs: [string, string, string];
+  buttons: [HomeDestinationButtonSlot, HomeDestinationButtonSlot, HomeDestinationButtonSlot];
+  footerLabel: LocalizedText;
+  footerHref: string;
+};
+
 /** site-settings 의 home.* 통합 블록 */
 export type HomeSections = {
   /** 홈 히어로 배경 슬라이드 이미지 URL 목록 (언어 공통) */
@@ -47,6 +66,7 @@ export type HomeSections = {
   booking: HomeBookingSection;
   reviews: HomeReviewsSection;
   faq: HomeFaqSectionContent;
+  destinations: HomeDestinationsSection;
 };
 
 const EMPTY: LocalizedText = { ko: "", en: "", ja: "", zh: "" };
@@ -74,9 +94,19 @@ function parseFaqPair(v: unknown): HomeFaqPair {
   return { q: lt(o.q), a: lt(o.a) };
 }
 
+function parseDestinationButton(v: unknown): HomeDestinationButtonSlot {
+  if (!v || typeof v !== "object") return { label: { ...EMPTY }, href: "" };
+  const o = v as Partial<HomeDestinationButtonSlot>;
+  return {
+    label: lt(o.label),
+    href: typeof o.href === "string" ? o.href.trim() : "",
+  };
+}
+
 export function emptyHomeSections(): HomeSections {
   const slot = (): HomeReviewSlot => ({ content: { ...EMPTY }, author: { ...EMPTY } });
   const pair = (): HomeFaqPair => ({ q: { ...EMPTY }, a: { ...EMPTY } });
+  const btn = (): HomeDestinationButtonSlot => ({ label: { ...EMPTY }, href: "" });
   return {
     heroVisuals: [],
     intro: { eyebrow: { ...EMPTY }, title: { ...EMPTY }, desc: { ...EMPTY } },
@@ -98,6 +128,15 @@ export function emptyHomeSections(): HomeSections {
       eyebrow: { ...EMPTY },
       title: { ...EMPTY },
       items: [pair(), pair(), pair(), pair(), pair()],
+    },
+    destinations: {
+      eyebrow: { ...EMPTY },
+      title: { ...EMPTY },
+      description: { ...EMPTY },
+      featuredSlugs: [...DEFAULT_HOME_FEATURED_DESTINATION_SLUGS],
+      buttons: [btn(), btn(), btn()],
+      footerLabel: { ...EMPTY },
+      footerHref: "",
     },
   };
 }
@@ -148,6 +187,32 @@ export function parseHomeSections(value: unknown): HomeSections {
       eyebrow: lt(h.faq.eyebrow),
       title: lt(h.faq.title),
       items,
+    };
+  }
+  if (h.destinations && typeof h.destinations === "object") {
+    const d = h.destinations as Partial<HomeDestinationsSection>;
+    const btns = Array.isArray(d.buttons) ? d.buttons : [];
+    const rawFeatured = Array.isArray(d.featuredSlugs) ? d.featuredSlugs : [];
+    const featuredSlugs =
+      rawFeatured.length === 3 && rawFeatured.every((s) => typeof s === "string" && s.trim())
+        ? ([rawFeatured[0].trim(), rawFeatured[1].trim(), rawFeatured[2].trim()] as [
+            string,
+            string,
+            string,
+          ])
+        : ([...DEFAULT_HOME_FEATURED_DESTINATION_SLUGS] as [string, string, string]);
+    base.destinations = {
+      eyebrow: lt(d.eyebrow),
+      title: lt(d.title),
+      description: lt(d.description),
+      featuredSlugs,
+      buttons: [
+        parseDestinationButton(btns[0]),
+        parseDestinationButton(btns[1]),
+        parseDestinationButton(btns[2]),
+      ],
+      footerLabel: lt(d.footerLabel),
+      footerHref: typeof d.footerHref === "string" ? d.footerHref.trim() : "",
     };
   }
   return base;

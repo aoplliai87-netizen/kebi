@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
@@ -10,15 +10,20 @@ type Props = {
   eyebrow: string;
   title: string;
   items: HomeFaqItem[];
+  /** 관리자 미리보기 전용 */
+  adminChrome?: ReactNode;
 };
 
-export function HomeFaqSection({ eyebrow, title, items }: Props) {
+export function HomeFaqSection({ eyebrow, title, items, adminChrome }: Props) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggle = (idx: number) => setOpenIndex((prev) => (prev === idx ? null : idx));
 
   return (
-    <section className="mx-auto max-w-content px-4 pb-24 md:px-6">
+    <section data-home-section="faq" className="relative mx-auto max-w-content px-4 pb-24 md:px-6">
+      {adminChrome ? (
+        <div className="pointer-events-auto absolute right-3 top-0 z-20 md:right-8">{adminChrome}</div>
+      ) : null}
       <div className="text-center">
         <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-metal-bronze-strong md:text-[13px]">
           {eyebrow}

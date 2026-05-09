@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback, useState } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import { useSiteRuntime } from "@/components/providers/SiteRuntimeProvider";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -91,7 +91,19 @@ function openChannel(id: Exclude<QuickChannel, "">, runtime: ReturnType<typeof u
   window.open(url, "_blank", "noopener,noreferrer");
 }
 
-export function BespokeSupportExperience({ contentOverrides }: { contentOverrides?: ContentOverrides }) {
+export function BespokeSupportExperience({
+  contentOverrides,
+  adminHeroChrome,
+  adminFaqChrome,
+  adminFormChrome,
+  adminContactChrome,
+}: {
+  contentOverrides?: ContentOverrides;
+  adminHeroChrome?: ReactNode;
+  adminFaqChrome?: ReactNode;
+  adminFormChrome?: ReactNode;
+  adminContactChrome?: ReactNode;
+}) {
   const runtime = useSiteRuntime();
   const t = useTranslations("Support");
   const locale = useLocale();
@@ -195,7 +207,11 @@ export function BespokeSupportExperience({ contentOverrides }: { contentOverride
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: LUX_EASE }}
+            className="relative"
           >
+            {adminHeroChrome ? (
+              <div className="pointer-events-auto absolute right-0 top-0 z-10">{adminHeroChrome}</div>
+            ) : null}
             <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-brand-gold/90 md:text-xs">
               {txt("heroEyebrow", "heroEyebrow")}
             </p>
@@ -211,8 +227,11 @@ export function BespokeSupportExperience({ contentOverrides }: { contentOverride
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: LUX_EASE, delay: 0.05 }}
-            className="mt-10 rounded-3xl border border-white/10 bg-[#0a1324]/85 p-6 backdrop-blur-md md:p-8"
+            className="relative mt-10 rounded-3xl border border-white/10 bg-[#0a1324]/85 p-6 backdrop-blur-md md:p-8"
           >
+            {adminFaqChrome ? (
+              <div className="pointer-events-auto absolute right-5 top-5 z-10 md:right-8 md:top-8">{adminFaqChrome}</div>
+            ) : null}
             <h2 className="font-sans text-2xl font-bold tracking-[-0.02em] text-brand-gold md:text-3xl">
               {txt("faqTitle", "faqTitle")}
             </h2>
@@ -258,10 +277,15 @@ export function BespokeSupportExperience({ contentOverrides }: { contentOverride
 
       <section className="border-b border-border/45 py-12 md:py-16">
         <div className="mx-auto max-w-content px-4 md:px-6">
-          <h2 className="font-sans text-2xl font-bold tracking-[-0.02em] text-brand-gold md:text-3xl">
-            {txt("formTitle", "formTitle")}
-          </h2>
-          <p className="mt-3 max-w-2xl whitespace-pre-line text-tone-body md:text-lg">{txt("formDesc", "formDesc")}</p>
+          <div className="relative">
+            {adminFormChrome ? (
+              <div className="pointer-events-auto absolute right-0 top-0 z-10">{adminFormChrome}</div>
+            ) : null}
+            <h2 className="font-sans text-2xl font-bold tracking-[-0.02em] text-brand-gold md:text-3xl">
+              {txt("formTitle", "formTitle")}
+            </h2>
+            <p className="mt-3 max-w-2xl whitespace-pre-line text-tone-body md:text-lg">{txt("formDesc", "formDesc")}</p>
+          </div>
 
           <form
             onSubmit={handleSubmit}
@@ -433,7 +457,10 @@ export function BespokeSupportExperience({ contentOverrides }: { contentOverride
             </div>
           </form>
 
-          <div className="mt-12 rounded-3xl border border-metal-bronze/35 bg-gradient-to-r from-brand-deep/55 to-surface p-6 md:p-10">
+          <div className="relative mt-12 rounded-3xl border border-metal-bronze/35 bg-gradient-to-r from-brand-deep/55 to-surface p-6 md:p-10">
+            {adminContactChrome ? (
+              <div className="pointer-events-auto absolute right-5 top-5 z-10 md:right-8 md:top-8">{adminContactChrome}</div>
+            ) : null}
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-gold/90">
               {t("contactSectionEyebrow")}
             </p>

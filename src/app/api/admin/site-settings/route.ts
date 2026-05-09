@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { isAdminRequestAuthenticated } from "@/lib/admin-auth";
 import { appendAdminChangeLog } from "@/lib/admin-change-log-store";
+import { parseDestinationContentOverrideMap } from "@/lib/destination-admin-types";
 import { parseHomeSections } from "@/lib/home-sections";
-import { parseSeoPagesSettings } from "@/lib/seo-settings";
+import { parseSeoPagesSettings, parseSeoPerSlugMap } from "@/lib/seo-settings";
 import { parseSubpagesContent } from "@/lib/subpages-content";
 import {
   type ContactLinks,
   getSiteSettings,
+  hydrateSeoDestinationBySlug,
   type LocaleKey,
   type LocalizedPricingTiers,
   type LocalizedText,
@@ -172,6 +174,15 @@ export async function POST(request: Request) {
     const home = body.home !== undefined ? parseHomeSections(body.home) : before.home;
     const subpages = body.subpages !== undefined ? parseSubpagesContent(body.subpages) : before.subpages;
     const seo = body.seo !== undefined ? parseSeoPagesSettings(body.seo) : before.seo;
+    const destinationContentOverrides =
+      body.destinationContentOverrides !== undefined
+        ? parseDestinationContentOverrideMap(body.destinationContentOverrides)
+        : before.destinationContentOverrides;
+    const seoDestinationBySlug = hydrateSeoDestinationBySlug(
+      body.seoDestinationBySlug !== undefined
+        ? parseSeoPerSlugMap(body.seoDestinationBySlug)
+        : before.seoDestinationBySlug,
+    );
     const seoHomeTitleByLocaleFromSeo = seo.home.metaTitle;
     const seoHomeDescriptionByLocaleFromSeo = seo.home.metaDescription;
     const seoHomeTitleByLocale = coalesceLocalized(seoHomeTitleByLocaleRaw, seoHomeTitleByLocaleFromSeo);
@@ -221,6 +232,8 @@ export async function POST(request: Request) {
       home,
       subpages,
       seo,
+      destinationContentOverrides,
+      seoDestinationBySlug,
     };
 
     if (!nextSettings.aboutMeTitle || !nextSettings.aboutMeDescription) {
@@ -248,6 +261,8 @@ export async function POST(request: Request) {
       ["home", persisted.home, nextSettings.home],
       ["subpages", persisted.subpages, nextSettings.subpages],
       ["seo", persisted.seo, nextSettings.seo],
+      ["destinationContentOverrides", persisted.destinationContentOverrides, nextSettings.destinationContentOverrides],
+      ["seoDestinationBySlug", persisted.seoDestinationBySlug, nextSettings.seoDestinationBySlug],
     ];
     for (const [name, actual, expected] of checks) {
       if (!sameJson(actual, expected)) verificationFailures.push(name);

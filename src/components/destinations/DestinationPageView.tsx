@@ -6,6 +6,10 @@ type Props = {
   locale: string;
   copy: LandingPageCopy;
   relatedLinks: Array<{ href: string; label: string }>;
+  /** 그래프 기반 “함께 많이 찾는 구간” — 비어 있으면 미표시 */
+  popularLinks?: Array<{ href: string; label: string }>;
+  recommendedLinks?: Array<{ href: string; label: string }>;
+  northGyeonggiLinks?: Array<{ href: string; label: string }>;
   whatsappHref: string;
   kakaoHref: string;
   phoneTel: string;
@@ -13,6 +17,17 @@ type Props = {
   faqSectionTitle: string;
   ctaSectionTitle: string;
   relatedSectionTitle: string;
+  popularSectionTitle: string;
+  recommendedSectionTitle: string;
+  northGyeonggiSectionTitle: string;
+  operationalTipsSectionTitle: string;
+  scenarioExamplesSectionTitle: string;
+  poiSectionEyebrow: string;
+  poiSectionTitle: string;
+  poiTagsTitle: string;
+  poiHotelsTitle: string;
+  poiLandmarksTitle: string;
+  poiDropoffTitle: string;
 };
 
 const SECONDARY_PATH = "/pricing" as const;
@@ -36,6 +51,9 @@ export function DestinationPageView({
   locale,
   copy,
   relatedLinks,
+  popularLinks = [],
+  recommendedLinks = [],
+  northGyeonggiLinks = [],
   whatsappHref,
   kakaoHref,
   phoneTel,
@@ -43,9 +61,20 @@ export function DestinationPageView({
   faqSectionTitle,
   ctaSectionTitle,
   relatedSectionTitle,
+  popularSectionTitle,
+  recommendedSectionTitle,
+  northGyeonggiSectionTitle,
+  operationalTipsSectionTitle,
+  scenarioExamplesSectionTitle,
+  poiSectionEyebrow,
+  poiSectionTitle,
+  poiTagsTitle,
+  poiHotelsTitle,
+  poiLandmarksTitle,
+  poiDropoffTitle,
 }: Props) {
   return (
-    <article className="mx-auto max-w-content px-4 py-10 md:px-6 md:py-14">
+    <article className="relative mx-auto max-w-content px-4 pb-28 pt-10 md:px-6 md:pb-14 md:pt-14">
       <nav aria-label="Breadcrumb" className="text-sm text-white/60">
         <ol className="flex flex-wrap items-center gap-2">
           <li>
@@ -65,6 +94,9 @@ export function DestinationPageView({
         <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/80 md:text-lg">
           {copy.lede}
         </p>
+        {copy.travelTraitsLine?.trim() ? (
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/60">{copy.travelTraitsLine}</p>
+        ) : null}
       </header>
 
       <div className="relative mt-10 overflow-hidden rounded-2xl border border-white/10 bg-black/20">
@@ -79,6 +111,84 @@ export function DestinationPageView({
           decoding="async"
         />
       </div>
+
+      {copy.trustPhotoNote?.trim() ? (
+        <p className="mt-3 max-w-3xl text-xs leading-relaxed text-white/45 md:text-sm">{copy.trustPhotoNote}</p>
+      ) : null}
+
+      {copy.vehicleRecommendBlurb?.trim() ? (
+        <aside className="mt-8 rounded-2xl border border-brand-gold/25 bg-brand-gold/[0.06] px-5 py-4 text-sm leading-relaxed text-white/85 md:text-base">
+          {copy.vehicleRecommendBlurb}
+        </aside>
+      ) : null}
+
+      {copy.destinationPoi &&
+      (copy.destinationPoi.nearbyHotels.length > 0 ||
+        copy.destinationPoi.nearbyLandmarks.length > 0 ||
+        copy.destinationPoi.popularDestinationTags.length > 0 ||
+        copy.destinationPoi.recommendedDropoff.trim()) ? (
+        <section
+          className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-5 md:mt-10 md:px-7 md:py-7"
+          aria-labelledby="destination-poi-heading"
+        >
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-gold/90">{poiSectionEyebrow}</p>
+          <h2 id="destination-poi-heading" className="mt-2 text-lg font-semibold text-white md:text-xl">
+            {poiSectionTitle}
+          </h2>
+          {copy.destinationPoi.popularDestinationTags.length > 0 ? (
+            <>
+              <p className="mt-3 text-sm text-white/55">{poiTagsTitle}</p>
+              <ul className="mt-3 flex flex-wrap gap-2" aria-label={poiTagsTitle}>
+              {copy.destinationPoi.popularDestinationTags.map((tag) => (
+                <li
+                  key={tag}
+                  className="rounded-full border border-white/15 bg-black/25 px-3 py-1.5 text-xs font-medium text-white/85 md:text-sm"
+                >
+                  {tag}
+                </li>
+              ))}
+              </ul>
+            </>
+          ) : null}
+
+          {copy.destinationPoi.nearbyHotels.length > 0 ? (
+            <div className="mt-8">
+              <h3 className="text-base font-semibold text-tone-sky md:text-lg">{poiHotelsTitle}</h3>
+              <ul className="mt-3 grid gap-2 text-sm leading-relaxed text-white/78 md:grid-cols-2 md:text-[15px]">
+                {copy.destinationPoi.nearbyHotels.map((name) => (
+                  <li key={name} className="flex gap-2">
+                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-brand-gold/70" aria-hidden />
+                    <span>{name}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          {copy.destinationPoi.nearbyLandmarks.length > 0 ? (
+            <div className="mt-8">
+              <h3 className="text-base font-semibold text-tone-sky md:text-lg">{poiLandmarksTitle}</h3>
+              <ul className="mt-3 grid gap-2 text-sm leading-relaxed text-white/78 md:grid-cols-2 md:text-[15px]">
+                {copy.destinationPoi.nearbyLandmarks.map((name) => (
+                  <li key={name} className="flex gap-2">
+                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-white/35" aria-hidden />
+                    <span>{name}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          {copy.destinationPoi.recommendedDropoff.trim() ? (
+            <div className="mt-8 border-t border-white/10 pt-6">
+              <h3 className="text-base font-semibold text-tone-sky md:text-lg">{poiDropoffTitle}</h3>
+              <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/72 md:text-[15px]">
+                {copy.destinationPoi.recommendedDropoff}
+              </p>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
 
       {copy.sections.map((section) => (
         <section
@@ -125,6 +235,25 @@ export function DestinationPageView({
         </ul>
       </section>
 
+      {copy.operationalTips && copy.operationalTips.length > 0 ? (
+        <section
+          className="mt-12 border-t border-white/10 pt-10"
+          aria-labelledby="operational-tips-heading"
+        >
+          <h2 id="operational-tips-heading" className="text-xl font-semibold text-tone-sky md:text-2xl">
+            {operationalTipsSectionTitle}
+          </h2>
+          <ul className="mt-6 space-y-5">
+            {copy.operationalTips.map((tip, idx) => (
+              <li key={`${tip.label}-${idx}`} className="rounded-xl border border-white/10 bg-white/[0.02] px-5 py-4">
+                <h3 className="text-[15px] font-semibold text-white md:text-base">{tip.label}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/72 md:text-[15px]">{tip.body}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
       <section
         className="mt-12 border-t border-white/10 pt-10"
         aria-labelledby="faq-heading"
@@ -134,13 +263,40 @@ export function DestinationPageView({
         </h2>
         <ul className="mt-6 space-y-6">
           {copy.faq.map((item) => (
-            <li key={item.q}>
+            <li key={item.q} className="scroll-mt-20">
               <h3 className="text-base font-semibold text-white md:text-lg">{item.q}</h3>
-              <p className="mt-2 max-w-3xl text-base leading-relaxed text-white/75">{item.a}</p>
+              <p className="mt-2 max-w-3xl text-base leading-[1.65] text-white/75 text-pretty md:leading-relaxed">
+                {item.a}
+              </p>
             </li>
           ))}
         </ul>
       </section>
+
+      {copy.scenarioExamples && copy.scenarioExamples.length > 0 ? (
+        <section
+          className="mt-12 border-t border-white/10 pt-10"
+          aria-labelledby="scenario-examples-heading"
+        >
+          <h2 id="scenario-examples-heading" className="text-xl font-semibold text-tone-sky md:text-2xl">
+            {scenarioExamplesSectionTitle}
+          </h2>
+          <ul className="mt-6 grid gap-4 sm:grid-cols-1 md:grid-cols-3">
+            {copy.scenarioExamples.map((ex, idx) => (
+              <li
+                key={`${ex.title}-${idx}`}
+                className="flex flex-col rounded-xl border border-brand-gold/20 bg-brand-gold/[0.04] px-4 py-4 md:min-h-[11rem]"
+              >
+                <p className="text-[15px] font-semibold leading-snug text-white">{ex.title}</p>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-white/70">{ex.body}</p>
+              </li>
+            ))}
+          </ul>
+          {copy.scenarioDisclaimer?.trim() ? (
+            <p className="mt-4 text-xs leading-relaxed text-white/45 md:text-sm">{copy.scenarioDisclaimer}</p>
+          ) : null}
+        </section>
+      ) : null}
 
       <section
         className="mt-12 rounded-2xl border border-brand-gold/25 bg-brand-deep/40 px-6 py-8 md:px-8"
@@ -206,6 +362,77 @@ export function DestinationPageView({
           </ul>
         </section>
       ) : null}
+
+      {popularLinks.length > 0 ? (
+        <section className="mt-12 border-t border-white/10 pt-10" aria-labelledby="popular-links-heading">
+          <h2 id="popular-links-heading" className="text-xl font-semibold text-tone-sky md:text-2xl">
+            {popularSectionTitle}
+          </h2>
+          <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+            {popularLinks.map((entry) => (
+              <li key={entry.href}>
+                <Link
+                  href={entry.href}
+                  className="flex min-h-12 items-center justify-center rounded-xl border border-white/14 bg-white/[0.03] px-4 text-center text-[15px] font-medium text-white/90 hover:bg-white/[0.06]"
+                >
+                  {entry.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {recommendedLinks.length > 0 ? (
+        <section className="mt-12 border-t border-white/10 pt-10" aria-labelledby="recommended-links-heading">
+          <h2 id="recommended-links-heading" className="text-xl font-semibold text-tone-sky md:text-2xl">
+            {recommendedSectionTitle}
+          </h2>
+          <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+            {recommendedLinks.map((entry) => (
+              <li key={entry.href}>
+                <Link
+                  href={entry.href}
+                  className="flex min-h-12 items-center justify-center rounded-xl border border-white/14 bg-white/[0.03] px-4 text-center text-[15px] font-medium text-white/90 hover:bg-white/[0.06]"
+                >
+                  {entry.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {northGyeonggiLinks.length > 0 ? (
+        <section className="mt-12 border-t border-white/10 pt-10" aria-labelledby="north-gyeonggi-links-heading">
+          <h2 id="north-gyeonggi-links-heading" className="text-xl font-semibold text-tone-sky md:text-2xl">
+            {northGyeonggiSectionTitle}
+          </h2>
+          <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+            {northGyeonggiLinks.map((entry) => (
+              <li key={entry.href}>
+                <Link
+                  href={entry.href}
+                  className="flex min-h-12 items-center justify-center rounded-xl border border-white/14 bg-white/[0.03] px-4 text-center text-[15px] font-medium text-white/90 hover:bg-white/[0.06]"
+                >
+                  {entry.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-black/80 px-3 py-2.5 shadow-[0_-10px_28px_rgba(0,0,0,0.45)] backdrop-blur-md md:hidden pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+        <div className="pointer-events-auto mx-auto flex max-w-content justify-center">
+          <Link
+            href={copy.bookingPathLabel}
+            className="inline-flex min-h-11 w-full max-w-md items-center justify-center rounded-xl bg-brand-gold px-4 text-[15px] font-semibold text-accent-foreground shadow-md hover:brightness-110"
+          >
+            {copy.primaryCtaLabel}
+          </Link>
+        </div>
+      </div>
     </article>
   );
 }

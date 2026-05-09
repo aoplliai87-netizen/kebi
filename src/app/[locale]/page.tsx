@@ -99,7 +99,14 @@ export default async function HomePage({ params }: Props) {
       heroSubtitleOverride={vm.heroSubtitleOverride}
       vehicleMainImages={vm.vehicleMainImages}
     />
-    <HomeDestinationsLinks locale={locale} />
+    <HomeDestinationsLinks
+      eyebrow={vm.destinationsEyebrow}
+      title={vm.destinationsTitle}
+      description={vm.destinationsDescription}
+      buttons={vm.destinationButtons}
+      footerLabel={vm.destinationsFooterLabel}
+      footerHref={vm.destinationsFooterHref}
+    />
     <HomeFaqSection eyebrow={vm.faqEyebrow} title={vm.faqTitle} items={vm.faqItems} />
     </>
   );

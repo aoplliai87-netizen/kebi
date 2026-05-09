@@ -11,6 +11,11 @@ import { isManagedPricingGroup } from "@/lib/pricing-table-types";
 
 type Props = {
   initialRegions: ManagedPricingRegion[];
+  /** 상위 비주얼 에디터와 표 데이터 동기화 */
+  regions?: ManagedPricingRegion[];
+  onRegionsChange?: (next: ManagedPricingRegion[]) => void;
+  /** true면 하단 저장·불러오기 바 숨김 (부모에서 저장) */
+  hidePersistenceBar?: boolean;
 };
 
 function emptyRow(): ManagedPricingRow {
@@ -21,8 +26,24 @@ function uid(prefix: string) {
   return `${prefix}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
-export function AdminPricingTableEditor({ initialRegions }: Props) {
-  const [regions, setRegions] = useState<ManagedPricingRegion[]>(initialRegions);
+export function AdminPricingTableEditor({
+  initialRegions,
+  regions: controlledRegions,
+  onRegionsChange,
+  hidePersistenceBar = false,
+}: Props) {
+  const [internalRegions, setInternalRegions] = useState<ManagedPricingRegion[]>(initialRegions);
+  const controlled = controlledRegions !== undefined && onRegionsChange !== undefined;
+  const regions = controlled ? controlledRegions : internalRegions;
+
+  const patchRegions = (fn: (prev: ManagedPricingRegion[]) => ManagedPricingRegion[]) => {
+    if (controlled) {
+      onRegionsChange!(fn(controlledRegions));
+    } else {
+      setInternalRegions(fn);
+    }
+  };
+
   const [activeRegionId, setActiveRegionId] = useState<string>(initialRegions[0]?.id ?? "seoul");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
@@ -33,7 +54,7 @@ export function AdminPricingTableEditor({ initialRegions }: Props) {
   );
 
   const updateRegion = (regionId: string, updater: (region: ManagedPricingRegion) => ManagedPricingRegion) => {
-    setRegions((prev) => prev.map((region) => (region.id === regionId ? updater(region) : region)));
+    patchRegions((prev) => prev.map((region) => (region.id === regionId ? updater(region) : region)));
   };
 
   const updateEntry = (entryIndex: number, updater: (entry: ManagedPricingEntry) => ManagedPricingEntry) => {
@@ -70,7 +91,7 @@ export function AdminPricingTableEditor({ initialRegions }: Props) {
     const res = await fetch("/api/admin/pricing-table", { cache: "no-store" });
     const result = (await res.json()) as { ok?: boolean; regions?: ManagedPricingRegion[] };
     if (result.ok && Array.isArray(result.regions)) {
-      setRegions(result.regions);
+      patchRegions(() => result.regions!);
       setActiveRegionId(result.regions[0]?.id ?? "seoul");
       setMessage("저장된 최신 값으로 다시 불러왔습니다.");
     }
@@ -292,24 +313,28 @@ export function AdminPricingTableEditor({ initialRegions }: Props) {
         </button>
       </div>
 
-      <div className="flex items-center gap-3 rounded-xl border border-metal-bronze/25 bg-[#0a1522] px-4 py-3">
-        <button
-          type="button"
-          onClick={onSave}
-          disabled={saving}
-          className="inline-flex h-10 items-center justify-center rounded-lg bg-gradient-to-r from-brand-gold to-[#b8892a] px-5 text-sm font-bold text-black disabled:opacity-60"
-        >
-          {saving ? "저장 중..." : "상세 요금표 저장"}
-        </button>
-        <button
-          type="button"
-          onClick={() => void onReset()}
-          className="inline-flex h-10 items-center justify-center rounded-lg border border-white/20 bg-black/30 px-4 text-sm font-semibold text-tone-strong"
-        >
-          저장값 다시 불러오기
-        </button>
-        {message ? <p className="text-sm text-tone-sky">{message}</p> : null}
-      </div>
+      {!hidePersistenceBar ? (
+        <div className="flex items-center gap-3 rounded-xl border border-metal-bronze/25 bg-[#0a1522] px-4 py-3">
+          <button
+            type="button"
+            onClick={onSave}
+            disabled={saving}
+            className="inline-flex h-10 items-center justify-center rounded-lg bg-gradient-to-r from-brand-gold to-[#b8892a] px-5 text-sm font-bold text-black disabled:opacity-60"
+          >
+            {saving ? "저장 중..." : "상세 요금표 저장"}
+          </button>
+          <button
+            type="button"
+            onClick={() => void onReset()}
+            className="inline-flex h-10 items-center justify-center rounded-lg border border-white/20 bg-black/30 px-4 text-sm font-semibold text-tone-strong"
+          >
+            저장값 다시 불러오기
+          </button>
+          {message ? <p className="text-sm text-tone-sky">{message}</p> : null}
+        </div>
+      ) : message ? (
+        <p className="text-sm text-tone-sky">{message}</p>
+      ) : null}
     </div>
   );
 }

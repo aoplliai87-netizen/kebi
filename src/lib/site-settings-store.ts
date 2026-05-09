@@ -11,10 +11,18 @@ import {
   type SubpagesContent,
 } from "@/lib/subpages-content";
 import {
+  emptySeoPageSettings,
   emptySeoPagesSettings,
   parseSeoPagesSettings,
+  parseSeoPerSlugMap,
+  type SeoPageSettings,
   type SeoPagesSettings,
 } from "@/lib/seo-settings";
+import { getAllDestinationSlugs } from "../../data/landing-pages";
+import {
+  parseDestinationContentOverrideMap,
+  type DestinationContentOverrideMap,
+} from "@/lib/destination-admin-types";
 import { asStringArray, getSupabaseServerClient } from "@/lib/supabase-server";
 
 export type ManagedPricingTier = {
@@ -63,6 +71,10 @@ export type SiteSettings = {
   subpages: SubpagesContent;
   /** 페이지별/언어별 SEO 설정 */
   seo: SeoPagesSettings;
+  /** destinations/[slug] 랜딩 본문 — 비어 있으면 data/landing-pages 기본값 */
+  destinationContentOverrides: DestinationContentOverrideMap;
+  /** slug별 메타/OG 등 — 비어 있으면 랜딩 데이터 파일 + 공통 규칙 */
+  seoDestinationBySlug: Record<string, SeoPageSettings>;
 };
 
 const EMPTY_LOCALIZED_TEXT: LocalizedText = { ko: "", en: "", ja: "", zh: "" };
@@ -100,10 +112,27 @@ const DEFAULT_SETTINGS: SiteSettings = {
   home: emptyHomeSections(),
   subpages: emptySubpagesContent(),
   seo: emptySeoPagesSettings(),
+  destinationContentOverrides: {},
+  seoDestinationBySlug: {},
 };
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const FILE = path.join(DATA_DIR, "site-settings.json");
+
+/** 신규 destination slug 추가 시 SEO 폼에 빈 레코드가 생기도록 보강 */
+export function hydrateSeoDestinationBySlug(stored: Record<string, SeoPageSettings>): Record<string, SeoPageSettings> {
+  let slugs: string[];
+  try {
+    slugs = getAllDestinationSlugs();
+  } catch {
+    return stored;
+  }
+  const next = { ...stored };
+  for (const slug of slugs) {
+    if (!next[slug]) next[slug] = emptySeoPageSettings();
+  }
+  return next;
+}
 
 async function ensureStore() {
   await mkdir(DATA_DIR, { recursive: true });
@@ -312,6 +341,13 @@ export async function getSiteSettings(): Promise<SiteSettings> {
           (data as { subpages_content?: unknown }).subpages_content ?? undefined,
         ),
         seo,
+        destinationContentOverrides: parseDestinationContentOverrideMap(
+          (data as { destination_content_overrides?: unknown }).destination_content_overrides ??
+            undefined,
+        ),
+        seoDestinationBySlug: hydrateSeoDestinationBySlug(
+          parseSeoPerSlugMap((data as { seo_destination_by_slug?: unknown }).seo_destination_by_slug ?? undefined),
+        ),
       };
     }
   }
@@ -405,6 +441,8 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       home: parseHomeSections(parsed.home),
       subpages: parseSubpagesContent(parsed.subpages),
       seo,
+      destinationContentOverrides: parseDestinationContentOverrideMap(parsed.destinationContentOverrides),
+      seoDestinationBySlug: hydrateSeoDestinationBySlug(parseSeoPerSlugMap(parsed.seoDestinationBySlug)),
     };
   } catch {
     return DEFAULT_SETTINGS;
@@ -472,6 +510,8 @@ export async function saveSiteSettings(nextSettings: SiteSettings) {
       home_sections: nextSettings.home,
       subpages_content: nextSettings.subpages,
       seo_pages: nextSettings.seo,
+      destination_content_overrides: nextSettings.destinationContentOverrides,
+      seo_destination_by_slug: nextSettings.seoDestinationBySlug,
     } as const;
 
     const payloadForUpsert: Record<string, unknown> = { ...payload };

@@ -1,10 +1,18 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { NextIntlClientProvider } from "next-intl";
+import { useRouter } from "next/navigation";
+import {
+  AdminVisualModal,
+  AdminVisualToolbar,
+  BtnEdit,
+} from "@/components/admin/admin-visual-editor-primitives";
 import { BespokeSupportExperience } from "@/components/support/BespokeSupportExperience";
 import { SiteRuntimeProvider } from "@/components/providers/SiteRuntimeProvider";
 import type { AdminContentFallbacks } from "@/lib/admin-content-fallbacks";
+import { effectiveText } from "@/lib/admin-visual-effective";
+import { normalizeSiteSettingsForPersist } from "@/lib/normalize-site-settings-persist";
 import type { LocaleKey, SiteSettings } from "@/lib/site-settings-store";
 import { SITE_PHONE_TEL } from "@/lib/site";
 
@@ -15,16 +23,26 @@ type Props = {
   mergedContact: { kakao: string; instagram: string; whatsapp: string; line: string; messenger: string };
 };
 
-const LOCALES: LocaleKey[] = ["ko", "en", "ja", "zh"];
-
 export function AdminInquiryVisualEditor({ initial, fallbackHints, messagesByLocale, mergedContact }: Props) {
-  const [locale, setLocale] = useState<LocaleKey>("ko");
+  const router = useRouter();
+  const [previewLocale, setPreviewLocale] = useState<LocaleKey>("ko");
   const [settings, setSettings] = useState<SiteSettings>(initial);
   const [panel, setPanel] = useState<"hero" | "faq" | "form" | "contact" | null>(null);
+  const [editLocale, setEditLocale] = useState<LocaleKey>("ko");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const q = settings.subpages.inquiry;
-  const localeMessages = messagesByLocale[locale];
+  const fb = fallbackHints.subpages.inquiry;
+
+  useEffect(() => {
+    setSettings(initial);
+  }, [initial]);
+
+  useEffect(() => {
+    if (panel) setEditLocale(previewLocale);
+  }, [panel, previewLocale]);
+
+  const localeMessages = messagesByLocale[previewLocale];
 
   const runtimeConfig = useMemo(
     () => ({
@@ -35,17 +53,47 @@ export function AdminInquiryVisualEditor({ initial, fallbackHints, messagesByLoc
     [settings.phoneDisplay, settings.phoneTel, mergedContact],
   );
 
-  const save = async () => {
+  const overrides = useMemo(
+    () => ({
+      heroEyebrow: q.heroEyebrow[previewLocale],
+      heroTitle: q.heroTitle[previewLocale],
+      heroDesc: q.heroDesc[previewLocale],
+      faqTitle: q.faqTitle[previewLocale],
+      faqQ1: q.faqItems[0].q[previewLocale],
+      faqA1: q.faqItems[0].a[previewLocale],
+      faqQ2: q.faqItems[1].q[previewLocale],
+      faqA2: q.faqItems[1].a[previewLocale],
+      faqQ3: q.faqItems[2].q[previewLocale],
+      faqA3: q.faqItems[2].a[previewLocale],
+      faqQ4: q.faqItems[3].q[previewLocale],
+      faqA4: q.faqItems[3].a[previewLocale],
+      faqQ5: q.faqItems[4].q[previewLocale],
+      faqA5: q.faqItems[4].a[previewLocale],
+      formTitle: q.formTitle[previewLocale],
+      formDesc: q.formDesc[previewLocale],
+      contactSectionTitle: q.contactSectionTitle[previewLocale],
+      contactSectionDesc: q.contactSectionDesc[previewLocale],
+    }),
+    [q, previewLocale],
+  );
+
+  const persist = async () => {
     setSaving(true);
     setMessage("");
     try {
+      const payload = normalizeSiteSettingsForPersist(settings, messagesByLocale);
       const res = await fetch("/api/admin/site-settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(settings),
+        body: JSON.stringify(payload),
       });
       const result = (await res.json()) as { ok?: boolean; message?: string };
-      setMessage(result.ok ? "저장 완료" : result.message ?? "저장 실패");
+      if (result.ok) {
+        setMessage("저장되었습니다.");
+        router.refresh();
+      } else {
+        setMessage(result.message ?? "저장 실패");
+      }
     } catch {
       setMessage("저장 실패");
     } finally {
@@ -53,84 +101,289 @@ export function AdminInquiryVisualEditor({ initial, fallbackHints, messagesByLoc
     }
   };
 
-  const overrides = {
-    heroEyebrow: q.heroEyebrow[locale],
-    heroTitle: q.heroTitle[locale],
-    heroDesc: q.heroDesc[locale],
-    faqTitle: q.faqTitle[locale],
-    faqQ1: q.faqItems[0].q[locale],
-    faqA1: q.faqItems[0].a[locale],
-    faqQ2: q.faqItems[1].q[locale],
-    faqA2: q.faqItems[1].a[locale],
-    faqQ3: q.faqItems[2].q[locale],
-    faqA3: q.faqItems[2].a[locale],
-    faqQ4: q.faqItems[3].q[locale],
-    faqA4: q.faqItems[3].a[locale],
-    faqQ5: q.faqItems[4].q[locale],
-    faqA5: q.faqItems[4].a[locale],
-    formTitle: q.formTitle[locale],
-    formDesc: q.formDesc[locale],
-    contactSectionTitle: q.contactSectionTitle[locale],
-    contactSectionDesc: q.contactSectionDesc[locale],
-  };
+  const loc = editLocale;
+  const resetHero = () =>
+    setSettings((s) => ({
+      ...s,
+      subpages: {
+        ...s.subpages,
+        inquiry: {
+          ...s.subpages.inquiry,
+          heroEyebrow: { ...s.subpages.inquiry.heroEyebrow, [loc]: "" },
+          heroTitle: { ...s.subpages.inquiry.heroTitle, [loc]: "" },
+          heroDesc: { ...s.subpages.inquiry.heroDesc, [loc]: "" },
+        },
+      },
+    }));
+
+  const resetFaq = () =>
+    setSettings((s) => ({
+      ...s,
+      subpages: {
+        ...s.subpages,
+        inquiry: {
+          ...s.subpages.inquiry,
+          faqTitle: { ...s.subpages.inquiry.faqTitle, [loc]: "" },
+          faqItems: s.subpages.inquiry.faqItems.map((item) => ({
+            q: { ...item.q, [loc]: "" },
+            a: { ...item.a, [loc]: "" },
+          })),
+        },
+      },
+    }));
+
+  const resetForm = () =>
+    setSettings((s) => ({
+      ...s,
+      subpages: {
+        ...s.subpages,
+        inquiry: {
+          ...s.subpages.inquiry,
+          formTitle: { ...s.subpages.inquiry.formTitle, [loc]: "" },
+          formDesc: { ...s.subpages.inquiry.formDesc, [loc]: "" },
+        },
+      },
+    }));
+
+  const resetContact = () =>
+    setSettings((s) => ({
+      ...s,
+      subpages: {
+        ...s.subpages,
+        inquiry: {
+          ...s.subpages.inquiry,
+          contactSectionTitle: { ...s.subpages.inquiry.contactSectionTitle, [loc]: "" },
+          contactSectionDesc: { ...s.subpages.inquiry.contactSectionDesc, [loc]: "" },
+        },
+      },
+    }));
 
   return (
     <section className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/20 p-3">
-        <div className="inline-flex gap-1 rounded-lg border border-white/15 bg-black/20 p-1">
-          {LOCALES.map((loc) => (
-            <button key={loc} type="button" onClick={() => setLocale(loc)} className={`rounded-md px-3 py-1 text-xs font-semibold ${locale === loc ? "bg-brand-gold text-black" : "text-tone-strong"}`}>{loc.toUpperCase()}</button>
-          ))}
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <button type="button" onClick={() => setPanel("hero")} className="rounded-md border border-white/20 px-3 py-1 text-xs text-tone-strong">히어로</button>
-          <button type="button" onClick={() => setPanel("faq")} className="rounded-md border border-white/20 px-3 py-1 text-xs text-tone-strong">FAQ</button>
-          <button type="button" onClick={() => setPanel("form")} className="rounded-md border border-white/20 px-3 py-1 text-xs text-tone-strong">폼</button>
-          <button type="button" onClick={() => setPanel("contact")} className="rounded-md border border-white/20 px-3 py-1 text-xs text-tone-strong">문의채널</button>
-          <button type="button" onClick={() => void save()} disabled={saving} className="rounded-md bg-brand-gold px-3 py-1 text-xs font-semibold text-black">{saving ? "저장 중" : "저장"}</button>
-        </div>
-      </div>
+      <AdminVisualToolbar previewLocale={previewLocale} onPreviewLocale={setPreviewLocale} onSave={persist} saving={saving} />
       {message ? <p className="text-xs text-tone-sky">{message}</p> : null}
 
       <div className="relative overflow-hidden rounded-2xl border border-white/10">
-        <div className="pointer-events-none absolute right-3 top-3 z-10 rounded-full border border-brand-gold/40 bg-black/70 px-2.5 py-1 text-[11px] text-brand-gold">ADMIN PREVIEW</div>
-        <NextIntlClientProvider locale={locale} messages={localeMessages}>
+        <NextIntlClientProvider locale={previewLocale} messages={localeMessages}>
           <SiteRuntimeProvider value={runtimeConfig}>
-            <BespokeSupportExperience contentOverrides={overrides} />
+            <BespokeSupportExperience
+              contentOverrides={overrides}
+              adminHeroChrome={<BtnEdit onClick={() => setPanel("hero")} />}
+              adminFaqChrome={<BtnEdit onClick={() => setPanel("faq")} />}
+              adminFormChrome={<BtnEdit onClick={() => setPanel("form")} />}
+              adminContactChrome={<BtnEdit onClick={() => setPanel("contact")} />}
+            />
           </SiteRuntimeProvider>
         </NextIntlClientProvider>
       </div>
 
-      {panel === "hero" ? (
-        <div className="grid gap-2 rounded-xl border border-white/10 bg-black/20 p-4">
-          <input value={q.heroEyebrow[locale]} onChange={(e)=>setSettings((s)=>({...s,subpages:{...s.subpages,inquiry:{...s.subpages.inquiry,heroEyebrow:{...s.subpages.inquiry.heroEyebrow,[locale]:e.target.value}}}}))} placeholder={fallbackHints.subpages.inquiry.heroEyebrow[locale]} className="h-10 rounded-lg border border-white/20 bg-black/30 px-3 text-sm" />
-          <input value={q.heroTitle[locale]} onChange={(e)=>setSettings((s)=>({...s,subpages:{...s.subpages,inquiry:{...s.subpages.inquiry,heroTitle:{...s.subpages.inquiry.heroTitle,[locale]:e.target.value}}}}))} placeholder={fallbackHints.subpages.inquiry.heroTitle[locale]} className="h-10 rounded-lg border border-white/20 bg-black/30 px-3 text-sm" />
-          <textarea rows={3} value={q.heroDesc[locale]} onChange={(e)=>setSettings((s)=>({...s,subpages:{...s.subpages,inquiry:{...s.subpages.inquiry,heroDesc:{...s.subpages.inquiry.heroDesc,[locale]:e.target.value}}}}))} placeholder={fallbackHints.subpages.inquiry.heroDesc[locale]} className="rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm" />
-        </div>
-      ) : null}
-      {panel === "faq" ? (
-        <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-4">
-          <input value={q.faqTitle[locale]} onChange={(e)=>setSettings((s)=>({...s,subpages:{...s.subpages,inquiry:{...s.subpages.inquiry,faqTitle:{...s.subpages.inquiry.faqTitle,[locale]:e.target.value}}}}))} placeholder={fallbackHints.subpages.inquiry.faqTitle[locale]} className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm" />
-          {[0,1,2,3,4].map((i)=>(
-            <div key={i} className="rounded-lg border border-white/10 bg-black/20 p-3">
-              <textarea rows={2} value={q.faqItems[i].q[locale]} onChange={(e)=>setSettings((s)=>{const n=[...s.subpages.inquiry.faqItems]; n[i]={...n[i],q:{...n[i].q,[locale]:e.target.value}}; return {...s,subpages:{...s.subpages,inquiry:{...s.subpages.inquiry,faqItems:n}}};})} placeholder={fallbackHints.subpages.inquiry.faqItems[i].q[locale]} className="w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm" />
-              <textarea rows={3} value={q.faqItems[i].a[locale]} onChange={(e)=>setSettings((s)=>{const n=[...s.subpages.inquiry.faqItems]; n[i]={...n[i],a:{...n[i].a,[locale]:e.target.value}}; return {...s,subpages:{...s.subpages,inquiry:{...s.subpages.inquiry,faqItems:n}}};})} placeholder={fallbackHints.subpages.inquiry.faqItems[i].a[locale]} className="mt-2 w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm" />
-            </div>
-          ))}
-        </div>
-      ) : null}
-      {panel === "form" ? (
-        <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-4">
-          <input value={q.formTitle[locale]} onChange={(e)=>setSettings((s)=>({...s,subpages:{...s.subpages,inquiry:{...s.subpages.inquiry,formTitle:{...s.subpages.inquiry.formTitle,[locale]:e.target.value}}}}))} placeholder={fallbackHints.subpages.inquiry.formTitle[locale]} className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm" />
-          <textarea rows={3} value={q.formDesc[locale]} onChange={(e)=>setSettings((s)=>({...s,subpages:{...s.subpages,inquiry:{...s.subpages.inquiry,formDesc:{...s.subpages.inquiry.formDesc,[locale]:e.target.value}}}}))} placeholder={fallbackHints.subpages.inquiry.formDesc[locale]} className="w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm" />
-        </div>
-      ) : null}
-      {panel === "contact" ? (
-        <div className="space-y-2 rounded-xl border border-white/10 bg-black/20 p-4">
-          <input value={q.contactSectionTitle[locale]} onChange={(e)=>setSettings((s)=>({...s,subpages:{...s.subpages,inquiry:{...s.subpages.inquiry,contactSectionTitle:{...s.subpages.inquiry.contactSectionTitle,[locale]:e.target.value}}}}))} placeholder={fallbackHints.subpages.inquiry.contactSectionTitle[locale]} className="h-10 w-full rounded-lg border border-white/20 bg-black/30 px-3 text-sm" />
-          <textarea rows={3} value={q.contactSectionDesc[locale]} onChange={(e)=>setSettings((s)=>({...s,subpages:{...s.subpages,inquiry:{...s.subpages.inquiry,contactSectionDesc:{...s.subpages.inquiry.contactSectionDesc,[locale]:e.target.value}}}}))} placeholder={fallbackHints.subpages.inquiry.contactSectionDesc[locale]} className="w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 text-sm" />
-        </div>
-      ) : null}
+      <AdminVisualModal
+        open={panel === "hero"}
+        title="문의 · 히어로"
+        onClose={() => setPanel(null)}
+        editLocale={editLocale}
+        onEditLocale={setEditLocale}
+        onSave={persist}
+        saving={saving}
+        onReset={resetHero}
+      >
+        <input
+          value={effectiveText(q.heroEyebrow[editLocale] ?? "", fb.heroEyebrow[editLocale])}
+          onChange={(e) =>
+            setSettings((s) => ({
+              ...s,
+              subpages: {
+                ...s.subpages,
+                inquiry: {
+                  ...s.subpages.inquiry,
+                  heroEyebrow: { ...s.subpages.inquiry.heroEyebrow, [editLocale]: e.target.value },
+                },
+              },
+            }))
+          }
+          className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+        />
+        <input
+          value={effectiveText(q.heroTitle[editLocale] ?? "", fb.heroTitle[editLocale])}
+          onChange={(e) =>
+            setSettings((s) => ({
+              ...s,
+              subpages: {
+                ...s.subpages,
+                inquiry: {
+                  ...s.subpages.inquiry,
+                  heroTitle: { ...s.subpages.inquiry.heroTitle, [editLocale]: e.target.value },
+                },
+              },
+            }))
+          }
+          className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+        />
+        <textarea
+          rows={3}
+          value={effectiveText(q.heroDesc[editLocale] ?? "", fb.heroDesc[editLocale])}
+          onChange={(e) =>
+            setSettings((s) => ({
+              ...s,
+              subpages: {
+                ...s.subpages,
+                inquiry: {
+                  ...s.subpages.inquiry,
+                  heroDesc: { ...s.subpages.inquiry.heroDesc, [editLocale]: e.target.value },
+                },
+              },
+            }))
+          }
+          className="w-full rounded-lg border border-white/20 bg-black/40 px-3 py-2 text-sm"
+        />
+      </AdminVisualModal>
+
+      <AdminVisualModal
+        open={panel === "faq"}
+        title="문의 · FAQ"
+        onClose={() => setPanel(null)}
+        editLocale={editLocale}
+        onEditLocale={setEditLocale}
+        onSave={persist}
+        saving={saving}
+        onReset={resetFaq}
+      >
+        <input
+          value={effectiveText(q.faqTitle[editLocale] ?? "", fb.faqTitle[editLocale])}
+          onChange={(e) =>
+            setSettings((s) => ({
+              ...s,
+              subpages: {
+                ...s.subpages,
+                inquiry: {
+                  ...s.subpages.inquiry,
+                  faqTitle: { ...s.subpages.inquiry.faqTitle, [editLocale]: e.target.value },
+                },
+              },
+            }))
+          }
+          className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+        />
+        {[0, 1, 2, 3, 4].map((i) => (
+          <div key={i} className="rounded-lg border border-white/10 bg-black/20 p-3">
+            <p className="mb-2 text-xs text-brand-gold">FAQ {i + 1}</p>
+            <textarea
+              rows={2}
+              value={effectiveText(q.faqItems[i].q[editLocale] ?? "", fb.faqItems[i].q[editLocale])}
+              onChange={(e) =>
+                setSettings((s) => {
+                  const n = [...s.subpages.inquiry.faqItems];
+                  n[i] = { ...n[i], q: { ...n[i].q, [editLocale]: e.target.value } };
+                  return { ...s, subpages: { ...s.subpages, inquiry: { ...s.subpages.inquiry, faqItems: n } } };
+                })
+              }
+              className="w-full rounded-lg border border-white/20 bg-black/40 px-3 py-2 text-sm"
+            />
+            <textarea
+              rows={3}
+              value={effectiveText(q.faqItems[i].a[editLocale] ?? "", fb.faqItems[i].a[editLocale])}
+              onChange={(e) =>
+                setSettings((s) => {
+                  const n = [...s.subpages.inquiry.faqItems];
+                  n[i] = { ...n[i], a: { ...n[i].a, [editLocale]: e.target.value } };
+                  return { ...s, subpages: { ...s.subpages, inquiry: { ...s.subpages.inquiry, faqItems: n } } };
+                })
+              }
+              className="mt-2 w-full rounded-lg border border-white/20 bg-black/40 px-3 py-2 text-sm"
+            />
+          </div>
+        ))}
+      </AdminVisualModal>
+
+      <AdminVisualModal
+        open={panel === "form"}
+        title="문의 · 폼 안내 문구"
+        onClose={() => setPanel(null)}
+        editLocale={editLocale}
+        onEditLocale={setEditLocale}
+        onSave={persist}
+        saving={saving}
+        onReset={resetForm}
+      >
+        <input
+          value={effectiveText(q.formTitle[editLocale] ?? "", fb.formTitle[editLocale])}
+          onChange={(e) =>
+            setSettings((s) => ({
+              ...s,
+              subpages: {
+                ...s.subpages,
+                inquiry: {
+                  ...s.subpages.inquiry,
+                  formTitle: { ...s.subpages.inquiry.formTitle, [editLocale]: e.target.value },
+                },
+              },
+            }))
+          }
+          className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+        />
+        <textarea
+          rows={3}
+          value={effectiveText(q.formDesc[editLocale] ?? "", fb.formDesc[editLocale])}
+          onChange={(e) =>
+            setSettings((s) => ({
+              ...s,
+              subpages: {
+                ...s.subpages,
+                inquiry: {
+                  ...s.subpages.inquiry,
+                  formDesc: { ...s.subpages.inquiry.formDesc, [editLocale]: e.target.value },
+                },
+              },
+            }))
+          }
+          className="w-full rounded-lg border border-white/20 bg-black/40 px-3 py-2 text-sm"
+        />
+      </AdminVisualModal>
+
+      <AdminVisualModal
+        open={panel === "contact"}
+        title="문의 · 연락 채널 안내"
+        onClose={() => setPanel(null)}
+        editLocale={editLocale}
+        onEditLocale={setEditLocale}
+        onSave={persist}
+        saving={saving}
+        onReset={resetContact}
+      >
+        <input
+          value={effectiveText(q.contactSectionTitle[editLocale] ?? "", fb.contactSectionTitle[editLocale])}
+          onChange={(e) =>
+            setSettings((s) => ({
+              ...s,
+              subpages: {
+                ...s.subpages,
+                inquiry: {
+                  ...s.subpages.inquiry,
+                  contactSectionTitle: { ...s.subpages.inquiry.contactSectionTitle, [editLocale]: e.target.value },
+                },
+              },
+            }))
+          }
+          className="h-10 w-full rounded-lg border border-white/20 bg-black/40 px-3 text-sm"
+        />
+        <textarea
+          rows={3}
+          value={effectiveText(q.contactSectionDesc[editLocale] ?? "", fb.contactSectionDesc[editLocale])}
+          onChange={(e) =>
+            setSettings((s) => ({
+              ...s,
+              subpages: {
+                ...s.subpages,
+                inquiry: {
+                  ...s.subpages.inquiry,
+                  contactSectionDesc: { ...s.subpages.inquiry.contactSectionDesc, [editLocale]: e.target.value },
+                },
+              },
+            }))
+          }
+          className="w-full rounded-lg border border-white/20 bg-black/40 px-3 py-2 text-sm"
+        />
+      </AdminVisualModal>
     </section>
   );
 }

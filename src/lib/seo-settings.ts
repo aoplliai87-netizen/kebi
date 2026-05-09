@@ -83,6 +83,17 @@ export function parseSeoPagesSettings(value: unknown): SeoPagesSettings {
   return out;
 }
 
+/** slug → SEO (destination 랜딩 등 동적 키) */
+export function parseSeoPerSlugMap(value: unknown): Record<string, SeoPageSettings> {
+  if (!value || typeof value !== "object") return {};
+  const src = value as Record<string, unknown>;
+  const out: Record<string, SeoPageSettings> = {};
+  for (const slug of Object.keys(src)) {
+    out[slug] = parsePage(src[slug]);
+  }
+  return out;
+}
+
 export function pickLocaleText(value: LocalizedText, locale: LocaleKey): string {
   return value[locale]?.trim() || "";
 }

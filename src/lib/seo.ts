@@ -309,3 +309,107 @@ export function buildDestinationMetadata(opts: {
     },
   };
 }
+
+/**
+ * `/[locale]/destinations` 목록 페이지 — 개별 slug 메타와 분리
+ */
+export function buildDestinationsIndexMetadata(opts: {
+  locale: string;
+  title: string;
+  description: string;
+  keywords?: string[];
+  siteName: string;
+  canonicalOverride?: string;
+  ogTitleOverride?: string;
+  ogDescriptionOverride?: string;
+  ogImageOverride?: string;
+  keywordsOverride?: string[];
+}): Metadata {
+  const {
+    locale,
+    title,
+    description,
+    keywords = [],
+    siteName,
+    canonicalOverride,
+    ogTitleOverride,
+    ogDescriptionOverride,
+    ogImageOverride,
+    keywordsOverride,
+  } = opts;
+  const pathFor = (loc: string) => `/${loc}/destinations`;
+  const canonical = canonicalOverride?.trim() || absoluteUrl(pathFor(locale));
+  const ogImage = ogImageOverride?.trim()
+    ? ogImageOverride.startsWith("http")
+      ? ogImageOverride
+      : absoluteUrl(ogImageOverride)
+    : absoluteUrl(SITE_OG_IMAGE_PATH);
+  const ogTitle = ogTitleOverride?.trim() || title;
+  const ogDescription = ogDescriptionOverride?.trim() || description;
+  const ogLocale = OG_LOCALE_MAP[locale] ?? "en_US";
+  const alternateOgLocale = Object.values(OG_LOCALE_MAP).filter((v) => v !== ogLocale);
+  const languages = Object.fromEntries(
+    HREFLANG_LOCALES.map((loc) => [loc, absoluteUrl(pathFor(loc))]),
+  ) as Record<string, string>;
+
+  const naverVerification = process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION;
+  const baiduVerification = process.env.NEXT_PUBLIC_BAIDU_SITE_VERIFICATION;
+  const otherVerification =
+    naverVerification || baiduVerification
+      ? {
+          ...(naverVerification ? { "naver-site-verification": naverVerification } : {}),
+          ...(baiduVerification ? { "baidu-site-verification": baiduVerification } : {}),
+        }
+      : undefined;
+
+  const kw =
+    keywordsOverride && keywordsOverride.length > 0 ? keywordsOverride : keywords.length > 0 ? keywords : undefined;
+
+  return {
+    title,
+    description,
+    ...(kw ? { keywords: kw } : {}),
+    alternates: {
+      canonical,
+      languages: {
+        ...languages,
+        "x-default": absoluteUrl(pathFor("ko")),
+      },
+    },
+    openGraph: {
+      type: "website",
+      url: canonical,
+      title: ogTitle,
+      description: ogDescription,
+      siteName,
+      locale: ogLocale,
+      alternateLocale: alternateOgLocale,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: ogTitle,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: ogTitle,
+      description: ogDescription,
+      images: [ogImage],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
+    other: {
+      ...(otherVerification ?? {}),
+      "format-detection": "telephone=no",
+    },
+  };
+}

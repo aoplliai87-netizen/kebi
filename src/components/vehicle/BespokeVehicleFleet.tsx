@@ -1,4 +1,5 @@
 "use client";
+/** 메인·갤러리 이미지는 `vehicle-media.json`·`VEHICLE_FLEET_MAIN`·`DETAIL_GALLERY_SRC` 를 우선합니다. SEO·접근성용 alt는 차종별 `imageAlt`(관리자·messages 폴백)를 유지하세요. */
 
 import Image from "next/image";
 import { Check, Luggage, Users, X } from "lucide-react";

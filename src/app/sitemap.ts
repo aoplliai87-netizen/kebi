@@ -12,6 +12,7 @@ const ROUTES = [
   "booking",
   "review",
   "inquiry",
+  "destinations",
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {

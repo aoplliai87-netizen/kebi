@@ -2,6 +2,15 @@
  * SEO 랜딩 페이지 데이터 — slug만 추가하면 `app/[locale]/destinations/[slug]` 가 생성됩니다.
  */
 
+import { refineLandingLocaleCopy } from "@/lib/landing-i18n-refine";
+
+import type { LandingPageSeoPlaceHints } from "./destination-place-seo";
+import { getPoiBundle } from "./destination-poi-bundles";
+import { DESTINATION_LINK_GRAPH } from "./destination-link-graph";
+import { EXTRA_AIRPORT_SEO_LANDINGS } from "./extra-airport-seo-landings";
+import { MORE_DESTINATION_LANDINGS } from "./more-destination-landings";
+import { TO_AIRPORT_LANDINGS } from "./to-airport-landings";
+
 export type AppLocale = "ko" | "en" | "ja" | "zh";
 
 export type LandingFaqItem = { q: string; a: string };
@@ -18,6 +27,10 @@ export type LandingPageCopy = {
   h1: string;
   /** 리드 문단 (plain) */
   lede: string;
+  /** 차량·인원 추천 블록 (선택) */
+  vehicleRecommendBlurb?: string;
+  /** 이동 구간·시간·혼잡 등 특성 (선택) */
+  travelTraitsLine?: string;
   /** 서비스 설명 섹션 */
   sections: Array<{ id: string; heading: string; body: string }>;
   pricingIntro: string;
@@ -39,10 +52,33 @@ export type LandingPageCopy = {
   localBusinessDescription: string;
   /** schema.org areaServed 이름 목록 */
   areaServedNames: string[];
+  /** 실제 운영 관점 체크리스트 (미입력 시 enrichment에서 슬러그 유형별 보강) */
+  operationalTips?: Array<{ label: string; body: string }>;
+  /** 추천 이용 상황·사례형 안내 (샘플 문구 허용) */
+  scenarioExamples?: Array<{ title: string; body: string }>;
+  scenarioDisclaimer?: string;
+  /** 히어로 이미지 신뢰 안내 (실차·브랜드 이미지 우선 등) */
+  trustPhotoNote?: string;
+  /** 목적지 클러스터 기준 호텔·랜드마크 컨텍스트 (`destination-poi-bundles` 병합) */
+  destinationPoi?: {
+    nearbyHotels: string[];
+    nearbyLandmarks: string[];
+    recommendedDropoff: string;
+    popularDestinationTags: string[];
+  };
 };
+
+export type { LandingPageSeoPlaceHints } from "./destination-place-seo";
 
 export type LandingPage = {
   slug: string;
+  /** 실검색 alias·키워드 보강 — `data/destination-place-seo.ts` 프로필과 병합 */
+  seoPlaceHints?: LandingPageSeoPlaceHints;
+  /** 개별 페이지에서 내부링크 오버라이드 시 (미설정이면 destination-link-graph 사용) */
+  relatedSlugs?: string[];
+  popularSlugs?: string[];
+  recommendedSlugs?: string[];
+  northGyeonggiSlugs?: string[];
   byLocale: Record<AppLocale, LandingPageCopy>;
 };
 
@@ -377,6 +413,13 @@ export const LANDING_PAGES: LandingPage[] = [
   },
   {
     slug: "incheon-airport-to-gangnam",
+    seoPlaceHints: {
+      aliases: ["Apgujeong", "Cheongdam-dong"],
+      searchKeywords: {
+        ja: ["狎鴎亭 送迎", "清潭洞 ホテル"],
+        zh: ["狎鸥亭接送", "清潭洞酒店"],
+      },
+    },
     byLocale: {
       ko: {
         metaTitle: "인천공항 강남 콜밴·프라이빗 밴 | 픽업·샌딩 예약",
@@ -1005,10 +1048,101 @@ export const LANDING_PAGES: LandingPage[] = [
       },
     },
   },
+  ...MORE_DESTINATION_LANDINGS,
+  ...TO_AIRPORT_LANDINGS,
+  ...EXTRA_AIRPORT_SEO_LANDINGS,
 ];
+
+/** 목적지 랜딩 내부링크 슬러그 (그래프 + 페이지 오버라이드 병합) */
+export function getDestinationLinkSlugsForPage(page: LandingPage): {
+  relatedSlugs: string[];
+  popularSlugs: string[];
+  recommendedSlugs: string[];
+  northGyeonggiSlugs: string[];
+} {
+  const g = DESTINATION_LINK_GRAPH[page.slug];
+  const related = [...(page.relatedSlugs ?? []), ...(g?.relatedSlugs ?? [])];
+  const popular = [...(page.popularSlugs ?? []), ...(g?.popularSlugs ?? [])];
+  const poiExtras = getPoiBundle(page.slug)?.relatedSlugs ?? [];
+  const recommended = [
+    ...(page.recommendedSlugs ?? []),
+    ...(g?.recommendedSlugs ?? []),
+    ...poiExtras,
+  ];
+  const northGyeonggi = [...(page.northGyeonggiSlugs ?? []), ...(g?.northGyeonggiSlugs ?? [])];
+  const uniq = (xs: string[]) => Array.from(new Set(xs.map((s) => s.trim()).filter(Boolean)));
+  return {
+    relatedSlugs: uniq(related),
+    popularSlugs: uniq(popular),
+    recommendedSlugs: uniq(recommended),
+    northGyeonggiSlugs: uniq(northGyeonggi),
+  };
+}
+
+/** 내비게이션용 내부링크 — 존재하는 슬러그만, 현재 페이지 제외, 아래 단계별 중복 제거 */
+export function buildDestinationNavLinksForPage(
+  page: LandingPage,
+  locale: string,
+): {
+  relatedLinks: Array<{ href: string; label: string }>;
+  popularLinks: Array<{ href: string; label: string }>;
+  recommendedLinks: Array<{ href: string; label: string }>;
+  northGyeonggiLinks: Array<{ href: string; label: string }>;
+} {
+  const currentSlug = page.slug;
+  const { relatedSlugs, popularSlugs, recommendedSlugs, northGyeonggiSlugs } =
+    getDestinationLinkSlugsForPage(page);
+
+  const toLinks = (slugs: string[]): Array<{ href: string; label: string }> => {
+    const out: Array<{ href: string; label: string }> = [];
+    const seen = new Set<string>();
+    for (const s of slugs) {
+      if (s === currentSlug) continue;
+      if (seen.has(s)) continue;
+      const entry = getLandingPageBySlug(s);
+      if (!entry) continue;
+      seen.add(s);
+      out.push({
+        href: `/destinations/${s}`,
+        label: getCopyForLocale(entry, locale).linkTitle,
+      });
+    }
+    return out;
+  };
+
+  const used = new Set<string>();
+
+  const relatedLinks = toLinks(relatedSlugs);
+  relatedLinks.forEach((l) => used.add(l.href.replace(/^\/destinations\//, "")));
+
+  const popularLinks = toLinks(popularSlugs.filter((s) => !used.has(s)));
+  popularLinks.forEach((l) => used.add(l.href.replace(/^\/destinations\//, "")));
+
+  const recommendedLinks = toLinks(recommendedSlugs.filter((s) => !used.has(s)));
+  recommendedLinks.forEach((l) => used.add(l.href.replace(/^\/destinations\//, "")));
+
+  const northGyeonggiLinks = toLinks(northGyeonggiSlugs.filter((s) => !used.has(s)));
+
+  return { relatedLinks, popularLinks, recommendedLinks, northGyeonggiLinks };
+}
 
 export function getLandingPageBySlug(slug: string): LandingPage | undefined {
   return LANDING_PAGES.find((p) => p.slug === slug);
+}
+
+/** 홈 대표 3개 버튼의 기본 라벨·링크 (관리자 저장값 없을 때) */
+export function getFeaturedDestinationButtonDefaults(
+  locale: string,
+  featuredSlugs: readonly [string, string, string],
+): { label: string; href: string }[] {
+  return featuredSlugs.map((slug) => {
+    const page = getLandingPageBySlug(slug);
+    const copy = page ? getCopyForLocale(page, locale) : null;
+    return {
+      label: copy?.linkTitle ?? slug,
+      href: `/destinations/${slug}`,
+    };
+  });
 }
 
 export function getAllDestinationSlugs(): string[] {
@@ -1020,8 +1154,10 @@ export function getCopyForLocale(
   locale: string,
 ): LandingPageCopy {
   const loc = locale as AppLocale;
-  if (loc in page.byLocale) {
-    return page.byLocale[loc];
+  const base =
+    loc in page.byLocale ? page.byLocale[loc] : page.byLocale.en;
+  if (loc === "ja" || loc === "zh") {
+    return refineLandingLocaleCopy(base, page.slug, loc, page.seoPlaceHints);
   }
-  return page.byLocale.en;
+  return base;
 }

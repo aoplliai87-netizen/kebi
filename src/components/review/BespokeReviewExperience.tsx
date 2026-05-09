@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import type { StoredReview } from "@/lib/review-store";
 
@@ -31,7 +31,14 @@ function formatDateTimePosted(iso: string, locale: string) {
   }).format(d);
 }
 
-export function BespokeReviewExperience({ sampleReviews = [] }: { sampleReviews?: SampleReview[] }) {
+export function BespokeReviewExperience({
+  sampleReviews = [],
+  samplesAdminChrome,
+}: {
+  sampleReviews?: SampleReview[];
+  /** 관리자 미리보기 — 샘플 후기 그리드 위 */
+  samplesAdminChrome?: ReactNode;
+}) {
   const t = useTranslations("ReviewBoard");
   const locale = useLocale();
   const [userReviews, setUserReviews] = useState<StoredReview[]>([]);
@@ -121,6 +128,9 @@ export function BespokeReviewExperience({ sampleReviews = [] }: { sampleReviews?
   return (
     <section className="scroll-mt-24 border-b border-border/45 py-12 md:py-16">
       <div className="mx-auto max-w-content px-4 md:px-6">
+        {samplesAdminChrome ? (
+          <div className="mb-4 flex justify-end">{samplesAdminChrome}</div>
+        ) : null}
         <div className="grid gap-4 md:grid-cols-3">
           {sampleReviews.length > 0 ? sampleReviews.map((item, idx) => (
             <article

@@ -1,7 +1,8 @@
 import { AdminNavTabs } from "@/components/admin/AdminNavTabs";
 import { AdminSeoSettingsForm } from "@/components/admin/AdminSeoSettingsForm";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
-import { buildAdminSeoFallbacks } from "@/lib/admin-seo-fallbacks";
+import { buildAdminSeoFallbacks, buildAllDestinationSlugSeoFallbacks } from "@/lib/admin-seo-fallbacks";
+import { getAllDestinationSlugs } from "../../../../data/landing-pages";
 import { listReservations } from "@/lib/reservation-store";
 import { getSiteSettings } from "@/lib/site-settings-store";
 import { listSupportInquiries } from "@/lib/support-inquiry-store";
@@ -17,6 +18,8 @@ export default async function AdminSeoPage() {
     buildAdminSeoFallbacks(),
   ]);
 
+  const destinationSlugFallbacks = buildAllDestinationSlugSeoFallbacks();
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
       <h1 className="text-3xl font-bold text-tone-strong md:text-4xl">SEO 전용 관리자</h1>
@@ -29,7 +32,12 @@ export default async function AdminSeoPage() {
         inquiriesCount={inquiries.length}
       />
       <div className="mt-6">
-        <AdminSeoSettingsForm initial={settings} fallback={fallback} />
+        <AdminSeoSettingsForm
+          initial={settings}
+          fallback={fallback}
+          destinationSlugs={getAllDestinationSlugs()}
+          destinationSlugFallbacks={destinationSlugFallbacks}
+        />
       </div>
     </div>
   );

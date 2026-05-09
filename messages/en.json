@@ -35,6 +35,10 @@
       "support": {
         "title": "Kkebi Support — FAQ & Online Inquiry | Private Airport Van",
         "description": "FAQs for Greater Seoul and beyond, booking and payment, plus an online inquiry form. Call or Kakao for immediate assistance."
+      },
+      "destinationsHub": {
+        "title": "Airport Transfer Routes | Incheon & Gimpo Private Van | Kkebi",
+        "description": "Browse ICN/GMP routes to Gangnam, Myeongdong, Hongdae, COEX, and more—pricing cues, FAQs, and booking on each landing."
       }
     }
   },
@@ -483,13 +487,31 @@
   },
   "HomeDestinations": {
     "eyebrow": "DESTINATIONS",
-    "title": "Popular routes & travel landings",
-    "description": "Quick links for Incheon Airport, Seoul, Gangnam, golf tours, and more. Each page includes pricing guidance, FAQs, and contact options.",
+    "title": "Popular airport transfer routes",
+    "description": "From Incheon & Gimpo connections to inbound visitor flows and northern Seoul / northeast Gyeonggi lived routes—Nowon, Gangbuk, Uijeongbu, Namyangju, Guri, and more—organized for real searches: dawn departures, car seats, golf bags, and group moves.",
+    "footerMoreCourses": "See more airport transfer routes",
     "toBooking": "Go to online booking",
     "pricingSection": "Pricing",
     "faqSection": "FAQ",
     "ctaSection": "Book or contact us",
-    "relatedSection": "Related destination routes"
+    "relatedSection": "Related transfer routes",
+    "popularSection": "Frequently paired routes",
+    "recommendedSection": "Recommended airport transfers",
+    "northGyeonggiSection": "Popular northern Gyeonggi airport runs",
+    "hubCategoryPopular": "Popular airport transfers",
+    "hubCategoryForeignVip": "Visitors & VIP-style routes",
+    "hubCategoryGyeonggiNorth": "Northern Gyeonggi & Gangbuk",
+    "hubCategoryFamilyTheme": "Family, golf & dawn trips",
+    "hubCategoryOther": "More routes",
+    "operationalTipsSection": "Operations checklist",
+    "scenarioExamplesSection": "Typical booking scenarios",
+    "destinationsQuickBooking": "Book or inquire",
+    "poiSectionEyebrow": "Trip context",
+    "poiSectionTitle": "Hotels, landmarks & drop-off notes",
+    "poiTagsTitle": "Common themes we align schedules with",
+    "poiHotelsTitle": "Hotels travelers often mention",
+    "poiLandmarksTitle": "Landmarks & venues",
+    "poiDropoffTitle": "Pickup & drop-off coordination"
   },
   "HomeFaq": {
     "eyebrow": "FAQ",

@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useSiteRuntime } from "@/components/providers/SiteRuntimeProvider";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -39,6 +39,8 @@ type Props = {
   locale: string;
   title: string;
   description: string;
+  /** 관리자 미리보기에서만 — 소개 문구 옆 「수정」 등 */
+  bookingIntroAdminChrome?: ReactNode;
 };
 
 const SERVICE_DEFS: {
@@ -172,7 +174,12 @@ const primaryTKey = (p: BookingPrimaryArea): string => {
   return map[p];
 };
 
-export function BespokeBookingExperience({ locale, title, description }: Props) {
+export function BespokeBookingExperience({
+  locale,
+  title,
+  description,
+  bookingIntroAdminChrome,
+}: Props) {
   const { phoneTel, links } = useSiteRuntime();
   const t = useTranslations("BookingExperience");
   const tb = useTranslations("HomePage.booking");
@@ -530,8 +537,13 @@ export function BespokeBookingExperience({ locale, title, description }: Props) 
             <h1 className="mt-3 font-sans text-3xl font-bold leading-[1.12] tracking-[-0.02em] text-brand-gold md:text-4xl lg:text-5xl">
               {t("onlineTitle")}
             </h1>
-            <p className="mt-4 text-lg font-semibold text-tone-body">{title}</p>
-            <p className="mt-4 whitespace-pre-line text-base leading-relaxed text-tone-body md:text-lg">{description}</p>
+            <div className="relative mt-4">
+              {bookingIntroAdminChrome ? (
+                <div className="pointer-events-auto absolute right-0 top-0 z-10">{bookingIntroAdminChrome}</div>
+              ) : null}
+              <p className="pr-16 text-lg font-semibold text-tone-body">{title}</p>
+              <p className="mt-4 whitespace-pre-line text-base leading-relaxed text-tone-body md:text-lg">{description}</p>
+            </div>
 
             <div className="mt-8 space-y-3">
               {[t("steps.s1"), t("steps.s2"), t("steps.s3"), t("steps.s4")].map((item) => (

@@ -1,5 +1,4 @@
 import { AdminNavTabs } from "@/components/admin/AdminNavTabs";
-import { AdminVehicleMediaEditor } from "@/components/admin/AdminVehicleMediaEditor";
 import { AdminVehicleVisualEditor } from "@/components/admin/AdminVehicleVisualEditor";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { listReservations } from "@/lib/reservation-store";
@@ -33,7 +32,13 @@ export default async function AdminVehiclesPage() {
     <div className="mx-auto max-w-5xl px-4 py-10">
       <h1 className="text-3xl font-bold text-tone-strong md:text-4xl">차량 비주얼 편집기</h1>
       <p className="mt-2 text-sm text-tone-body">
-        공개 `/ko/vehicle` 레이아웃을 미러로 보면서 텍스트/버튼/이미지 URL을 바로 수정할 수 있습니다.
+        공개 차량 페이지와 동일한 구조로 문구·이미지를 수정합니다. 메인 컷은{" "}
+        <code className="rounded bg-neutral-800/60 px-1.5 py-0.5 text-[13px]">data/vehicle-media.json</code> 과{" "}
+        <code className="rounded bg-neutral-800/60 px-1.5 py-0.5 text-[13px]">public/images/vehicles/</code> 실사
+        파일을 맞추고, 상세 갤러리 빈 슬롯은 에디터에서 URL을 채우면 됩니다. 차종별{" "}
+        <code className="rounded bg-neutral-800/60 px-1.5 py-0.5 text-[13px]">imageAlt</code> 는 검색·스크린리더용으로
+        로케일별로
+        유지하세요.
       </p>
 
       <AdminNavTabs
@@ -46,14 +51,6 @@ export default async function AdminVehiclesPage() {
         <AdminVehicleVisualEditor initialMedia={media} initialContent={content} defaultsByLocale={vByLocale} />
       </div>
 
-      <div className="mt-6">
-        <details className="rounded-xl border border-white/12 bg-black/20 p-4">
-          <summary className="cursor-pointer text-sm font-semibold text-tone-strong">기존 폼 방식 (고급 편집)</summary>
-          <div className="mt-4">
-        <AdminVehicleMediaEditor initialMedia={media} />
-          </div>
-        </details>
-      </div>
     </div>
   );
 }

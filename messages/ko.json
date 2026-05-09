@@ -35,6 +35,10 @@
       "support": {
         "title": "깨비콜밴 고객지원 - FAQ 및 온라인 문의",
         "description": "수도권·지역별 이용 안내, 예약·결제 FAQ, 온라인 문의 양식. 전화·카카오톡으로도 바로 상담 가능합니다."
+      },
+      "destinationsHub": {
+        "title": "공항 이동 코스 목록 | 인천·김포 픽업 랜딩 | 깨비콜밴",
+        "description": "인천공항·김포공항에서 강남·명동·홍대·코엑스 등 자주 찾는 구간별 프라이빗 밴 안내. 각 코스별 요금·FAQ·예약 문의를 확인하세요."
       }
     }
   },
@@ -483,13 +487,31 @@
   },
   "HomeDestinations": {
     "eyebrow": "DESTINATIONS",
-    "title": "인기 이동 코스 · 관광 랜딩",
-    "description": "인천공항·서울·강남·골프 투어 등 자주 찾는 구간을 한눈에 모았습니다. 각 페이지에서 요금·FAQ·문의 채널을 확인하실 수 있습니다.",
+    "title": "자주 찾는 공항 이동 코스",
+    "description": "인천공항·김포공항 연결은 물론, 외국인 관광·VIP 동선과 의정부·노원·강북·남양주·구리 등 경기북부·강북 실거주 고객의 공항 이동까지 실제 검색 흐름에 맞춰 구성했습니다. 새벽 출국·카시트·골프백·단체 이동도 예약 시 함께 상담할 수 있습니다.",
+    "footerMoreCourses": "더 많은 공항 이동 코스 보기",
     "toBooking": "온라인 예약·상담으로 이동",
     "pricingSection": "가격 안내",
     "faqSection": "자주 묻는 질문",
     "ctaSection": "예약 및 문의",
-    "relatedSection": "연관 인기 이동 코스"
+    "relatedSection": "관련 이동 코스",
+    "popularSection": "함께 많이 찾는 구간",
+    "recommendedSection": "추천 공항 이동",
+    "northGyeonggiSection": "경기북부 인기 공항 이동",
+    "hubCategoryPopular": "인기 공항 이동",
+    "hubCategoryForeignVip": "외국인 관광·VIP",
+    "hubCategoryGyeonggiNorth": "경기북부·강북 공항 이동",
+    "hubCategoryFamilyTheme": "가족·골프·새벽 이동",
+    "hubCategoryOther": "기타 공항 이동 코스",
+    "operationalTipsSection": "실무에서 챙기는 포인트",
+    "scenarioExamplesSection": "추천 이용 상황 · 상담 예시",
+    "destinationsQuickBooking": "빠른 예약·상담",
+    "poiSectionEyebrow": "목적지 맥락",
+    "poiSectionTitle": "호텔·랜드마크·승하차 안내",
+    "poiTagsTitle": "예약 시 자주 함께 언급되는 동선",
+    "poiHotelsTitle": "자주 검색되는 호텔 예시",
+    "poiLandmarksTitle": "랜드마크·시설",
+    "poiDropoffTitle": "픽업·하차 조율 포인트"
   },
   "HomeFaq": {
     "eyebrow": "FAQ",

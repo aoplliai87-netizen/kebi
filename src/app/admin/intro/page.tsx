@@ -1,12 +1,15 @@
 import { AdminIntroVisualEditor } from "@/components/admin/AdminIntroVisualEditor";
 import { AdminNavTabs } from "@/components/admin/AdminNavTabs";
-import { AdminSiteSettingsForm } from "@/components/admin/AdminSiteSettingsForm";
 import { buildAdminContentFallbacks } from "@/lib/admin-content-fallbacks";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { listReservations } from "@/lib/reservation-store";
 import { getSiteSettings } from "@/lib/site-settings-store";
 import { listSupportInquiries } from "@/lib/support-inquiry-store";
 import { redirect } from "next/navigation";
+import en from "../../../../messages/en.json";
+import ja from "../../../../messages/ja.json";
+import ko from "../../../../messages/ko.json";
+import zh from "../../../../messages/zh.json";
 
 export default async function AdminIntroPage() {
   if (!isAdminAuthenticated()) redirect("/admin");
@@ -23,14 +26,12 @@ export default async function AdminIntroPage() {
       <p className="mt-2 text-sm text-tone-body">실제 공개 `/intro` 화면과 동일한 컴포넌트 위에서 바로 수정합니다.</p>
       <AdminNavTabs currentPath="/admin/intro" reservationsCount={reservations.length} inquiriesCount={inquiries.length} />
       <div className="mt-6">
-        <AdminIntroVisualEditor initial={settings} fallbackHints={fallbackHints} />
+        <AdminIntroVisualEditor
+          initial={settings}
+          fallbackHints={fallbackHints}
+          messagesByLocale={{ ko, en, ja, zh }}
+        />
       </div>
-      <details className="mt-6 rounded-xl border border-white/10 bg-black/20 p-4">
-        <summary className="cursor-pointer text-sm font-semibold text-tone-strong">고급 편집 (기존 폼)</summary>
-        <div className="mt-4">
-          <AdminSiteSettingsForm initial={settings} fallbackHints={fallbackHints} initialTab="subpages" allowedTabs={["subpages"]} />
-        </div>
-      </details>
     </div>
   );
 }

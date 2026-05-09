@@ -10,6 +10,10 @@
  * 폴더에 두고 `/images/vehicles/interiors/staria-01.jpg` 처럼 지정하면 됩니다.
  *
  * 원격 URL을 그대로 써도 됩니다. 빌드 전에 파일이 실제로 존재하는지 확인하세요.
+ *
+ * 관리자 `/admin/vehicles` 에서 저장하는 경로는 `data/vehicle-media.json` 에 기록되며,
+ * 빈 슬롯은 여기 기본값(위 상수)으로 폴백합니다. 실사 전환 시 JSON·이 파일·갤러리 슬롯을
+ * 함께 맞추면 공개 페이지·SEO alt가 한 경로를 바라보게 됩니다.
  */
 export const VEHICLE_FLEET_MAIN = {
   staria: "/images/vehicles/staria-hero.png",
