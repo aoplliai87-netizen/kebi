@@ -1,5 +1,5 @@
 /**
- * 목적지 랜딩용 안내 팁·이용 상황 예시 자동 보강 — 데이터 파일에 비어 있을 때만 채움
+ * 목적지 랜딩용 안내 팁·이용 상황 자동 보강 — 데이터 파일에 비어 있을 때만 채움
  * SEO 키워드 나열이 아니라 예약 고객이 읽기 쉬운 문장 (locale별 분리, ja/zh는 en 기반)
  */
 import type { LandingPageCopy } from "../../data/landing-pages";
@@ -25,13 +25,13 @@ const PHOTO_NOTE_EN =
   "Hero imagery is illustrative; your booking confirms vehicle class and real interior/luggage fit.";
 
 const DISCLAIMER_KO =
-  "아래는 비슷한 일정을 준비하실 때 참고하시면 좋은 예시입니다. 실제 소요 시간, 차량, 요금은 예약 확정 시 안내와 함께 정리됩니다.";
+  "아래 내용은 실제 예약 고객에게 자주 안내드리는 이동 패턴입니다. 실제 소요 시간, 차량, 요금은 예약 확정 시 최종 안내됩니다.";
 const DISCLAIMER_EN =
   "These vignettes illustrate common booking patterns; timing, vehicle class, and fare are confirmed when you book.";
 const DISCLAIMER_JA =
-  "以下はよくあるご相談パターンの例です。実際の所要時間・車両クラス・料金はお見積り時に確定します。";
+  "以下はお問い合わせの多い空港送迎パターンです。実際の所要時間・車両クラス・料金はご予約確定時にご案内します。";
 const DISCLAIMER_ZH =
-  "以下为常见咨询场景示例；实际用时、车型与费用以确认订单时为准。";
+  "以下为常见机场接送场景；实际用时、车型与费用以确认订单时为准。";
 const PHOTO_NOTE_JA =
   "写真はイメージです。実車・車内はご予約時にクラスと荷物適合を確認してご案内します。";
 const PHOTO_NOTE_ZH =
