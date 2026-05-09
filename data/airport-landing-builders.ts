@@ -39,8 +39,8 @@ export function sec(
   ko: [string, string, string],
   en: [string, string, string],
 ): { ko: LandingPageCopy["sections"]; en: LandingPageCopy["sections"] } {
-  const hk = ["픽업·일정 안내", "구간·도로 특성", "이런 분께 추천"];
-  const he = ["Pickup planning", "Route notes", "Best for"];
+  const hk = ["픽업·일정 안내", "이동 구간 안내", "이런 분께 잘 맞습니다"];
+  const he = ["Pickup & timing", "Route notes", "A good fit if…"];
   const ids = ["service", "coverage", "why"] as const;
   return {
     ko: ids.map((id, i) => ({ id, heading: hk[i], body: ko[i] })),

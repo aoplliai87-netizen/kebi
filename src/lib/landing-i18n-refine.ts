@@ -93,8 +93,8 @@ const ZH_TOKEN: Record<string, string> = {
   "gimpo-airport": "金浦机场",
 };
 
-const JA_SECTION_HEADINGS = ["お迎え・スケジュール", "ルートのポイント", "こんな方におすすめ"];
-const ZH_SECTION_HEADINGS = ["接送与行程安排", "路线特点", "适合人群"];
+const JA_SECTION_HEADINGS = ["ご利用の流れ・スケジュール", "ルートの目安", "こんなお客様におすすめ"];
+const ZH_SECTION_HEADINGS = ["接送流程与行程", "路线说明", "适合哪些旅客"];
 
 function tokensToLocalized(slug: string, map: Record<string, string>): string {
   const parts = slug.split("-").filter(Boolean);

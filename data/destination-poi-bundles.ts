@@ -22,7 +22,8 @@ export type AppLocalePoi = "ko" | "en" | "ja" | "zh";
 
 export type LocalizedLine = Record<AppLocalePoi, string>;
 
-export type PoiTriple = { en: string; ja: string; zh: string };
+/** 표시: ko는 한국어 공식명, en은 검색·병기용 영문 (화면에 locale별로 함께 노출) */
+export type PoiQuad = { ko: string; en: string; ja: string; zh: string };
 
 export type DestinationPoiBundle = {
   id: PoiBundleId;
@@ -30,8 +31,8 @@ export type DestinationPoiBundle = {
   metaAccent: LocalizedLine;
   /** 리드 아래 자연스러운 한 문장 (없으면 빈 문자열) */
   ledeBridge: LocalizedLine;
-  hotels: PoiTriple[];
-  landmarks: PoiTriple[];
+  hotels: PoiQuad[];
+  landmarks: PoiQuad[];
   /** 검색 보조 키워드 — 메타 keywords 병합용 (과다 삽입 방지로 소량) */
   searchBoostKeywords: Partial<Record<AppLocalePoi, string[]>>;
   recommendedDropoff: LocalizedLine;
@@ -45,9 +46,9 @@ function L(ko: string, en: string, ja: string, zh: string): LocalizedLine {
   return { ko, en, ja, zh };
 }
 
-/** 호텔·시설명 (한국어 공식명은 필요 시 zh/ja에 병기) */
-function H(en: string, ja: string, zh: string): PoiTriple {
-  return { en, ja, zh };
+/** 호텔·랜드마크: ko 공식 한글명, en 브랜드·SEO용 영문 */
+function P(ko: string, en: string, ja: string, zh: string): PoiQuad {
+  return { ko, en, ja, zh };
 }
 
 export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> = {
@@ -66,20 +67,20 @@ export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> 
       "会展与商务会议结束后直达 COEX、帕纳斯、柏悦等江南核心酒店的行程很常见。",
     ),
     hotels: [
-      H("Josun Palace Gangnam", "ジョスン パレス 江南", "首尔江南朝鲜王宫酒店"),
-      H("Grand InterContinental Seoul Parnas", "グランドインターコンチネンタル ソウル パルナス", "首尔帕纳斯洲际大酒店"),
-      H("InterContinental Seoul COEX", "インターコンチネンタル ソウル COEX", "首尔 COEX 洲际酒店"),
-      H("Park Hyatt Seoul", "パーク ハイアット ソウル", "首尔柏悦酒店"),
-      H("Andaz Seoul Gangnam", "アンダーズ ソウル 江南", "首尔江南安达仕酒店"),
+      P("조선 팰리스 강남", "Josun Palace Gangnam", "ジョスン パレス 江南", "首尔江南朝鲜王宫酒店"),
+      P("그랜드 인터컨티넨탈 서울 파르나스", "Grand InterContinental Seoul Parnas", "グランドインターコンチネンタル ソウル パルナス", "首尔帕纳斯洲际大酒店"),
+      P("인터컨티넨탈 서울 코엑스", "InterContinental Seoul COEX", "インターコンチネンタル ソウル COEX", "首尔 COEX 洲际酒店"),
+      P("파크 하얏트 서울", "Park Hyatt Seoul", "パーク ハイアット ソウル", "首尔柏悦酒店"),
+      P("안다즈 서울 강남", "Andaz Seoul Gangnam", "アンダーズ ソウル 江南", "首尔江南安达仕酒店"),
     ],
     landmarks: [
-      H("COEX", "COEX・コエックス", "COEX 会展中心"),
-      H("Bongeunsa", "奉恩寺（ポンウンサ）", "奉恩寺"),
-      H("Apgujeong Rodeo", "狎鴎亭ロデオ通り", "狎鸥亭罗迪奥街"),
-      H("Cheongdam-dong", "清潭洞（チョンダム）", "清潭洞"),
-      H("Samsung Station", "三成駅（サムソン）", "三成站"),
-      H("Gangnam Station", "江南駅", "江南站"),
-      H("Sinnonhyeon Station", "新論峴駅（シンノンヒョン）", "新论岘站"),
+      P("코엑스", "COEX", "COEX・コエックス", "COEX 会展中心"),
+      P("봉은사", "Bongeunsa", "奉恩寺（ポンウンサ）", "奉恩寺"),
+      P("압구정 로데오", "Apgujeong Rodeo", "狎鴎亭ロデオ通り", "狎鸥亭罗迪奥街"),
+      P("청담동", "Cheongdam-dong", "清潭洞（チョンダム）", "清潭洞"),
+      P("삼성역", "Samsung Station", "三成駅（サムソン）", "三成站"),
+      P("강남역", "Gangnam Station", "江南駅", "江南站"),
+      P("신논현역", "Sinnonhyeon Station", "新論峴駅（シンノンヒョン）", "新论岘站"),
     ],
     searchBoostKeywords: {
       ko: ["코엑스 인천공항", "삼성역 픽업", "테헤란로 호텔 샌딩", "압구정 로데오 공항"],
@@ -122,18 +123,18 @@ export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> 
       "结合乐天、威斯汀朝昕、格拉斯丽等市中心酒店与南大门、明洞购物动线的需求很常见。",
     ),
     hotels: [
-      H("Lotte Hotel Seoul", "ロッテホテルソウル", "首尔乐天酒店"),
-      H("The Westin Josun Seoul", "ウェスティン チョスン ソウル", "首尔威斯汀朝鲜酒店"),
-      H("Hotel Gracery Seoul", "ホテル グラセリ ソウル", "格拉斯丽首尔酒店"),
-      H("Shilla Stay Myeongdong", "新羅ステイ 明洞", "首尔明洞新罗舒泰酒店"),
+      P("롯데호텔 서울", "Lotte Hotel Seoul", "ロッテホテルソウル", "首尔乐天酒店"),
+      P("웨스틴 조선 서울", "The Westin Josun Seoul", "ウェスティン チョスン ソウル", "首尔威斯汀朝鲜酒店"),
+      P("호텔 그라세리 서울", "Hotel Gracery Seoul", "ホテル グラセリ ソウル", "格拉斯丽首尔酒店"),
+      P("신라스테이 명동", "Shilla Stay Myeongdong", "新羅ステイ 明洞", "首尔明洞新罗舒泰酒店"),
     ],
     landmarks: [
-      H("Myeongdong Cathedral", "明洞聖堂（ミョンドン）", "明洞圣堂"),
-      H("Myeongdong Shopping Street", "明洞商店街", "明洞商业街"),
-      H("Euljiro 1-ga Station", "乙支路1街駅", "乙支路1街站"),
-      H("Seoul City Hall", "ソウル市庁", "首尔市厅"),
-      H("Namdaemun Market", "南大門市場", "南大门市场"),
-      H("N Seoul Tower", "Nソウルタワー", "N首尔塔"),
+      P("명동성당", "Myeongdong Cathedral", "明洞聖堂（ミョンドン）", "明洞圣堂"),
+      P("명동 쇼핑거리", "Myeongdong Shopping Street", "明洞商店街", "明洞商业街"),
+      P("을지로입구역", "Euljiro 1-ga Station", "乙支路1街駅", "乙支路1街站"),
+      P("서울시청", "Seoul City Hall", "ソウル市庁", "首尔市厅"),
+      P("남대문시장", "Namdaemun Market", "南大門市場", "南大门市场"),
+      P("N서울타워", "N Seoul Tower", "Nソウルタワー", "N首尔塔"),
     ],
     searchBoostKeywords: {
       ko: ["명동 호텔 픽업", "을지로 인천공항", "남대문 콜밴", "시청역 공항"],
@@ -171,17 +172,17 @@ export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> 
       "宫殿、北村韩屋村、仁寺洞行程与钟路商务酒店同日衔接很常见。",
     ),
     hotels: [
-      H("Four Seasons Hotel Seoul", "フォーシーズンズホテルソウル", "首尔四季酒店"),
-      H("JW Marriott Dongdaemun Square Seoul", "JWマリオット 東大門スクエア", "首尔东大门广场JW万豪酒店"),
+      P("포시즌스 호텔 서울", "Four Seasons Hotel Seoul", "フォーシーズンズホテルソウル", "首尔四季酒店"),
+      P("JW메리어트 동대문스퀘어 서울", "JW Marriott Dongdaemun Square Seoul", "JWマリオット 東大門スクエア", "首尔东大门广场JW万豪酒店"),
     ],
     landmarks: [
-      H("Gyeongbokgung Palace", "景福宮（キョンボックン）", "景福宫"),
-      H("Gwanghwamun Square", "光化門広場", "光化门广场"),
-      H("Bukchon Hanok Village", "北村韓屋村", "北村韩屋村"),
-      H("Insadong", "仁寺洞（インサドン）", "仁寺洞"),
-      H("Cheonggyecheon", "清渓川（チョンゲチョン）", "清溪川"),
-      H("Jongno", "鐘路（チョンノ）", "钟路"),
-      H("Dongdaemun Design Plaza (DDP)", "東大門デザインプラザ", "东大门设计广场"),
+      P("경복궁", "Gyeongbokgung Palace", "景福宮（キョンボックン）", "景福宫"),
+      P("광화문광장", "Gwanghwamun Square", "光化門広場", "光化门广场"),
+      P("북촌한옥마을", "Bukchon Hanok Village", "北村韓屋村", "北村韩屋村"),
+      P("인사동", "Insadong", "仁寺洞（インサドン）", "仁寺洞"),
+      P("청계천", "Cheonggyecheon", "清渓川（チョンゲチョン）", "清溪川"),
+      P("종로", "Jongno", "鐘路（チョンノ）", "钟路"),
+      P("동대문디자인플라자(DDP)", "Dongdaemun Design Plaza (DDP)", "東大門デザインプラザ", "东大门设计广场"),
     ],
     searchBoostKeywords: {
       ko: ["광화문 인천공항", "종로 픽업", "DDP 공항 셔틀", "경복궁 관광 이동"],
@@ -219,17 +220,17 @@ export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> 
       "亲子与演唱会观众常把 Signiel、索菲特、乐天世界塔、奥林匹克公园排在同一天线路上。",
     ),
     hotels: [
-      H("Signiel Seoul", "シグニエル ソウル", "首尔喜格尼尔酒店"),
-      H("Sofitel Ambassador Seoul", "ソフィテル アンバサダー ソウル", "首尔索菲特大使酒店"),
+      P("시그니엘 서울", "Signiel Seoul", "シグニエル ソウル", "首尔喜格尼尔酒店"),
+      P("소피텔 앰배서더 서울", "Sofitel Ambassador Seoul", "ソフィテル アンバサダー ソウル", "首尔索菲特大使酒店"),
     ],
     landmarks: [
-      H("Lotte World Tower", "ロッテワールドタワー", "乐天世界塔"),
-      H("Lotte World", "ロッテワールド", "乐天世界"),
-      H("Lotte World Mall", "ロッテワールドモール", "乐天世界购物中心"),
-      H("Jamsil Sports Complex", "蚕室総合運動場", "蚕室综合运动场"),
-      H("Olympic Park", "オリンピック公園", "奥林匹克公园"),
-      H("Seokchon Lake", "石村湖（ソクチョン）", "石村湖"),
-      H("KSPO Dome", "KSPOドーム（オリ主競）", "KSPO 体育馆（奥林匹克主竞技场）"),
+      P("롯데월드타워", "Lotte World Tower", "ロッテワールドタワー", "乐天世界塔"),
+      P("롯데월드", "Lotte World", "ロッテワールド", "乐天世界"),
+      P("롯데월드몰", "Lotte World Mall", "ロッテワールドモール", "乐天世界购物中心"),
+      P("잠실종합운동장", "Jamsil Sports Complex", "蚕室総合運動場", "蚕室综合运动场"),
+      P("올림픽공원", "Olympic Park", "オリンピック公園", "奥林匹克公园"),
+      P("석촌호수", "Seokchon Lake", "石村湖（ソクチョン）", "石村湖"),
+      P("KSPO돔(올림픽주경기장)", "KSPO Dome", "KSPOドーム（オリ主競）", "KSPO 体育馆（奥林匹克主竞技场）"),
     ],
     searchBoostKeywords: {
       ko: ["잠실 인천공항", "롯데월드 가족 픽업", "올림픽공원 콘서트 셔틀", "시그니엘 공항"],
@@ -267,16 +268,16 @@ export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> 
       "把 RYSE、L7 与民宿、咖啡街串在同一行程里很常见。",
     ),
     hotels: [
-      H("RYSE, Autograph Collection", "ライズ オートグラフ コレクション", "首尔弘大RYSE酒店"),
-      H("L7 Hongdae", "L7 ホンデ", "首尔弘大L7酒店"),
+      P("라이즈 오토그래프 컬렉션", "RYSE, Autograph Collection", "ライズ オートグラフ コレクション", "首尔弘大RYSE酒店"),
+      P("L7 홍대", "L7 Hongdae", "L7 ホンデ", "首尔弘大L7酒店"),
     ],
     landmarks: [
-      H("Hongik University Station", "弘大入口駅", "弘大入口站"),
-      H("Hongdae Street", "ホンデストリート", "弘大步行街"),
-      H("Yeonnam-dong", "延南洞（ヨンナム）", "延南洞"),
-      H("Hapjeong Station", "合井駅", "合井站"),
-      H("Mangwon Market", "望遠市場", "望远市场"),
-      H("Gyeongui Line Forest Park", "京義線林フォレストパーク", "京义线林荫公园"),
+      P("홍대입구역", "Hongik University Station", "弘大入口駅", "弘大入口站"),
+      P("홍대 거리", "Hongdae Street", "ホンデストリート", "弘大步行街"),
+      P("연남동", "Yeonnam-dong", "延南洞（ヨンナム）", "延南洞"),
+      P("합정역", "Hapjeong Station", "合井駅", "合井站"),
+      P("망원시장", "Mangwon Market", "望遠市場", "望远市场"),
+      P("경의선숲길", "Gyeongui Line Forest Park", "京義線林フォレストパーク", "京义线林荫公园"),
     ],
     searchBoostKeywords: {
       ko: ["홍대 공항 픽업", "합정 연남 셔틀", "홍익대역 미팅", "게스트하우스 인천"],
@@ -314,16 +315,16 @@ export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> 
       "蒙德里安、君悦与龙山站、战争纪念馆、国立中央博物馆的串联行程较多。",
     ),
     hotels: [
-      H("Mondrian Seoul Itaewon", "モンドリアン ソウル イテウォン", "首尔梨泰院蒙德里安酒店"),
-      H("Grand Hyatt Seoul", "グランド ハイアット ソウル", "首尔君悦酒店"),
+      P("몬드리안 서울 이태원", "Mondrian Seoul Itaewon", "モンドリアン ソウル イテウォン", "首尔梨泰院蒙德里安酒店"),
+      P("그랜드 하얏트 서울", "Grand Hyatt Seoul", "グランド ハイアット ソウル", "首尔君悦酒店"),
     ],
     landmarks: [
-      H("Itaewon Street", "イテウォンストリート", "梨泰院商业街"),
-      H("Hannam-dong", "漢南洞（ハンナム）", "汉南洞"),
-      H("Namsan", "南山（ナムサン）", "南山"),
-      H("Yongsan Station", "龍山駅", "龙山站"),
-      H("War Memorial of Korea", "韓国戦争記念館", "韩国战争纪念馆"),
-      H("National Museum of Korea", "国立中央博物館", "国立中央博物馆"),
+      P("이태원 거리", "Itaewon Street", "イテウォンストリート", "梨泰院商业街"),
+      P("한남동", "Hannam-dong", "漢南洞（ハンナム）", "汉南洞"),
+      P("남산", "Namsan", "南山（ナムサン）", "南山"),
+      P("용산역", "Yongsan Station", "龍山駅", "龙山站"),
+      P("전쟁기념관", "War Memorial of Korea", "韓国戦争記念館", "韩国战争纪念馆"),
+      P("국립중앙박물관", "National Museum of Korea", "国立中央博物館", "国立中央博物馆"),
     ],
     searchBoostKeywords: {
       ko: ["이태원 인천공항", "한남동 픽업", "용산역 셔틀", "그랜드하얏트 공항"],
@@ -361,16 +362,16 @@ export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> 
       "费尔蒙、康莱德、现代首尔常与国会、汉江公园安排在同一天。",
     ),
     hotels: [
-      H("Fairmont Ambassador Seoul", "フェアモント アンバサダー ソウル", "首尔费尔蒙酒店"),
-      H("Conrad Seoul", "コンラッド ソウル", "首尔康莱德酒店"),
+      P("페어몬트 앰배서더 서울", "Fairmont Ambassador Seoul", "フェアモント アンバサダー ソウル", "首尔费尔蒙酒店"),
+      P("콘래드 서울", "Conrad Seoul", "コンラッド ソウル", "首尔康莱德酒店"),
     ],
     landmarks: [
-      H("The Hyundai Seoul", "ザ・ヒュンダイ ソウル", "现代首尔百货"),
-      H("IFC Mall", "IFCモール", "IFC商场"),
-      H("Yeouido Park", "汝矣島公園", "汝矣岛公园"),
-      H("National Assembly", "国会議事堂", "韩国国会"),
-      H("Yeouinaru Station", "汝矣渡口駅", "汝矣渡口站"),
-      H("Han River Park (Yeouido)", "漢江公園（汝矣島）", "汉江公园（汝矣岛段）"),
+      P("더현대 서울", "The Hyundai Seoul", "ザ・ヒュンダイ ソウル", "现代首尔百货"),
+      P("IFC몰", "IFC Mall", "IFCモール", "IFC商场"),
+      P("여의도공원", "Yeouido Park", "汝矣島公園", "汝矣岛公园"),
+      P("국회의사당", "National Assembly", "国会議事堂", "韩国国会"),
+      P("여의나루역", "Yeouinaru Station", "汝矣渡口駅", "汝矣渡口站"),
+      P("여의도 한강공원", "Han River Park (Yeouido)", "漢江公園（汝矣島）", "汉江公园（汝矣岛段）"),
     ],
     searchBoostKeywords: {
       ko: ["여의도 인천공항", "더현대 픽업", "IFC 셔틀", "국회대로 공항"],
@@ -409,12 +410,12 @@ export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> 
     ),
     hotels: [],
     landmarks: [
-      H("Seongsu-dong", "聖水洞（ソンス）", "圣水洞"),
-      H("Seoul Forest", "ソウルの森", "首尔林"),
-      H("Common Ground", "カモングラウンド", "Common Ground 集装箱商场"),
-      H("Konkuk University Station", "建大入口駅", "建大入口站"),
-      H("Ttukseom Station", "トゥクソム駅", "纛岛站"),
-      H("Seongsu Cafe Street", "聖水カフェ街", "圣水咖啡街"),
+      P("성수동", "Seongsu-dong", "聖水洞（ソンス）", "圣水洞"),
+      P("서울숲", "Seoul Forest", "ソウルの森", "首尔林"),
+      P("커먼그라운드", "Common Ground", "カモングラウンド", "Common Ground 集装箱商场"),
+      P("건대입구역", "Konkuk University Station", "建大入口駅", "建大入口站"),
+      P("뚝섬역", "Ttukseom Station", "トゥクソム駅", "纛岛站"),
+      P("성수 카페거리", "Seongsu Cafe Street", "聖水カフェ街", "圣水咖啡街"),
     ],
     searchBoostKeywords: {
       ko: ["성수 인천공항", "서울숲 픽업", "건대 공항 셔틀", "성수동 콜밴"],
@@ -452,16 +453,16 @@ export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> 
       "Gravity、万怡与现代百货、亭子、盆唐的出差行程常与远程机场线衔接。",
     ),
     hotels: [
-      H("Gravity Seoul Pangyo", "グラビティ ソウル パンギョ", "板桥Gravity酒店"),
-      H("Courtyard Seoul Pangyo", "コートヤード ソウル パンギョ", "首尔板桥万怡酒店"),
+      P("그래비티 서울 판교", "Gravity Seoul Pangyo", "グラビティ ソウル パンギョ", "板桥Gravity酒店"),
+      P("코트야드 서울 판교", "Courtyard Seoul Pangyo", "コートヤード ソウル パンギョ", "首尔板桥万怡酒店"),
     ],
     landmarks: [
-      H("Pangyo Techno Valley", "パンギョテクノバレー", "板桥科技谷"),
-      H("Hyundai Department Store Pangyo", "現代百貨店 パンギョ", "现代百货板桥店"),
-      H("Pangyo Station", "パンギョ駅", "板桥站"),
-      H("Jeongja Station", "ジョンジャ駅", "亭子站"),
-      H("Bundang", "盆唐（プンダン）", "盆唐"),
-      H("Seohyeon Station", "ソヒョン駅", "书岘站"),
+      P("판교테크노밸리", "Pangyo Techno Valley", "パンギョテクノバレー", "板桥科技谷"),
+      P("현대백화점 판교", "Hyundai Department Store Pangyo", "現代百貨店 パンギョ", "现代百货板桥店"),
+      P("판교역", "Pangyo Station", "パンギョ駅", "板桥站"),
+      P("정자역", "Jeongja Station", "ジョンジャ駅", "亭子站"),
+      P("분당", "Bundang", "盆唐（プンダン）", "盆唐"),
+      P("서현역", "Seohyeon Station", "ソヒョン駅", "书岘站"),
     ],
     searchBoostKeywords: {
       ko: ["판교 인천공항", "테크노밸리 픽업", "분당 출장 샌딩", "동탄 공항"],
@@ -498,15 +499,15 @@ export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> 
       "コートヤード水原・コンベンション・ギャラリア光教・華城行宮を出張と家族旅行でつなぐことがあります。",
       "万怡水原、会议中心、Galleria光教、华城行宫常与商务或家庭行程结合。",
     ),
-    hotels: [H("Courtyard by Marriott Suwon", "コートヤード バイ マリオット 水原", "水原万怡酒店")],
+    hotels: [P("코트야드 바이 메리어트 수원", "Courtyard by Marriott Suwon", "コートヤード バイ マリオット 水原", "水原万怡酒店")],
     landmarks: [
-      H("Suwon Convention Center", "水原コンベンションセンター", "水原会议中心"),
-      H("Galleria Gwanggyo", "ギャラリア光教", "Galleria光教"),
-      H("Gwanggyo Lake Park", "光教湖水公園", "光教湖水公园"),
-      H("Suwon Station", "水原駅", "水原站"),
-      H("Hwaseong Fortress", "水原華城", "水原华城"),
-      H("Yeongtong", "永通（ヨントン）", "永通"),
-      H("Samsung Digital City", "サムスンデジタルシティ", "三星数字城"),
+      P("수원컨벤션센터", "Suwon Convention Center", "水原コンベンションセンター", "水原会议中心"),
+      P("갤러리아 광교", "Galleria Gwanggyo", "ギャラリア光教", "Galleria光教"),
+      P("광교호수공원", "Gwanggyo Lake Park", "光教湖水公園", "光教湖水公园"),
+      P("수원역", "Suwon Station", "水原駅", "水原站"),
+      P("수원화성", "Hwaseong Fortress", "水原華城", "水原华城"),
+      P("영통", "Yeongtong", "永通（ヨントン）", "永通"),
+      P("삼성 디지털시티", "Samsung Digital City", "サムスンデジタルシティ", "三星数字城"),
     ],
     searchBoostKeywords: {
       ko: ["수원 인천공항", "광교 픽업", "영통 셔틀", "삼성디지털시티 공항"],
@@ -544,16 +545,16 @@ export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> 
       "喜来登、橡树与会展中心展会及仁川、金浦机场线衔接。",
     ),
     hotels: [
-      H("Sheraton Grand Incheon", "シェラトン グランド インチョン", "仁川喜来登大酒店"),
-      H("Oakwood Premier Incheon", "オークウッド プレミア インチョン", "仁川奥克伍德豪景酒店"),
+      P("쉐라톤 그랜드 인천", "Sheraton Grand Incheon", "シェラトン グランド インチョン", "仁川喜来登大酒店"),
+      P("오크우드 프리미어 인천", "Oakwood Premier Incheon", "オークウッド プレミア インチョン", "仁川奥克伍德豪景酒店"),
     ],
     landmarks: [
-      H("Songdo Convensia", "ソンドコンベンシア", "松岛国际会展中心"),
-      H("Songdo Central Park", "ソンドセントラルパーク", "松岛中央公园"),
-      H("Triple Street", "トリプルストリート", "Triple Street"),
-      H("Hyundai Premium Outlet Songdo", "ヒュンダイプレミアムソンド", "现代奥特莱斯松岛店"),
-      H("Incheon National University", "仁川大学（インチョン）", "仁川大学"),
-      H("Incheon International Airport (ICN)", "仁川国際空港（ICN）", "仁川国际机场（ICN）"),
+      P("송도 컨벤시아", "Songdo Convensia", "ソンドコンベンシア", "松岛国际会展中心"),
+      P("송도 센트럴파크", "Songdo Central Park", "ソンドセントラルパーク", "松岛中央公园"),
+      P("트리플스트리트", "Triple Street", "トリプルストリート", "Triple Street"),
+      P("현대프리미엄아울렛 송도", "Hyundai Premium Outlet Songdo", "ヒュンダイプレミアムソンド", "现代奥特莱斯松岛店"),
+      P("인천대학교", "Incheon National University", "仁川大学（インチョン）", "仁川大学"),
+      P("인천국제공항", "Incheon International Airport (ICN)", "仁川国際空港（ICN）", "仁川国际机场（ICN）"),
     ],
     searchBoostKeywords: {
       ko: ["송도 인천공항", "컨벤시아 픽업", "triple street 셔틀", "중국어 예약 송도"],
@@ -591,17 +592,17 @@ export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> 
       "天堂城、迎仕柏、Nest 等度假村入住与航站楼接送常合并安排。",
     ),
     hotels: [
-      H("Paradise City", "パラダイスシティ", "百乐达斯城"),
-      H("Inspire Entertainment Resort", "インスパイアエンタテインメントリゾート", "迎仕柏度假城"),
-      H("Nest Hotel Incheon", "ネストホテルインチョン", "仁川Nest酒店"),
-      H("The Week & Resort", "ザウィークアンドリゾート", "The Week度假村"),
+      P("파라다이스시티", "Paradise City", "パラダイスシティ", "百乐达斯城"),
+      P("인스파이어 엔터테인먼트 리조트", "Inspire Entertainment Resort", "インスパイアエンタテインメントリゾート", "迎仕柏度假城"),
+      P("네스트호텔 인천", "Nest Hotel Incheon", "ネストホテルインチョン", "仁川Nest酒店"),
+      P("더위크앤리조트", "The Week & Resort", "ザウィークアンドリゾート", "The Week度假村"),
     ],
     landmarks: [
-      H("Incheon Airport Terminal 1", "仁川国際空港 第1ターミナル", "仁川国际机场1号航站楼"),
-      H("Incheon Airport Terminal 2", "仁川国際空港 第2ターミナル", "仁川国际机场2号航站楼"),
-      H("Cimer Spa", "シーメール（ジメール）", "汐美水疗"),
-      H("Yeongjongdo", "永宗島（ヨンジョンド）", "永宗岛"),
-      H("Eulwangri Beach", "乙旺里海水浴場", "乙旺里海滩"),
+      P("인천국제공항 제1여객터미널", "Incheon Airport Terminal 1", "仁川国際空港 第1ターミナル", "仁川国际机场1号航站楼"),
+      P("인천국제공항 제2여객터미널", "Incheon Airport Terminal 2", "仁川国際空港 第2ターミナル", "仁川国际机场2号航站楼"),
+      P("씨메르 스파", "Cimer Spa", "シーメール（ジメール）", "汐美水疗"),
+      P("영종도", "Yeongjongdo", "永宗島（ヨンジョンド）", "永宗岛"),
+      P("을왕리 해수욕장", "Eulwangri Beach", "乙旺里海水浴場", "乙旺里海滩"),
     ],
     searchBoostKeywords: {
       ko: ["영종도 공항 픽업", "파라다이스시티 셔틀", "인스파이어 리조트 인천", "터미널2 네스트호텔"],
@@ -638,14 +639,14 @@ export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> 
       "ソノカーム・ラフェスタ・ウェスタンドームを展示と家族外出でまとめます。",
       "Sono Calm、Lafesta、Western Dom 常与展会和家庭出行合并。",
     ),
-    hotels: [H("Sono Calm Goyang", "ソノカーム 高陽", "高阳绍诺卡尔姆酒店")],
+    hotels: [P("소노캄 고양", "Sono Calm Goyang", "ソノカーム 高陽", "高阳绍诺卡尔姆酒店")],
     landmarks: [
-      H("KINTEX", "KINTEX（キンテックス）", "韩国国际会展中心"),
-      H("Ilsan Lake Park", "一山湖水公園（イルサン）", "一山湖水公园"),
-      H("Daehwa Station", "大花駅", "大化站"),
-      H("Lafesta", "ラフェスタ", "Lafesta"),
-      H("Western Dom", "ウェスタンドーム", "Western Dom"),
-      H("Hyundai Department Store Kintex", "현대백화점 킨텍스", "现代百货KINTEX店"),
+      P("킨텍스", "KINTEX", "KINTEX（キンテックス）", "韩国国际会展中心"),
+      P("일산호수공원", "Ilsan Lake Park", "一山湖水公園（イルサン）", "一山湖水公园"),
+      P("대화역", "Daehwa Station", "大花駅", "大化站"),
+      P("라페스타", "Lafesta", "ラフェスタ", "Lafesta"),
+      P("웨스턴돔", "Western Dom", "ウェスタンドーム", "Western Dom"),
+      P("현대백화점 킨텍스점", "Hyundai Department Store Kintex", "現代百貨店 キンテックス", "现代百货KINTEX店"),
     ],
     searchBoostKeywords: {
       ko: ["킨텍스 인천공항", "일산 픽업", "고양 대화역 셔틀", "라페스타 공항"],
@@ -684,18 +685,18 @@ export const DESTINATION_POI_BUNDLES: Record<PoiBundleId, DestinationPoiBundle> 
     ),
     hotels: [],
     landmarks: [
-      H("Uijeongbu Station", "議政府駅", "议政府站"),
-      H("Nowon Station", "蘆原駅", "芦原站"),
-      H("Chang-dong Station", "倉洞駅", "仓洞站"),
-      H("Dobong Station", "道峰駅", "道峰站"),
-      H("Suyu Station", "水逾駅", "水逾站"),
-      H("Gangbuk-gu", "江北区（カンブク）", "江北区"),
-      H("Bukhansan", "北漢山（プカンサン）", "北汉山"),
-      H("Yangju", "楊州（ヤンジュ）", "杨州"),
-      H("Dongducheon", "東豆川（トンドゥチョン）", "东豆川"),
-      H("Namyangju", "南楊州市", "南杨州市"),
-      H("Guri", "九里市", "九里市"),
-      H("Byeollae", "別内（ピョルネ）", "别内"),
+      P("의정부역", "Uijeongbu Station", "議政府駅", "议政府站"),
+      P("노원역", "Nowon Station", "蘆原駅", "芦原站"),
+      P("창동역", "Chang-dong Station", "倉洞駅", "仓洞站"),
+      P("도봉역", "Dobong Station", "道峰駅", "道峰站"),
+      P("수유역", "Suyu Station", "水逾駅", "水逾站"),
+      P("강북구", "Gangbuk-gu", "江北区（カンブク）", "江北区"),
+      P("북한산", "Bukhansan", "北漢山（プカンサン）", "北汉山"),
+      P("양주", "Yangju", "楊州（ヤンジュ）", "杨州"),
+      P("동두천", "Dongducheon", "東豆川（トンドゥチョン）", "东豆川"),
+      P("남양주", "Namyangju", "南楊州市", "南杨州市"),
+      P("구리", "Guri", "九里市", "九里市"),
+      P("별내", "Byeollae", "別内（ピョルネ）", "别内"),
     ],
     searchBoostKeywords: {
       ko: ["의정부 인천공항", "노원 공항 셔틀", "경기북부 콜밴", "양주 픽업"],

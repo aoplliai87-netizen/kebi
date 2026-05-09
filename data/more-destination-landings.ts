@@ -35,8 +35,8 @@ function sec(
   ko: [string, string, string],
   en: [string, string, string],
 ): { ko: LandingPageCopy["sections"]; en: LandingPageCopy["sections"] } {
-  const hk = ["서비스 안내", "이동 구간 안내", "추천 대상"];
-  const he = ["Service overview", "Route coverage", "Best suited for"];
+  const hk = ["이용 안내", "이동 구간 안내", "이런 분께 잘 맞습니다"];
+  const he = ["How it works", "Route & timing", "A good fit if…"];
   const ids = ["service", "coverage", "why"] as const;
   return {
     ko: ids.map((id, i) => ({ id, heading: hk[i], body: ko[i] })),
@@ -48,9 +48,9 @@ function sec(
 function baseTemplate(hero: Record<Loc, LandingPageCopy["hero"]>): { ko: LandingPageCopy; en: LandingPageCopy } {
   const { ko: sKo, en: sEn } = sec(
     [
-      "터미널별 미팅 포인트를 안내하고 호텔·숙소 하차 위치를 확정합니다. 유모차·대형 가방은 사전 알림 시 배차를 조정합니다.",
-      "목적지 주소·구역에 맞춰 공항고속도로·시내 간선을 선택합니다. 서울 및 수도권 다른 지역과 연계 이동도 상담 가능합니다.",
-      "외국인 관광객·출장객, 첫 방문 서울 고객, 짐이 많은 가족 단위 이동에 적합합니다.",
+      "도착 터미널과 호텔·숙소 주소를 알려 주시면, 만나는 장소와 하차 위치를 함께 정해 드립니다. 유모차나 캐리어가 많으시면 미리 말씀해 주시면 좋습니다.",
+      "목적지에 맞춰 공항고속도로와 시내 도로를 선택합니다. 서울·수도권 다른 지역을 이어서 이동하실 때도 한 번에 상담 가능합니다.",
+      "첫 방문이시거나 짐이 많은 가족, 편하게 한 번에 이동하고 싶은 출장·관광 고객께 부담 없이 맞춰 드립니다.",
     ],
     [
       "We confirm terminal meeting points and drop-off pins before departure.",

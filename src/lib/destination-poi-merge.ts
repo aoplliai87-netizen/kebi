@@ -1,14 +1,16 @@
 /**
  * 목적지 POI 번들을 랜딩 카피에 합성 — 키워드 나열이 아닌 짧은 문맥 보강
  */
-import type { DestinationPoiBundle, PoiTriple } from "../../data/destination-poi-bundles";
+import type { DestinationPoiBundle, PoiQuad } from "../../data/destination-poi-bundles";
 import { getPoiBundle } from "../../data/destination-poi-bundles";
 import type { AppLocale, LandingPageCopy } from "../../data/landing-pages";
 
-function pickLabel(p: PoiTriple, locale: AppLocale): string {
-  if (locale === "ja") return p.ja;
-  if (locale === "zh") return p.zh;
-  return p.en;
+/** 로케일별: 현지 표기 + 영문 병기 (검색·신뢰용) */
+function formatPoiLine(p: PoiQuad, locale: AppLocale): string {
+  if (locale === "ko") return `${p.ko} (${p.en})`;
+  if (locale === "en") return `${p.en} (${p.ko})`;
+  if (locale === "ja") return `${p.ja} (${p.en})`;
+  return `${p.zh} (${p.en})`;
 }
 
 function dedupeKeywords(items: string[]): string[] {
@@ -41,8 +43,8 @@ function applyBundle(copy: LandingPageCopy, bundle: DestinationPoiBundle, locale
   const lede = bridge ? appendIfFresh(copy.lede, bridge, 20) : copy.lede;
 
   const destinationPoi = {
-    nearbyHotels: bundle.hotels.map((h) => pickLabel(h, locale)),
-    nearbyLandmarks: bundle.landmarks.map((l) => pickLabel(l, locale)),
+    nearbyHotels: bundle.hotels.map((h) => formatPoiLine(h, locale)),
+    nearbyLandmarks: bundle.landmarks.map((l) => formatPoiLine(l, locale)),
     recommendedDropoff: bundle.recommendedDropoff[locale],
     popularDestinationTags: bundle.tags[locale],
   };
