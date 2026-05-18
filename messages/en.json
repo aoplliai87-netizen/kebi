@@ -216,7 +216,7 @@
     "review": {
       "eyebrow": "REVIEWS",
       "title": "Customer feedback",
-      "heroDesc": "See what travelers say about their rides with Kkebi.",
+      "heroDesc": "Website posts and Google reviews both help future guests choose a trusted airport van.",
       "one": {
         "content": "Perfect pickup timing for my early morning flight.",
         "author": "Customer K**",
@@ -457,8 +457,12 @@
     }
   },
   "ReviewBoard": {
+    "googleTitle": "Leave a Google review for Kkebi Callvan",
+    "googleDescription": "Honest reviews help other travelers choose a reliable airport van and pickup service.",
+    "googleReviewBtn": "Leave a Google Review",
+    "googleMapsBtn": "View on Google Maps",
     "sampleBadge": "Sample {n}",
-    "userSectionTitle": "Review board",
+    "userSectionTitle": "Guest reviews",
     "writeReviewBtn": "Write a post",
     "writeReviewHint": "Tap the button below to open the review form.",
     "formTitle": "Write a review",

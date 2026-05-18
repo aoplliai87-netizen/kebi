@@ -216,7 +216,7 @@
     "review": {
       "eyebrow": "评价",
       "title": "客户反馈",
-      "heroDesc": "看看旅客如何评价 Kkebi 的接送服务。",
+      "heroDesc": "网站评价与 Google 评价都能帮助其他旅客选择可靠的机场接送。",
       "one": {
         "content": "早班机也能准时来接，非常省心。",
         "author": "客户 K**",
@@ -457,8 +457,12 @@
     }
   },
   "ReviewBoard": {
+    "googleTitle": "欢迎在 Google 为 Kkebi 留下真实评价",
+    "googleDescription": "真实体验能帮助其他旅客选择可靠的机场接送服务。",
+    "googleReviewBtn": "撰写 Google 评价",
+    "googleMapsBtn": "在 Google 地图查看",
     "sampleBadge": "示例 {n}",
-    "userSectionTitle": "评价墙",
+    "userSectionTitle": "客户真实评价",
     "writeReviewBtn": "发帖",
     "writeReviewHint": "点击下方按钮打开评价表单。",
     "formTitle": "撰写评价",

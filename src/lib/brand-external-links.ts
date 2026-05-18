@@ -17,6 +17,7 @@ export function isPublicBrandUrl(url: string | undefined | null): url is string 
 export function getBrandSameAsLinks(): string[] {
   const candidates = [
     process.env.NEXT_PUBLIC_GOOGLE_BUSINESS_URL,
+    process.env.NEXT_PUBLIC_GOOGLE_REVIEW_URL,
     process.env.NEXT_PUBLIC_NAVER_PLACE_URL,
     SITE_KAKAO_BIZ_URL,
     SITE_NAVER_URL,

@@ -216,7 +216,7 @@
     "review": {
       "eyebrow": "レビュー",
       "title": "お客様の声",
-      "heroDesc": "Kkebiをご利用いただいたお客様のレビューをご覧ください。",
+      "heroDesc": "サイト上のレビューとGoogleの口コミのどちらも、ほかのお客様の参考になります。",
       "one": {
         "content": "早朝便でも時間どおりのピックアップで助かりました。",
         "author": "お客様 K**",
@@ -457,8 +457,12 @@
     }
   },
   "ReviewBoard": {
+    "googleTitle": "Googleの口コミでKkebiのご利用感想をお聞かせください",
+    "googleDescription": "実際のご利用体験は、ほかのお客様が空港送迎を選ぶ際の大きな参考になります。",
+    "googleReviewBtn": "Googleで口コミを書く",
+    "googleMapsBtn": "Googleマップで見る",
     "sampleBadge": "サンプル {n}",
-    "userSectionTitle": "レビュー掲示板",
+    "userSectionTitle": "お客様の声",
     "writeReviewBtn": "投稿する",
     "writeReviewHint": "下のボタンからレビューフォームを開けます。",
     "formTitle": "レビューを書く",

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GoogleReviewCta } from "@/components/review/GoogleReviewCta";
 import { BespokeReviewExperience } from "@/components/review/BespokeReviewExperience";
 import { OnlineBookingCta } from "@/components/layout/OnlineBookingCta";
 import { SubpageHero } from "@/components/layout/SubpageHero";
@@ -48,6 +49,7 @@ export default async function ReviewPage({ params }: Props) {
         title={pickSubpageLocalized(reviewCms.heroTitle, localeKey) || t("title")}
         description={pickSubpageLocalized(reviewCms.heroDesc, localeKey) || t("heroDesc")}
       />
+      <GoogleReviewCta locale={params.locale} />
       <BespokeReviewExperience sampleReviews={showSampleRows ? reviewRows : []} />
       <OnlineBookingCta />
     </>

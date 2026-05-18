@@ -216,7 +216,7 @@
     "review": {
       "eyebrow": "REVIEWS",
       "title": "고객 이용 후기",
-      "heroDesc": "실제 이용 고객님의 후기를 확인해 보세요.",
+      "heroDesc": "홈페이지에 남겨 주신 후기와 구글 리뷰 모두 저희에게 큰 힘이 됩니다.",
       "one": {
         "content": "새벽 비행이었는데 시간 맞춰 와주셔서 이동이 정말 편했습니다.",
         "author": "김** 고객",
@@ -457,8 +457,12 @@
     }
   },
   "ReviewBoard": {
+    "googleTitle": "구글 리뷰로 깨비콜밴 이용 후기를 남겨주세요",
+    "googleDescription": "실제 이용 후기는 다른 고객님들이 공항 콜밴을 선택하는 데 큰 도움이 됩니다.",
+    "googleReviewBtn": "구글 리뷰 남기기",
+    "googleMapsBtn": "구글 지도에서 보기",
     "sampleBadge": "샘플 {n}",
-    "userSectionTitle": "리뷰 게시판",
+    "userSectionTitle": "실제 이용 후기",
     "writeReviewBtn": "글 쓰기",
     "writeReviewHint": "아래 버튼을 눌러 후기를 작성할 수 있습니다.",
     "formTitle": "리뷰 남기기",
