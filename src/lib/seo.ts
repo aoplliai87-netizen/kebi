@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 
-/** 프로덕션 도메인 — 메타 canonical·OG·robots·사이트맵 기준 */
-export const SITE_URL = "https://kebicallvan.com";
+/** 프로덕션 도메인 — 메타 canonical·OG·robots·사이트맵 기준 (www 통일) */
+const DEFAULT_SITE_URL = "https://www.kebicallvan.com";
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL?.trim() || DEFAULT_SITE_URL).replace(
+  /\/$/,
+  "",
+);
 export const SITE_OG_IMAGE_PATH = "/images/og-image.jpg";
 
 export type SeoPageKey =
