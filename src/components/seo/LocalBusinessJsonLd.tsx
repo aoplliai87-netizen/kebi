@@ -1,3 +1,4 @@
+import { getBrandSameAsLinks } from "@/lib/brand-external-links";
 import { SITE_OG_IMAGE_PATH, SITE_URL, absoluteUrl } from "@/lib/seo";
 
 const NAMES: Record<string, string> = {
@@ -52,9 +53,7 @@ function buildSchema(locale: string): Record<string, unknown> {
       opens: "00:00",
       closes: "23:59",
     },
-    sameAs: [
-      "https://pf.kakao.com",
-    ],
+    ...(getBrandSameAsLinks().length > 0 ? { sameAs: getBrandSameAsLinks() } : {}),
   };
 }
 

@@ -14,6 +14,7 @@ const ROUTES = [
   "inquiry",
   "destinations",
 ] as const;
+// `/[locale]/support` → inquiry 리다이렉트 전용 — 사이트맵에 포함하지 않음
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = SITE_URL.replace(/\/$/, "");
